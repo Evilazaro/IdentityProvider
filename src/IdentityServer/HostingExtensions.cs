@@ -14,7 +14,12 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
+        builder.Services.AddCertificateForwarding(options =>
+    options.CertificateHeader = "X-ARR-ClientCert");
+
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        Environment.SetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED", "true");
 
         var isBuilder = builder.Services
             .AddIdentityServer(options =>
