@@ -1,6 +1,6 @@
 param name string 
 
-module sp '../AppServicePlan/appServicePlanResource.bicep' = {
+module sp 'appServicePlanResource.bicep' = {
   name: 'appServicePlanResource'
   params:{
     name: name
