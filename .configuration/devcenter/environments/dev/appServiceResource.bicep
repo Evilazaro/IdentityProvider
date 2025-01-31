@@ -44,8 +44,8 @@ param dotnetcoreVersion string = '9.0'
 @description('App Settings')
 param appSettings array = [
   {
-    name: 'WEBSITE_RUN_FROM_PACKAGE'
-    value: '1'
+    name: 'ASPNETCORE_ENVIRONMENT'
+    value: 'Development'
   }
 ]
 
