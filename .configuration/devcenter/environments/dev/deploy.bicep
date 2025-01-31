@@ -1,4 +1,4 @@
-param name string 
+param name string = 'identityServerApp'
 
 module sp 'appServicePlanResource.bicep' = {
   name: 'appServicePlanResource'
