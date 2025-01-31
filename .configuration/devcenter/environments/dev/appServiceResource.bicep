@@ -47,6 +47,10 @@ param appSettings array = [
     name: 'ASPNETCORE_ENVIRONMENT'
     value: 'Development'
   }
+  {
+    name: 'PLATFORM_ENGINEERING_ENVIRONMENT'
+    value: 'Development'
+  }
 ]
 
 @description('Tags')
