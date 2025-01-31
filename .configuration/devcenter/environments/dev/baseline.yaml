@@ -4,7 +4,7 @@ version: 1.0.0
 summary: 'Dev environment for identityProvider'
 description: 'Dev environment for identityProvider'
 runner: ARM
-templatePath: './deploy.bicep'
+templatePath: deploy.bicep
 
 parameters:
   - id: 'workloadName'
