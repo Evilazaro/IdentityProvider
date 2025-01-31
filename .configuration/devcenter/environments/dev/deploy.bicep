@@ -13,7 +13,7 @@ module sp 'appServicePlanResource.bicep' = {
 }
 
 
-module ws '../appServiceResource.bicep'= {
+module ws 'appServiceResource.bicep'= {
   name: 'appServiceResource'
   params: {
     name: name
