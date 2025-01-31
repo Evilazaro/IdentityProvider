@@ -42,7 +42,12 @@ param currentStack string = 'dotnetcore'
 param dotnetcoreVersion string = '9.0'
 
 @description('App Settings')
-param appSettings array = []
+param appSettings array = [
+  {
+    name: 'WEBSITE_RUN_FROM_PACKAGE'
+    value: '1'
+  }
+]
 
 @description('Tags')
 param tags object = {}
@@ -64,12 +69,8 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
       alwaysOn: true
       minimumElasticInstanceCount: 1
       http20Enabled: true
-      appSettings: [
-        {
-          name: 'ConnectionStrings__DefaultConnection'
-          value: 'Data Source=IdentityServer.db;'
-        }
-      ]
+      appSettings: appSettings
+      
     }
   }
 }
