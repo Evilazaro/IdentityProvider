@@ -5,7 +5,7 @@ description: Dev environment for identityProvider
 templatePath: deploy.bicep
 runner: bicep
 parameters:
-  - id: "workloadName"
+  - id: "name"
     name: "name"
     description: "Name of the Azure Web App"
     type: "string"
