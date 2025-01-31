@@ -3,6 +3,7 @@ name: identityProvider-dev
 summary: Dev environment for identityProvider
 description: Dev environment for identityProvider
 templatePath: deploy.bicep
+runner: bicep
 parameters:
   - id: "workloadName"
     name: "name"
