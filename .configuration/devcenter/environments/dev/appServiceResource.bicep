@@ -64,7 +64,12 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
       alwaysOn: true
       minimumElasticInstanceCount: 1
       http20Enabled: true
-      appSettings: appSettings
+      appSettings: [
+        {
+          name: 'ConnectionStrings__DefaultConnection'
+          value: 'Data Source=IdentityServer.db;'
+        }
+      ]
     }
   }
 }
