@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contoso.IdentityProvider", "src\Contoso.IdentityProvider\Contoso.IdentityProvider.csproj", "{F24294F4-2B78-485C-8F87-60634CD8A878}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{55DAE0E2-1899-4B79-B08C-ACB97C6D65F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F24294F4-2B78-485C-8F87-60634CD8A878}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F24294F4-2B78-485C-8F87-60634CD8A878}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F24294F4-2B78-485C-8F87-60634CD8A878}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55DAE0E2-1899-4B79-B08C-ACB97C6D65F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55DAE0E2-1899-4B79-B08C-ACB97C6D65F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55DAE0E2-1899-4B79-B08C-ACB97C6D65F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55DAE0E2-1899-4B79-B08C-ACB97C6D65F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

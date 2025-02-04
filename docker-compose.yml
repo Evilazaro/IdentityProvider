@@ -1,0 +1,6 @@
+services:
+  contoso.identityprovider:
+    image: ${DOCKER_REGISTRY-}contosoidentityprovider
+    build:
+      context: .
+      dockerfile: src/Contoso.IdentityProvider/Dockerfile
