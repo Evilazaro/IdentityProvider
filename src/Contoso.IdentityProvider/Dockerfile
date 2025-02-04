@@ -16,12 +16,13 @@ COPY ["src/Contoso.IdentityProvider/Contoso.IdentityProvider.csproj", "src/Conto
 RUN dotnet restore "./src/Contoso.IdentityProvider/Contoso.IdentityProvider.csproj"
 COPY . .
 WORKDIR "/src/src/Contoso.IdentityProvider"
-RUN dotnet build "./Contoso.IdentityProvider.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet restore "./Contoso.IdentityProvider.csproj"
+RUN dotnet build "./Contoso.IdentityProvider.csproj" -c $BUILD_CONFIGURATION --no-restore -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Contoso.IdentityProvider.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Contoso.IdentityProvider.csproj" -c $BUILD_CONFIGURATION --no-restore -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
