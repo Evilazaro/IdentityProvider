@@ -1,13 +1,13 @@
-param name string = 'identityServerApp'
+param workloadName string = 'identityServerApp'
 
 module sp 'appServicePlanResource.bicep' = {
   name: 'appServicePlanResource'
   params:{
-    name: name
+    name: workloadName
     kind: 'app,linux'
     tags: {
       environment: 'dev'
-      name: name
+      name: workloadName
     }
   }
 }
@@ -15,7 +15,7 @@ module sp 'appServicePlanResource.bicep' = {
 module ws 'appServiceResource.bicep'= {
   name: 'appServiceResource'
   params: {
-    name: name
+    name: workloadName
     appServicePlanId: sp.outputs.appServicePlanId 
   }
 }
