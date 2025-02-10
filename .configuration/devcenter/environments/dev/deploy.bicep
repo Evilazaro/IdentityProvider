@@ -1,5 +1,16 @@
 param name string = 'identityServerApp'
 
+module monitoring 'logAnalyticsResource.bicep' = {
+  name: 'logAnalyticsResource'
+  params: {
+    name: name
+    tags: {
+      environment: 'dev'
+      name: name
+    }
+  }
+}
+
 module sp 'appServicePlanResource.bicep' = {
   name: 'appServicePlanResource'
   params:{
