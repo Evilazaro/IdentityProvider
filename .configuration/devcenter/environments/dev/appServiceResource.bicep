@@ -41,7 +41,16 @@ param currentStack string = 'dotnetcore'
 ])
 param dotnetcoreVersion string = '9.0'
 
-param instrumentationKey string
+module monitoring 'logAnalyticsResource.bicep' = {
+  name: 'logAnalyticsResource'
+  params: {
+    name: name
+    tags: {
+      environment: 'dev'
+      name: name
+    }
+  }
+}
 
 @description('App Settings')
 var appSettings = [
@@ -55,7 +64,31 @@ var appSettings = [
   }
   {
     name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-    value: instrumentationKey
+    value: monitoring.outputs.InstrumentationKey
+  }
+  {
+    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+    value: monitoring.outputs.ConnectionString
+  }
+  {
+    name: 'APPINSIGHTS_PROFILERFEATURE_VERSION'
+    value: '1.0.0'
+  }
+  {
+    name: 'APPINSIGHTS_SNAPSHOTFEATURE_VERSION'
+    value: '1.0.0'
+  }
+  {
+    name: 'APPLICATIONINSIGHTS_ENABLESQLQUERYCOLLECTION'
+    value: 'enabled'
+  }
+  {
+    name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+    value: '~3'
+  }
+  {
+    name: 'DiagnosticServices_EXTENSION_VERSION'
+    value: '~3'
   }
 ]
 
@@ -71,6 +104,9 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
   location: location
   kind: kind
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     serverFarmId: appServicePlanId
     enabled: true
@@ -79,7 +115,7 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
       alwaysOn: true
       minimumElasticInstanceCount: 1
       http20Enabled: true
-      appSettings: appSettings      
+      appSettings: appSettings
     }
   }
 }
