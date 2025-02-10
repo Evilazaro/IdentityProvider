@@ -23,11 +23,11 @@ module sp 'appServicePlanResource.bicep' = {
   }
 }
 
-
 module ws 'appServiceResource.bicep'= {
   name: 'appServiceResource'
   params: {
     name: name
     appServicePlanId: sp.outputs.appServicePlanId 
+    instrumentationKey: monitoring.outputs.InstrumentationKey
   }
 }

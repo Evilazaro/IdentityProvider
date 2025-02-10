@@ -41,8 +41,10 @@ param currentStack string = 'dotnetcore'
 ])
 param dotnetcoreVersion string = '9.0'
 
+param instrumentationKey string
+
 @description('App Settings')
-param appSettings array = [
+var appSettings = [
   {
     name: 'ASPNETCORE_ENVIRONMENT'
     value: 'Development'
@@ -50,6 +52,10 @@ param appSettings array = [
   {
     name: 'PLATFORM_ENGINEERING_ENVIRONMENT'
     value: 'Development'
+  }
+  {
+    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+    value: instrumentationKey
   }
 ]
 
