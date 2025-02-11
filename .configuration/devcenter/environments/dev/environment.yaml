@@ -9,5 +9,5 @@ parameters:
     name: "name"
     description: "Name of the Azure Web App"
     type: "string"
-    default: "identityProvider-appsvc"
+    default: "identityProvider"
     readOnly: true

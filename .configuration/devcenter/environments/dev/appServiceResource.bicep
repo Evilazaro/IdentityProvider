@@ -100,7 +100,7 @@ var linuxFxVersion = (contains(kind, 'linux')) ? '${toUpper(currentStack)}|${dot
 
 @description('App Service Resource')
 resource appService 'Microsoft.Web/sites@2024-04-01' = {
-  name: name
+  name: '${name}-app-service'
   location: location
   kind: kind
   tags: tags
