@@ -1,4 +1,4 @@
-param workloadName string = 'identityServer'
+param workloadName string
 
 module sp 'appServicePlanResource.bicep' = {
   name: 'appServicePlanResource'

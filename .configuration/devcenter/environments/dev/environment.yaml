@@ -10,4 +10,4 @@ parameters:
     description: "Name of the Azure Web App"
     type: "string"
     default: "identityProvider"
-    readOnly: true
+    readOnly: false
