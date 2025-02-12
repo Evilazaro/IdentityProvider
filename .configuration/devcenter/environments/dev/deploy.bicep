@@ -19,3 +19,12 @@ module ws 'appServiceResource.bicep'= {
     appServicePlanId: sp.outputs.appServicePlanId 
   }
 }
+
+resource sa 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
+  name: workloadName
+  location: 'eastus'
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+}
