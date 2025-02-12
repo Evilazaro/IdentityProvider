@@ -90,6 +90,10 @@ var appSettings = [
     name: 'DiagnosticServices_EXTENSION_VERSION'
     value: '~3'
   }
+  {
+    name: 'IdProviderTemplate'
+    value: '2.0'
+  }
 ]
 
 @description('Tags')
