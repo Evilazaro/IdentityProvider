@@ -3,7 +3,8 @@ param workloadName string
 module sp 'appServicePlanResource.bicep' = {
   name: 'appServicePlanResource'
   params:{
-    name: workloadName
+    name: '${workloadName}-${uniqueString(workloadName,resourceGroup().id)}'
+    location: resourceGroup().location
     kind: 'app,linux'
     tags: {
       environment: 'dev'
@@ -15,16 +16,8 @@ module sp 'appServicePlanResource.bicep' = {
 module ws 'appServiceResource.bicep'= {
   name: 'appServiceResource'
   params: {
-    name: workloadName
+    name: '${workloadName}-${uniqueString(workloadName,resourceGroup().id)}'
     appServicePlanId: sp.outputs.appServicePlanId 
   }
 }
 
-resource sa 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
-  name: workloadName
-  location: 'eastus'
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-}
