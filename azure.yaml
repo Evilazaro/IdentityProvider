@@ -6,7 +6,6 @@ platform:
   type: devcenter
   config:
     name: DevExP
-    environmentDefinition: dev
+    environmentDefinition: environments
     environmentType: dev
     project: identityProvider
-    catalog: environments
