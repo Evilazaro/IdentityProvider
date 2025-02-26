@@ -1,6 +1,13 @@
 @description('App Service Name')
 param name string
 
+@description('App Service Environment')
+@allowed([
+  'dev'
+  'prod'
+])
+param environment string
+
 @description('App Service Location')
 param location string = resourceGroup().location
 
@@ -116,7 +123,7 @@ resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
 
 @description('App Service Resource')
 resource webapp 'Microsoft.Web/sites@2024-04-01' = {
-  name: '${name}-app-service'
+  name: '${name}-webapp-${environment}'
   location: location
   kind: kind
   tags: tags

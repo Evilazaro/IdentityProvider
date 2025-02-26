@@ -1,5 +1,11 @@
 var workloadName = 'identityProvider'
 
+@allowed([
+  'dev'
+  'prod'
+])
+param environment string = 'dev'
+
 module monitoring 'logAnalyticsResource.bicep' = {
   name: 'monitoring'
   scope: resourceGroup()
@@ -17,6 +23,7 @@ module webapp 'appServiceResource.bicep' = {
   scope: resourceGroup()
   params: {
     name: workloadName
+    environment: environment
     ConnectionString: monitoring.outputs.ConnectionString
     InstrumentationKey: monitoring.outputs.InstrumentationKey
   }
