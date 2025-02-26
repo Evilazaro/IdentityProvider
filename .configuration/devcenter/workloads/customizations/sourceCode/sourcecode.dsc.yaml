@@ -61,21 +61,10 @@ properties:
         allowPrerelease: true
       settings:
         SetScript: |
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
-          dotnet restore "c:\Workspaces\IdentityProvider\Contoso.IdentityProvider.sln"
-          dotnet build "c:\Workspaces\IdentityProvider\Contoso.IdentityProvider.sln" --no-restore
-        GetScript: return $false
-        TestScript: return $false
-    - resource: PSDscResources/Script
-      id: BuildeShop
-      directives:
-        description: Clone Identity Provider and eShop-k8s repositories
-        allowPrerelease: true
-      settings:
-        SetScript: |
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
-          dotnet restore "c:\Workspaces\eShop-k8s\eShop.Web.slnf"
-          dotnet build "c:\Workspaces\eShop-k8s\eShop.Web.slnf" --no-restore
+          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+          dotnet workload install aspire 
+          dotnet restore "c:\Workspaces\IdentityProvider\src\Contoso.IdentityProvider.sln"
+          dotnet build "c:\Workspaces\IdentityProvider\src\Contoso.IdentityProvider.sln" --no-restore
         GetScript: return $false
         TestScript: return $false
     - resource: PSDscResources/Script
