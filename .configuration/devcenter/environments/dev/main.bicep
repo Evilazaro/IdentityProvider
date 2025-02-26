@@ -22,5 +22,5 @@ module webapp 'appServiceResource.bicep' = {
   }
 }
 
-output webappName string = webapp.outputs.webappName
+output RESOURCE_NAME string = webapp.outputs.webappName
 output webappURL string = webapp.outputs.webappUrl
