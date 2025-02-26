@@ -15,7 +15,8 @@ platform:
 
 services:
   identity-service:
-    project: ./src/Contoso.IdentityProvider
+    host: appservice
     language: csharp
-    host: appservice 
-
+    project: .
+    
+      
