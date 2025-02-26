@@ -4,9 +4,6 @@ param name string
 @description('App Service Location')
 param location string = resourceGroup().location
 
-@description('App Service Plan Id')
-param appServicePlanId string
-
 @description('App Service Kind')
 @allowed([
   'app'
@@ -22,6 +19,13 @@ param appServicePlanId string
   'functionapp,linux,kubernetes'
 ])
 param kind string = 'app,linux'
+
+@description('App Service Plan SKU')
+param sku object = {
+  name: 'P1V3'
+  tier: 'PremiumV3'
+  capacity: 1
+}
 
 @description('App Service Current Stack')
 @allowed([
@@ -41,16 +45,12 @@ param currentStack string = 'dotnetcore'
 ])
 param dotnetcoreVersion string = '9.0'
 
-module monitoring 'logAnalyticsResource.bicep' = {
-  name: 'logAnalyticsResource'
-  params: {
-    name: name
-    tags: {
-      environment: 'dev'
-      name: name
-    }
-  }
-}
+@secure()
+param InstrumentationKey string
+
+@secure()
+param ConnectionString string
+
 
 @description('App Settings')
 var appSettings = [
@@ -64,11 +64,11 @@ var appSettings = [
   }
   {
     name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-    value: monitoring.outputs.InstrumentationKey
+    value: InstrumentationKey
   }
   {
     name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-    value: monitoring.outputs.ConnectionString
+    value: ConnectionString
   }
   {
     name: 'APPINSIGHTS_PROFILERFEATURE_VERSION'
@@ -102,8 +102,20 @@ param tags object = {}
 @description('LinuxFxVersion')
 var linuxFxVersion = (contains(kind, 'linux')) ? '${toUpper(currentStack)}|${dotnetcoreVersion}' : null
 
+@description('App Service Plan Resource')
+resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
+  name: '${name}-${uniqueString(resourceGroup().id,name)}-svcplan'
+  location: location
+  sku: sku
+  kind: 'linux'
+  properties: {
+    reserved: (contains(kind, 'linux')) ? true : false
+  }
+  tags: tags
+}
+
 @description('App Service Resource')
-resource appService 'Microsoft.Web/sites@2024-04-01' = {
+resource webapp 'Microsoft.Web/sites@2024-04-01' = {
   name: '${name}-app-service'
   location: location
   kind: kind
@@ -112,7 +124,7 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: appServicePlanId
+    serverFarmId: serviceplan.id
     enabled: true
     siteConfig: {
       linuxFxVersion: linuxFxVersion
@@ -123,3 +135,6 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
     }
   }
 }
+
+output webappName string = webapp.name
+output webappUrl string = webapp.properties.defaultHostName
