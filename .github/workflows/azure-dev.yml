@@ -20,9 +20,11 @@ jobs:
       - name: Build Application
         run: |
           echo "Installing .NET SDK"
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           sudo add-apt-repository ppa:dotnet/backports -y && \
           sudo apt-get update && \
           sudo apt-get install -y dotnet-sdk-9.0
+          sudo dotnet workload install aspire
           echo "Building application"
           dotnet restore ./src/Contoso.IdentityProvider.sln
           dotnet build ./src/Contoso.IdentityProvider.sln --configuration Release --no-restore
@@ -41,9 +43,11 @@ jobs:
       - name: Install .NET SDK and AZD
         run: |
           echo "Installing .NET SDK"
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           sudo add-apt-repository ppa:dotnet/backports -y && \
           sudo apt-get update && \
           sudo apt-get install -y dotnet-sdk-9.0
+          sudo dotnet workload install aspire
         shell: bash
       
       - name: Install azd
