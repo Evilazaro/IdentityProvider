@@ -24,8 +24,8 @@ jobs:
           sudo apt-get update && \
           sudo apt-get install -y dotnet-sdk-9.0
           echo "Building application"
-          dotnet restore ./src/Contoso.IdentityProvider/Contoso.IdentityProvider.csproj
-          dotnet build ./src/Contoso.IdentityProvider/Contoso.IdentityProvider.csproj --configuration Release --no-restore
+          dotnet restore ./src/Contoso.IdentityProvider.sln
+          dotnet build ./src/Contoso.IdentityProvider.sln --configuration Release --no-restore
         shell: bash
 
   deploy:
@@ -58,7 +58,9 @@ jobs:
         shell: bash
 
       - name: Provision Infrastructure
-        run: azd provision --no-prompt
+        run: |
+          azd env new dev --no-prompt
+          azd provision --no-prompt
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
 
