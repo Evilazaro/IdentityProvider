@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://github.com/Azure/deployment-environments/releases/download/2022-11-11-preview/manifest.schema.json
-name: Dev
+name: webapp
 summary: Dev environment for identityProvider
 description: Dev environment for identityProvider
-templatePath: deploy.bicep
+templatePath: main.bicep
 runner: bicep

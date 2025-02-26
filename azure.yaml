@@ -9,14 +9,14 @@ platform:
   type: devcenter
   config:
     name: DevExP-devcenter
-    environmentDefinition: Dev
+    environmentDefinition: webap
     environmentType: dev
     project: identityProvider
     catalog: environments
 
 services:
   identity-service:
-    resourceName: identityProvider-eokosiisxeqkc-app-service
+    resourceName: ${WEBAPPNAME}
     host: appservice
     language: csharp
     project: ./src/Contoso.IdentityProvider
