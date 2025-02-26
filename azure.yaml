@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: identity-provider
+
+cloud:
+  name: AzureCloud
+
+platform:
+  type: devcenter
+  config:
+    name: DevExP
+    environmentDefinition: environments
+    environmentType: dev
+    project: identityProvider
+
+services:
+  identity-service:
+    project: ./src/Contoso.IdentityProvider
+    language: csharp
+    host: appservice 
+
