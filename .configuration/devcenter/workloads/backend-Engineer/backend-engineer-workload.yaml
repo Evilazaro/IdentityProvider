@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/winget-cli/refs/heads/master/schemas/JSON/configuration/configuration.schema.0.2.json
 
-$schema: "2.0"
+$schema: "1.0"
 name: "backend-engineer-workload"
 description: "Back End Engineer Workload"
 tasks:

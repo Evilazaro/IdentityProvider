@@ -1,4 +1,4 @@
-$schema: "2.0"
+$schema: "1.0"
 name: baseline
 image: microsoftwindowsdesktop_windows-ent-cpc_win11-24H2-ent-cpc
 
