@@ -8,7 +8,7 @@ cloud:
 platform:
   type: devcenter
   config:
-    name: DevExP-ph6qnjxxnezp4
+    name: DevExP-devcenter
     environmentDefinition: webapp
     environmentType: dev
     project: identityProvider
