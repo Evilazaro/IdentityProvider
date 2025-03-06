@@ -14,7 +14,7 @@ param tags object
 @secure()
 param secretValue string
 
-var uniqueName = guid(keyVaultName, secretName, location, resourceGroup().id)
+var uniqueName = guid('${keyVaultName}-kv', resourceGroup().id)
 
 resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
   name: '${keyVaultName}-${uniqueString(resourceGroup().id, keyVaultName, resourceGroup().name, uniqueName)}-kv'
