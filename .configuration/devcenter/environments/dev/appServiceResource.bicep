@@ -11,6 +11,8 @@ param environment string
 @description('App Service Location')
 param location string = resourceGroup().location
 
+param keyVaultName string
+
 @description('App Service Kind')
 @allowed([
   'app'
@@ -43,7 +45,7 @@ param sku object = {
 ])
 param currentStack string = 'dotnetcore'
 
-@description('netFrameworkVersion')
+@description('Dotnet Core Version')
 @allowed([
   '7.0'
   '8.0'
@@ -52,13 +54,15 @@ param currentStack string = 'dotnetcore'
 param dotnetcoreVersion string = '9.0'
 
 @secure()
-param InstrumentationKey string
+@description('Instrumentation Key for Application Insights')
+param instrumentationKey string
 
 @secure()
-param ConnectionString string
+@description('Connection String for Application Insights')
+param connectionString string
 
 @description('App Settings')
-var appSettings = [
+param appSettings array = [
   {
     name: 'ASPNETCORE_ENVIRONMENT'
     value: 'Development'
@@ -69,11 +73,11 @@ var appSettings = [
   }
   {
     name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-    value: InstrumentationKey
+    value: instrumentationKey
   }
   {
     name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-    value: ConnectionString
+    value: connectionString
   }
   {
     name: 'APPINSIGHTS_PROFILERFEATURE_VERSION'
@@ -105,24 +109,23 @@ var appSettings = [
 param tags object = {}
 
 @description('LinuxFxVersion')
-var linuxFxVersion = (contains(kind, 'linux')) ? '${toUpper(currentStack)}|${dotnetcoreVersion}' : null
+var linuxFxVersion = contains(kind, 'linux') ? '${toUpper(currentStack)}|${dotnetcoreVersion}' : null
 
 @description('App Service Plan Resource')
-resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
-  name: '${name}-${uniqueString(resourceGroup().id,name)}-svcplan'
+resource servicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+  name: '${name}-${uniqueString(resourceGroup().id, name)}-svcplan'
   location: location
   sku: sku
   kind: 'linux'
   properties: {
-    reserved: (contains(kind, 'linux')) ? true : false
+    reserved: contains(kind, 'linux') ? true : false
     elasticScaleEnabled: true
-    targetWorkerCount: 2
   }
   tags: tags
 }
 
 @description('App Service Resource')
-resource webapp 'Microsoft.Web/sites@2024-04-01' = {
+resource webApp 'Microsoft.Web/sites@2024-04-01' = {
   name: '${name}-webapp-${environment}'
   location: location
   kind: kind
@@ -131,12 +134,11 @@ resource webapp 'Microsoft.Web/sites@2024-04-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: serviceplan.id
+    serverFarmId: servicePlan.id
     enabled: true
     siteConfig: {
       linuxFxVersion: linuxFxVersion
       alwaysOn: true
-      minimumElasticInstanceCount: 3
       preWarmedInstanceCount: 1
       http20Enabled: true
       appSettings: appSettings
@@ -144,5 +146,13 @@ resource webapp 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-output webappName string = webapp.name
-output webappUrl string = webapp.properties.defaultHostName
+module keyvaultAccess 'security/keyvault-access.bicep' = {
+  name: 'keyvault-access'
+  params: {
+    keyVaultName: keyVaultName
+    principalId: webApp.identity.principalId
+  }
+}
+
+output webAppName string = webApp.name
+output webAppUrl string = webApp.properties.defaultHostName

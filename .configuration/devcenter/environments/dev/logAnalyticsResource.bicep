@@ -1,8 +1,17 @@
 @description('Name of the Log Analytics workspace')
-param name string 
+param name string
 
 @description('Tags for the Log Analytics workspace')
-param tags object
+param tags object = {}
+
+@description('Log Analytics workspace SKU')
+@allowed([
+  'Free'
+  'PerGB2018'
+  'Standalone'
+  'CapacityReservation'
+])
+param logAnalyticsSku string = 'PerGB2018'
 
 @description('Create a Log Analytics workspace')
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
@@ -14,11 +23,12 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   }
   properties: {
     sku: {
-      name: 'PerGB2018'
+      name: logAnalyticsSku
     }
   }
 }
 
+@description('Create an Application Insights resource')
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: '${name}-${uniqueString(name, resourceGroup().id)}'
   location: resourceGroup().location
@@ -30,5 +40,5 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-output InstrumentationKey string = appInsights.properties.InstrumentationKey
-output ConnectionString string = appInsights.properties.ConnectionString
+output instrumentationKey string = appInsights.properties.InstrumentationKey
+output connectionString string = appInsights.properties.ConnectionString
