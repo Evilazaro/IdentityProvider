@@ -1,6 +1,6 @@
 $schema: "1.0"
 name: baseline
-image: microsoftwindowsdesktop_windows-ent-cpc_win11-21h2-ent-cpc-m365
+image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
 tasks:
   - name: powershell
@@ -36,6 +36,7 @@ tasks:
   ### Install: Microsoft Azure Functions Core Tools
   ### Install: Microsoft Azure Cosmos Emulator
   ### Install: Microsoft Bicep
+  ### Install: Microsoft.VisualStudioCode
   ########################################
   - name: winget
     parameters:
@@ -58,6 +59,9 @@ tasks:
   - name: winget
     parameters:
       package: Microsoft.Bicep
+  - name: winget
+    parameters:
+      package: Microsoft.VisualStudioCode
 
 userTasks:
   - name: winget
@@ -65,4 +69,52 @@ userTasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/baseline.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\baseline.dsc.yaml'
-      runAsUser: true
+
+  - name: winget
+    description: Install WSL and Ubuntu
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\virtualization.dsc.yaml'
+
+  - name: winget
+    description: Install Visual Studio Code and its Extensions
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\vscode.dsc.yaml'
+
+  - name: winget
+    description: Install Visual Studio Code, Extensions and Microsoft Visual Studio Enterprise
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\vstudio.dsc.yaml'
+
+  - name: winget
+    description: Install Containers Resources
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/containers/containers.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\containers.dsc.yaml'
+
+  - name: winget
+    description: Install APIs Resources
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\apis.dsc.yaml'
+
+  - name: git-clone
+    description: Clone this repository into C:\Workspaces
+    parameters:
+      repositoryUrl: https://github.com/Evilazaro/IdentityProvider.git
+      directory: C:\Workspaces
+  
+  - name: git-clone
+    description: Clone this repository's feature/winui2.6 branch into C:\Workspaces
+    parameters:
+      repositoryUrl: https://github.com/Evilazaro/eShop.git
+      directory: C:\Workspaces
+
+  - name: winget
+    description: Clone Identity Provider and eShop-k8s repositories
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/sourceCode/sourcecode.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\sourcecode.dsc.yaml'
+

@@ -6,16 +6,6 @@ properties:
   ### RESOURCES: System Configuration
   ########################################
   resources:
-    ### Install Microsoft Visual Studio Code
-    ### -------------------------------------
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: Microsoft.VisualStudioCode
-      directives:
-        description: Install Microsoft Visual Studio Code
-        allowPrerelease: true
-      settings:
-        id: Microsoft.VisualStudioCode
-        ensure: Present
     ### Install VS Code Extension
     ### -------------------------------------
     - resource: PSDscResources/Script
@@ -85,5 +75,3 @@ properties:
           }
         GetScript: return $false
         TestScript: return $false
-      dependsOn:
-        - Microsoft.VisualStudioCode
