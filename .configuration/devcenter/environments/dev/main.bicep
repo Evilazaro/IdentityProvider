@@ -8,10 +8,15 @@ var workloadName = 'identityProvider'
 ])
 param environment string = 'dev'
 
+resource rg 'Microsoft.Resources/resourceGroups@2024-11-01' existing = {
+  name: resourceGroup().name
+  scope: subscription()
+}
+
 @description('Module for Log Analytics and Application Insights')
 module monitoring './monitoring/logAnalyticsResource.bicep' = {
   name: 'monitoring'
-  scope: resourceGroup()
+  scope: rg
   params: {
     name: '${workloadName}-loganalytics'
     tags: {
@@ -22,7 +27,7 @@ module monitoring './monitoring/logAnalyticsResource.bicep' = {
 }
 
 module security 'security/security.bicep'= {
-  scope: resourceGroup()
+  scope: rg
   name: 'security'
   params: {
     tags: {}
@@ -38,7 +43,7 @@ module security 'security/security.bicep'= {
 @description('Module for App Service')
 module webapp './core/appServiceResource.bicep' = {
   name: 'webapp'
-  scope: resourceGroup()
+  scope: rg
   params: {
     name: workloadName
     environment: environment
