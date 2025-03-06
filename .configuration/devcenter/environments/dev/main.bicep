@@ -1,3 +1,6 @@
+@description('The name of the workload')
+var workloadName = 'identityProvider'
+
 @description('The environment for the deployment')
 @allowed([
   'dev'
@@ -5,14 +8,48 @@
 ])
 param environment string = 'dev'
 
-@description('The location for the resource group')
-param location string = 'eastus2'
-
-module workload 'workload.bicep' = {
-  scope: subscription()
-  name: 'workload'
+module security 'security/security.bicep'= {
+  scope: resourceGroup()
+  name: 'security'
   params: {
-    environment: environment
-    location: location
+    tags: {}
+    keyVaultName: '${workloadName}-kv'	 
+    secretName: 'gha-secret'
+    secretValue: 'example-secret-value'
   }
 }
+  
+@description('Module for Log Analytics and Application Insights')
+module monitoring 'logAnalyticsResource.bicep' = {
+  name: 'monitoring'
+  scope: resourceGroup()
+  params: {
+    name: '${workloadName}-loganalytics'
+    tags: {
+      environment: environment
+      name: workloadName
+    }
+  }
+  dependsOn: [
+    security
+  ]
+}
+
+@description('Module for App Service')
+module webapp 'appServiceResource.bicep' = {
+  name: 'webapp'
+  scope: resourceGroup()
+  params: {
+    name: workloadName
+    environment: environment
+    keyVaultName: security.outputs.keyVaultName
+    connectionString: monitoring.outputs.connectionString
+    instrumentationKey: monitoring.outputs.instrumentationKey
+  }
+}
+
+@description('Output the name of the web app')
+output resourceName string = webapp.outputs.webAppName
+
+@description('Output the URL of the web app')
+output webAppUrl string = webapp.outputs.webAppUrl
