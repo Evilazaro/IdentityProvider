@@ -11,44 +11,38 @@ param location string = resourceGroup().location
 ])
 param environment string = 'dev'
 
-resource rg 'Microsoft.Resources/resourceGroups@2024-11-01' existing = {
-  name: resourceGroup().name
-  scope: subscription()
-}
-
 @description('Module for Log Analytics and Application Insights')
 module monitoring 'monitoring/monitoring.bicep' = {
   name: 'monitoring'
   scope: subscription()
   params: {
-    workloadName : workloadName
+    workloadName: workloadName
     environment: environment
     location: location
   }
 }
 
 module security 'security/security.bicep' = {
-  scope: rg
+  scope: subscription()
   name: 'security'
   params: {
-    tags: {}
-    keyVaultName: 'kv'
-    secretName: 'gha'
-    secretValue: 'example-secret-value'
+    location: location
     logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
+    workloadName: workloadName
   }
 }
 
 @description('Module for App Service')
-module webapp './core/appServiceResource.bicep' = {
+module webapp 'core/webapp.bicep' = {
   name: 'webapp'
-  scope: rg
+  scope: subscription()
   params: {
-    name: workloadName
+    workloadName: workloadName
+    location: location
     environment: environment
     keyVaultName: security.outputs.keyVaultName
-    connectionString: monitoring.outputs.connectionString
     instrumentationKey: monitoring.outputs.instrumentationKey
+    connectionString: monitoring.outputs.connectionString
     logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
   }
 }

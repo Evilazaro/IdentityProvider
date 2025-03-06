@@ -8,9 +8,6 @@ param name string
 ])
 param environment string
 
-@description('App Service Location')
-param location string = resourceGroup().location
-
 param keyVaultName string
 
 @description('App Service Kind')
@@ -116,7 +113,7 @@ var linuxFxVersion = contains(kind, 'linux') ? '${toUpper(currentStack)}|${dotne
 @description('App Service Plan Resource')
 resource servicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: '${name}-${uniqueString(resourceGroup().id, name)}-svcplan'
-  location: location
+  location: resourceGroup().location
   sku: sku
   kind: 'linux'
   properties: {
@@ -145,7 +142,7 @@ resource spDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-
 @description('App Service Resource')
 resource webApp 'Microsoft.Web/sites@2024-04-01' = {
   name: '${name}-webapp-${environment}'
-  location: location
+  location: resourceGroup().location
   kind: kind
   tags: tags
   identity: {
