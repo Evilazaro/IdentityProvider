@@ -6,14 +6,10 @@ properties:
   ### RESOURCES: System Configuration
   ########################################
   resources:
-    - resource: PSDscResources/Script
-      id: winget.update
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
-        description: Update Winget Packages
+        description: Installing GitHub.GitHubDesktop
+        allowPrerelease: true
       settings:
-        SetScript: |
-          Set-ExecutionPolicy Unrestricted -Scope Process -Force
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
-          winget install  Microsoft.PowerToys --silent --accept-package-agreements --accept-source-agreements
-        GetScript: return $false
-        TestScript: return $false
+        id: GitHub.GitHubDesktop
+        source: winget
