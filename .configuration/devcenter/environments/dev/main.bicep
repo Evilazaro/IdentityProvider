@@ -14,31 +14,27 @@ param environment string = 'dev'
 @description('Module for Log Analytics and Application Insights')
 module monitoring 'monitoring/monitoring.bicep' = {
   name: 'monitoring'
-  scope: subscription()
+  scope: resourceGroup()
   params: {
     workloadName: workloadName
     environment: environment
-    location: location
   }
 }
 
 module security 'security/security.bicep' = {
-  scope: subscription()
+  scope: resourceGroup()
   name: 'security'
   params: {
-    location: location
     logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
-    workloadName: workloadName
   }
 }
 
 @description('Module for App Service')
-module webapp 'core/webapp.bicep' = {
-  name: 'webapp'
-  scope: subscription()
+module workload 'core/webapp.bicep' = {
+  name: 'workload'
+  scope: resourceGroup()
   params: {
     workloadName: workloadName
-    location: location
     environment: environment
     keyVaultName: security.outputs.keyVaultName
     instrumentationKey: monitoring.outputs.instrumentationKey
@@ -48,7 +44,7 @@ module webapp 'core/webapp.bicep' = {
 }
 
 @description('Output the name of the web app')
-output resourceName string = webapp.outputs.webAppName
+output resourceName string = workload.outputs.webAppName
 
 @description('Output the URL of the web app')
-output webAppUrl string = webapp.outputs.webAppUrl
+output webAppUrl string = workload.outputs.webAppUrl
