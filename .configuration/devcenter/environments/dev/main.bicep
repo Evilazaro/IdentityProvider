@@ -13,8 +13,8 @@ module security 'security/security.bicep'= {
   name: 'security'
   params: {
     tags: {}
-    keyVaultName: 'keyvault'	 
-    secretName: 'gha-secret'
+    keyVaultName: 'kv'	 
+    secretName: 'gha'
     secretValue: 'example-secret-value'
   }
 }
