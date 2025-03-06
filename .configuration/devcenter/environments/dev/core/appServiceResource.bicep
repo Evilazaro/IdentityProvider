@@ -146,7 +146,7 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-module keyvaultAccess 'security/keyvault-access.bicep' = {
+module keyvaultAccess '../security/keyvault-access.bicep' = {
   name: 'keyvault-access'
   params: {
     keyVaultName: keyVaultName

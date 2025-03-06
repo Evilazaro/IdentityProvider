@@ -13,14 +13,14 @@ module security 'security/security.bicep'= {
   name: 'security'
   params: {
     tags: {}
-    keyVaultName: '${workloadName}-kv'	 
+    keyVaultName: 'keyvault'	 
     secretName: 'gha-secret'
     secretValue: 'example-secret-value'
   }
 }
   
 @description('Module for Log Analytics and Application Insights')
-module monitoring 'logAnalyticsResource.bicep' = {
+module monitoring './monitoring/logAnalyticsResource.bicep' = {
   name: 'monitoring'
   scope: resourceGroup()
   params: {
@@ -36,7 +36,7 @@ module monitoring 'logAnalyticsResource.bicep' = {
 }
 
 @description('Module for App Service')
-module webapp 'appServiceResource.bicep' = {
+module webapp './core/appServiceResource.bicep' = {
   name: 'webapp'
   scope: resourceGroup()
   params: {
