@@ -2,11 +2,12 @@
 
 properties:
   configurationVersion: 0.2.0
+
   ########################################
   ### RESOURCES: System Configuration
   ########################################
   resources:
-    ### Install VS Code Extension
+    ### Install VS Code Extensions
     ### -------------------------------------
     - resource: PSDscResources/Script
       id: Microsoft.VisualStudioCode.Extensions
@@ -14,7 +15,7 @@ properties:
         description: Install VS Code Extensions
       settings:
         SetScript: |
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
+          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
           $extensions = @(
               "azps-tools.azps-tools",
               "azurite.azurite",
@@ -70,8 +71,12 @@ properties:
               "visualstudioonlineapplicationinsights.application-insights"
           )
           foreach ($extension in $extensions) {
-              code --install-extension $extension
-              Write-Host "Installed: $extension"
+              try {
+                  code --install-extension $extension
+                  Write-Host "Installed: $extension"
+              } catch {
+                  Write-Host "Failed to install: $extension"
+              }
           }
         GetScript: return $false
         TestScript: return $false
