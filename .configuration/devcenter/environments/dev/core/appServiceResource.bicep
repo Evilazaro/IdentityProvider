@@ -120,6 +120,7 @@ resource servicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     reserved: contains(kind, 'linux') ? true : false
     elasticScaleEnabled: true
   }
+
   tags: tags
 }
 
@@ -157,6 +158,7 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
       preWarmedInstanceCount: 1
       http20Enabled: true
       appSettings: appSettings
+      
     }
   }
 }
