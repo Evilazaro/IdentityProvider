@@ -15,7 +15,7 @@ param location string = 'eastus2'
 
 @description('Resource group for the deployment')
 resource securityRg 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${workloadName}-RG'
+  name: '${workloadName}-security-RG'
   location: location
 }
 
@@ -32,7 +32,7 @@ module security 'security/security.bicep'= {
   
 @description('Resource group for the deployment')
 resource monitoringRg 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${workloadName}-RG'
+  name: '${workloadName}-monitoring-RG'
   location: location
 }
 
@@ -41,7 +41,7 @@ module monitoring 'logAnalyticsResource.bicep' = {
   name: 'monitoring'
   scope: monitoringRg
   params: {
-    name: '${workloadName}-monitoring'
+    name: '${workloadName}-loganalytics'
     tags: {
       environment: environment
       name: workloadName
@@ -51,7 +51,7 @@ module monitoring 'logAnalyticsResource.bicep' = {
 
 @description('Resource group for the deployment')
 resource workloadRg 'Microsoft.Resources/resourceGroups@2024-11-01' = {
-  name: '${workloadName}-RG'
+  name: '${workloadName}-workload-RG'
   location: location
 }
 
