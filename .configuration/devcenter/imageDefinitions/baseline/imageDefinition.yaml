@@ -20,10 +20,50 @@ tasks:
       package: Microsoft.WindowsTerminal
   - name: winget
     parameters:
-      package: Git.Git
+      package: GitHub.cli
   - name: winget
     parameters:
       package: Microsoft.WindowsTerminal
+  ########################################################
+    ### Installs Dotnet SDK and Runtime
+  ########################################################
+  - name: winget
+    parameters:
+      package: Microsoft.DotNet.SDK.9
+  - name: winget
+    parameters:
+      package: Microsoft.DotNet.Runtime.9
+  ########################################
+  ### RESOURCES: System Configuration
+  ### Install: Microsoft Azure CLI
+  ### Install: Microsoft Azure Developer CLI
+  ### Install: Microsoft Azure Storage Emulator
+  ### Install: Microsoft Azure Storage Explorer
+  ### Install: Microsoft Azure Functions Core Tools
+  ### Install: Microsoft Azure Cosmos Emulator
+  ### Install: Microsoft Bicep
+  ########################################
+  - name: winget
+    parameters:
+      package: Microsoft.AzureCLI
+  - name: winget
+    parameters:
+      package: Microsoft.Azd
+  - name: winget
+    parameters:
+      package: Microsoft.Azure.StorageEmulator
+  - name: winget
+    parameters:
+      package: Microsoft.Azure.StorageExplorer
+  - name: winget
+    parameters:
+      package: Microsoft.Azure.FunctionsCoreTools
+  - name: winget
+    parameters:
+      package: Microsoft.Azure.CosmosEmulator
+  - name: winget
+    parameters:
+      package: Microsoft.Bicep
 
 userTasks:
   - name: winget
