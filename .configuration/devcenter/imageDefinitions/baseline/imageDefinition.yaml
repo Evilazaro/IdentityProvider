@@ -1,6 +1,6 @@
 $schema: "1.0"
 name: baseline
-image: microsoftwindowsdesktop_windows-ent-cpc_win11-24H2-ent-cpc
+image: microsoftwindowsdesktop_windows-ent-cpc_win11-21h2-ent-cpc-m365
 
 tasks:
   - name: powershell
@@ -11,16 +11,24 @@ tasks:
         Install-Module -Name PSDscResources -Force -AllowClobber
   - name: winget
     parameters:
-      package: Microsoft.AppInstaller
+      package: Git.Git
   - name: winget
     parameters:
-      package: Microsoft.AppInstallerFileBuilder
+      package: GitHub.GitHubDesktop
   - name: winget
     parameters:
-      package: Microsoft.DevHome
+      package: Microsoft.WindowsTerminal
   - name: winget
     parameters:
       package: Git.Git
   - name: winget
     parameters:
       package: Microsoft.WindowsTerminal
+
+userTasks:
+  - name: winget
+    description: Install workload baseline prerequisites
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/baseline.dsc.yaml"
+      configurationFile: 'C:\WinGetConfig\baseline.dsc.yaml'
+      runAsUser: true
