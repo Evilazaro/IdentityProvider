@@ -48,7 +48,6 @@ param currentStack string = 'dotnetcore'
   '7.0'
   '8.0'
   '9.0'
-  ''
 ])
 param dotnetcoreVersion string = '9.0'
 
@@ -57,7 +56,6 @@ param InstrumentationKey string
 
 @secure()
 param ConnectionString string
-
 
 @description('App Settings')
 var appSettings = [
@@ -117,6 +115,8 @@ resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
   kind: 'linux'
   properties: {
     reserved: (contains(kind, 'linux')) ? true : false
+    elasticScaleEnabled: true
+    targetWorkerCount: 2
   }
   tags: tags
 }
@@ -136,7 +136,8 @@ resource webapp 'Microsoft.Web/sites@2024-04-01' = {
     siteConfig: {
       linuxFxVersion: linuxFxVersion
       alwaysOn: true
-      minimumElasticInstanceCount: 1
+      minimumElasticInstanceCount: 3
+      preWarmedInstanceCount: 1
       http20Enabled: true
       appSettings: appSettings
     }
