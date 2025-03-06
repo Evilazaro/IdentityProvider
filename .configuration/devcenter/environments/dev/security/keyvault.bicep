@@ -1,5 +1,5 @@
 @description('Key Vault Name')
-var keyVaultName = 'kv'
+var keyVaultName = 'identity-kv'
 
 @description('Secret Name')
 var secretName = 'gha'
@@ -10,7 +10,7 @@ param logAnalyticsWorkspaceId string
 @description('Secret Value')
 var secretValue = 'example-secret-value'
 
-var uniqueName = guid('${keyVaultName}', resourceGroup().id)
+var uniqueName = guid('${keyVaultName}',subscription().displayName,subscription().id, resourceGroup().id)
 
 resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
   name: '${keyVaultName}-${uniqueString(resourceGroup().id, keyVaultName, resourceGroup().name, uniqueName)}-kv'
