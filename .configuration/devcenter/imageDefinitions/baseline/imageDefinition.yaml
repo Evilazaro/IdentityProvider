@@ -10,7 +10,7 @@ tasks:
   - name: ~/powershell
     parameters:
       command: |
-        Set-ExecutionPolicy Unrestricted -Scope LocalMachine -Force
+        Set-ExecutionPolicy Bypass -Scope Process -Force
         Install-PackageProvider -Name NuGet -Force
         Install-Module -Name PSDscResources -Force -AllowClobber
 
