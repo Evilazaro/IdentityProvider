@@ -47,6 +47,9 @@ module monitoring 'logAnalyticsResource.bicep' = {
       name: workloadName
     }
   }
+  dependsOn: [
+    security
+  ]
 }
 
 @description('Resource group for the deployment')
