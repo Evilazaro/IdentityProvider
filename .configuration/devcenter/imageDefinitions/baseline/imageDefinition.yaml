@@ -24,7 +24,4 @@ tasks:
       package: Git.Git
   - name: winget
     parameters:
-      package: Git.Git
-  - name: winget
-    parameters:
       package: Microsoft.WindowsTerminal
