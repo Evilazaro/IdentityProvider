@@ -7,7 +7,7 @@ tasks:
     parameters:
       package: Git.Git
   
-  - name: ~/powershell
+  - name: powershell
     parameters:
       command: |
         Set-ExecutionPolicy Bypass -Scope Process -Force
