@@ -8,17 +8,6 @@ var workloadName = 'identityProvider'
 ])
 param environment string = 'dev'
 
-module security 'security/security.bicep'= {
-  scope: resourceGroup()
-  name: 'security'
-  params: {
-    tags: {}
-    keyVaultName: 'kv'	 
-    secretName: 'gha'
-    secretValue: 'example-secret-value'
-  }
-}
-  
 @description('Module for Log Analytics and Application Insights')
 module monitoring './monitoring/logAnalyticsResource.bicep' = {
   name: 'monitoring'
@@ -30,10 +19,21 @@ module monitoring './monitoring/logAnalyticsResource.bicep' = {
       name: workloadName
     }
   }
-  dependsOn: [
-    security
-  ]
 }
+
+module security 'security/security.bicep'= {
+  scope: resourceGroup()
+  name: 'security'
+  params: {
+    tags: {}
+    keyVaultName: 'kv'	 
+    secretName: 'gha'
+    secretValue: 'example-secret-value'
+    logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
+  }
+}
+  
+
 
 @description('Module for App Service')
 module webapp './core/appServiceResource.bicep' = {
@@ -45,6 +45,7 @@ module webapp './core/appServiceResource.bicep' = {
     keyVaultName: security.outputs.keyVaultName
     connectionString: monitoring.outputs.connectionString
     instrumentationKey: monitoring.outputs.instrumentationKey
+    logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
   }
 }
 

@@ -28,6 +28,28 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   }
 }
 
+@description('Log Analytics Diagnostic Settings')
+resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'keyvault'
+  scope: logAnalytics
+  properties: {
+    logAnalyticsDestinationType: 'AzureDiagnostics'
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+    workspaceId: logAnalytics.id
+  }
+}
+
 @description('Create an Application Insights resource')
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: '${name}-${uniqueString(name, resourceGroup().id)}'
@@ -42,3 +64,4 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 output instrumentationKey string = appInsights.properties.InstrumentationKey
 output connectionString string = appInsights.properties.ConnectionString
+output workspaceId string = logAnalytics.id

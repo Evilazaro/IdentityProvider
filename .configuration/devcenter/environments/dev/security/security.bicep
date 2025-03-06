@@ -7,6 +7,9 @@ param secretName string
 @description('Key Vault Location')
 param location string = resourceGroup().location
 
+@description('Log Analytics Workspace')
+param logAnalyticsWorkspaceId string
+
 @description('Key Vault Tags')
 param tags object
 
@@ -38,6 +41,29 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
     ]
   }
 }
+
+@description('Log Analytics Diagnostic Settings')
+resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'keyvault'
+  scope: keyVault
+  properties: {
+    logAnalyticsDestinationType: 'AzureDiagnostics'
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+    workspaceId: logAnalyticsWorkspaceId
+  }
+}
+
 
 resource secret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: secretName

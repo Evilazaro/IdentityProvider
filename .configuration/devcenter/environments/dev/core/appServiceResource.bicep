@@ -105,6 +105,8 @@ param appSettings array = [
   }
 ]
 
+param logAnalyticsWorkspaceId string
+
 @description('Tags')
 param tags object = {}
 
@@ -122,6 +124,28 @@ resource servicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     elasticScaleEnabled: true
   }
   tags: tags
+}
+
+@description('Log Analytics Diagnostic Settings')
+resource spDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'appsplan'
+  scope: servicePlan
+  properties: {
+    logAnalyticsDestinationType: 'AzureDiagnostics'
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+    workspaceId: logAnalyticsWorkspaceId
+  }
 }
 
 @description('App Service Resource')
@@ -143,6 +167,28 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
       http20Enabled: true
       appSettings: appSettings
     }
+  }
+}
+
+@description('Log Analytics Diagnostic Settings')
+resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'keyvault'
+  scope: webApp
+  properties: {
+    logAnalyticsDestinationType: 'AzureDiagnostics'
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+    workspaceId: logAnalyticsWorkspaceId
   }
 }
 
