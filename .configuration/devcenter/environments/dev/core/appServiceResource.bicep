@@ -132,12 +132,6 @@ resource spDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-
   scope: servicePlan
   properties: {
     logAnalyticsDestinationType: 'AzureDiagnostics'
-    logs: [
-      {
-        categoryGroup: 'allLogs'
-        enabled: true
-      }
-    ]
     metrics: [
       {
         category: 'AllMetrics'
