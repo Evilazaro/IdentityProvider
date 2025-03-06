@@ -17,13 +17,7 @@ tasks:
       package: GitHub.GitHubDesktop
   - name: winget
     parameters:
-      package: Microsoft.WindowsTerminal
-  - name: winget
-    parameters:
       package: GitHub.cli
-  - name: winget
-    parameters:
-      package: Microsoft.WindowsTerminal
   ########################################################
     ### Installs Dotnet SDK and Runtime
   ########################################################
