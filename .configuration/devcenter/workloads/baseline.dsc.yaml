@@ -12,7 +12,7 @@ properties:
         description: Update Winget Packages
       settings:
         SetScript: |
-          Set-ExecutionPolicy Unrestricted -Scope AllUsers -Force
+          Set-ExecutionPolicy Unrestricted -Scope Process -Force
           $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
           winget install  Microsoft.PowerToys --silent --accept-package-agreements --accept-source-agreements
         GetScript: return $false
