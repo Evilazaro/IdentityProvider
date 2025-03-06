@@ -5,6 +5,8 @@ name: identity-provider
 cloud:
   name: AzureCloud
 
+resourceGroup: identityProvider-rg
+
 platform:
   type: devcenter
   config:
@@ -16,6 +18,9 @@ platform:
 
 services:
   identity-service:
+    config:
+      resourceGroup: identityProvider-rg
+      location: eastus2
     resourceName: identityProvider-webapp-dev
     host: appservice
     language: csharp
