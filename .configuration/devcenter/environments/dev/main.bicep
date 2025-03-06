@@ -1,6 +1,9 @@
 @description('The name of the workload')
 var workloadName = 'identityProvider'
 
+@description('Location for the resources')
+param location string = resourceGroup().location
+
 @description('The environment for the deployment')
 @allowed([
   'dev'
@@ -14,31 +17,27 @@ resource rg 'Microsoft.Resources/resourceGroups@2024-11-01' existing = {
 }
 
 @description('Module for Log Analytics and Application Insights')
-module monitoring './monitoring/logAnalyticsResource.bicep' = {
+module monitoring 'monitoring/monitoring.bicep' = {
   name: 'monitoring'
-  scope: rg
+  scope: subscription()
   params: {
-    name: '${workloadName}-loganalytics'
-    tags: {
-      environment: environment
-      name: workloadName
-    }
+    workloadName : workloadName
+    environment: environment
+    location: location
   }
 }
 
-module security 'security/security.bicep'= {
+module security 'security/security.bicep' = {
   scope: rg
   name: 'security'
   params: {
     tags: {}
-    keyVaultName: 'kv'	 
+    keyVaultName: 'kv'
     secretName: 'gha'
     secretValue: 'example-secret-value'
     logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
   }
 }
-  
-
 
 @description('Module for App Service')
 module webapp './core/appServiceResource.bicep' = {
