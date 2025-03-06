@@ -9,8 +9,8 @@ param workloadName string
 param environment string
 
 @description('Module for Log Analytics and Application Insights')
-module monitoring 'logAnalyticsResource.bicep' = {
-  name: 'monitoring'
+module logAnalytics 'logAnalyticsResource.bicep' = {
+  name: 'logAnalytics'
   scope: resourceGroup()
   params: {
     name: '${workloadName}-loganalytics'
@@ -21,6 +21,6 @@ module monitoring 'logAnalyticsResource.bicep' = {
   }
 }
 
-output workspaceId string = monitoring.outputs.workspaceId
-output connectionString string = monitoring.outputs.connectionString
-output instrumentationKey string = monitoring.outputs.instrumentationKey
+output workspaceId string = logAnalytics.outputs.workspaceId
+output connectionString string = logAnalytics.outputs.connectionString
+output instrumentationKey string = logAnalytics.outputs.instrumentationKey
