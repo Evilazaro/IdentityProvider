@@ -9,7 +9,6 @@ tasks:
         Set-ExecutionPolicy Bypass -Scope Process -Force
         Install-PackageProvider -Name NuGet -Force
         Install-Module -Name PSDscResources -Force -AllowClobber
-
   - name: winget
     parameters:
       package: Microsoft.AppInstaller
