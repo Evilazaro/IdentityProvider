@@ -15,7 +15,7 @@ param logAnalyticsSku string = 'PerGB2018'
 
 
 resource sa 'Microsoft.Storage/storageAccounts@2023-05-01' = {
-  name: '${name}-sa'
+  name: 'devcentersa'
   location: resourceGroup().location
   sku: {
     name: 'Standard_GZRS'
