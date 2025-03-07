@@ -155,7 +155,6 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
     siteConfig: {
       linuxFxVersion: linuxFxVersion
       alwaysOn: true
-      preWarmedInstanceCount: 1
       http20Enabled: true
       appSettings: appSettings
       
