@@ -56,18 +56,21 @@ userTasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/baseline.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\baseline.dsc.yaml'
+      runAsUser: true
 
   - name: winget
     description: Install Visual Studio Code and its Extensions
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\vscode.dsc.yaml'
+      runAsUser: true
 
   - name: winget
     description: Install APIs Resources
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\apis.dsc.yaml'
+      runAsUser: true
 
   - name: git-clone
     description: Clone IdentityProvider repository into C:\Workspaces
@@ -86,3 +89,4 @@ userTasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/customizations/sourceCode/sourcecode.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\sourcecode.dsc.yaml'
+      runAsUser: true
