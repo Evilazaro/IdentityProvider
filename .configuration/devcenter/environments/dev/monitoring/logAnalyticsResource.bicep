@@ -13,6 +13,16 @@ param tags object = {}
 ])
 param logAnalyticsSku string = 'PerGB2018'
 
+
+resource sa 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: '${name}-sa'
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_GZRS'
+  }
+  kind: 'StorageV2'
+}
+
 @description('Create a Log Analytics workspace')
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: '${name}-${uniqueString(name, resourceGroup().id)}'
@@ -47,6 +57,7 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
       }
     ]
     workspaceId: logAnalytics.id
+    storageAccountId: sa.id
   }
 }
 
