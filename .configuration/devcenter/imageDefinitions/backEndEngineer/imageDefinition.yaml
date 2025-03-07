@@ -80,6 +80,7 @@ userTasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/identityProvider/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\vstudio.dsc.yaml'
+      runAsUser: true
 
   - name: winget
     description: Install Containers Resources
