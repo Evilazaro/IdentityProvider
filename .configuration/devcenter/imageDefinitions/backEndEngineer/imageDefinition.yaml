@@ -99,13 +99,13 @@ userTasks:
       configurationFile: 'C:\WinGetConfig\apis.dsc.yaml'
       
 
-  - name: ~/git-clone
+  - name: git-clone
     description: Clone IdentityProvider repository into C:\Workspaces
     parameters:
       repositoryUrl: https://github.com/Evilazaro/IdentityProvider.git
       directory: C:\Workspaces
 
-  - name: ~/git-clone
+  - name: git-clone
     description: Clone eShop repository's feature/winui2.6 branch into C:\Workspaces
     parameters:
       repositoryUrl: https://github.com/Evilazaro/eShop.git
