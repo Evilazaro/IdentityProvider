@@ -2,5 +2,5 @@
 name: webapp
 summary: Dev environment for identityProvider
 description: Dev environment for identityProvider
-templatePath: main.bicep
+templatePath: ../infra/main.bicep
 runner: bicep

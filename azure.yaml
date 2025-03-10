@@ -6,3 +6,13 @@ services:
     language: dotnet
     project: ./src/IdentityProvider.AppHost/IdentityProvider.AppHost.csproj
     host: containerapp
+
+
+platform:
+  type: devcenter
+  config:
+    catalog: environments
+    name: environments
+    environmentDefinition: webapp
+    environmentType: dev
+    project: identityProvider
