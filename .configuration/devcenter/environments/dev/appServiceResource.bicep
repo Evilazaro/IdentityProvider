@@ -58,7 +58,6 @@ param InstrumentationKey string
 @secure()
 param ConnectionString string
 
-
 @description('App Settings')
 var appSettings = [
   {
@@ -126,7 +125,9 @@ resource webapp 'Microsoft.Web/sites@2024-04-01' = {
   name: '${name}-webapp-${environment}'
   location: location
   kind: kind
-  tags: tags
+  tags: {
+    'azd-service-name': 'identityProvider'
+  }
   identity: {
     type: 'SystemAssigned'
   }
