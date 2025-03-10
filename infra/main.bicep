@@ -1,22 +1,30 @@
+targetScope = 'subscription'
+
 @minLength(1)
 @maxLength(64)
 @description('Name of the environment that can be used as part of naming resource convention, the name of the resource group for your application will use this name, prefixed with rg-')
-param environmentName string = 'dev'
+param environmentName string
 
 @minLength(1)
 @description('The location used for all deployed resources')
-param location string = resourceGroup().location
+param location string
 
 @description('Id of the user or app to assign application roles')
-param principalId string = deployer().objectId
+param principalId string = ''
+
 
 var tags = {
   'azd-env-name': environmentName
-  'azd-service-name': 'identityprovider'
+}
+
+resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: 'rg-identityProvider-${environmentName}'
+  location: location
+  tags: tags
 }
 
 module resources 'resources.bicep' = {
-  scope: resourceGroup()
+  scope: rg
   name: 'resources'
   params: {
     location: location
