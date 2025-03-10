@@ -8,7 +8,7 @@ cloud:
 platform:
   type: devcenter
   config:
-    name: ContosoDevExp-devCenter
+    name: DevExp-devcenter
     environmentDefinition: webapp
     environmentType: dev
     project: identityProvider
