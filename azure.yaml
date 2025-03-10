@@ -7,7 +7,7 @@ services:
   identityProvider:
     host: appservice
     language: dotnet
-    project: ./identityProvider.sln
+    project: ./src/IdentityProvider/IdentityProvider.csproj
       
 platform:
   type: devcenter
