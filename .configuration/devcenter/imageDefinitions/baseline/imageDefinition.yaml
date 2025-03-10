@@ -1,5 +1,5 @@
 $schema: "1.0"
-name: baseline
+name: identityProvider-baseline
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
 tasks:
