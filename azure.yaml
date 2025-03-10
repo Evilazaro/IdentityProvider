@@ -2,13 +2,12 @@
 
 name: identityProvider
 
-
 services:
   identityProvider:
     host: appservice
     language: dotnet
     project: ./src/IdentityProvider/IdentityProvider.csproj
-      
+
 platform:
   type: devcenter
   config:

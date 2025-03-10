@@ -122,9 +122,12 @@ resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
 
 @description('App Service Resource')
 resource identityProvider 'Microsoft.Web/sites@2024-04-01' = {
-  name: '${name}-webapp-${uniqueString(resourceGroup().id)}-${environment}'
+  name: '${name}-webapp-${environment}'
   location: location
   kind: kind
+  tags: {
+    'azd-service-name': '${name}-webapp-${environment}'
+  }
   identity: {
     type: 'SystemAssigned'
   }
