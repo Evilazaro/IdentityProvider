@@ -11,8 +11,8 @@ services:
 platform:
   type: devcenter
   config:
+    name: DevExp-devcenter
     catalog: environments
-    name: environments
     environmentDefinition: webapp
     environmentType: dev
     project: identityProvider
