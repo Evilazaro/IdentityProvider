@@ -13,6 +13,8 @@ param principalId string = deployer().objectId
 
 var tags = {
   'azd-env-name': environmentName
+  'azd-service-name': 'identityprovider'
+  'aspire-resource-name': 'identityprovider'
 }
 
 module resources 'resources.bicep' = {
