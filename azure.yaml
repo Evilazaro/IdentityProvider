@@ -5,6 +5,7 @@ services:
   app:
     project: ./src/IdentityProvider.AppHost/IdentityProvider.AppHost.csproj
     host: containerapp
+    language: csharp
 
 
 platform:
