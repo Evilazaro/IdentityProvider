@@ -6,12 +6,11 @@ services:
     language: dotnet
     project: ./src/IdentityProvider.AppHost/IdentityProvider.AppHost.csproj
     host: containerapp
-resourceGroup: rg-identityProvider-dev
 
 platform:
   type: devcenter
   config:
-    name: DevExp-devcenter2
+    name: DevExp-devcenter
     catalog: environments
     environmentDefinition: webapp
     environmentType: dev
