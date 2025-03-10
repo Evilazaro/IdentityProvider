@@ -1,6 +1,0 @@
-services:
-  contoso.identityprovider:
-    image: evilazaro/contosoidentityprovider
-    build:
-      context: .
-      dockerfile: src/Contoso.IdentityProvider/Dockerfile
