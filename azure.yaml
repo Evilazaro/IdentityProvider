@@ -1,25 +1,18 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
 name: identity-provider
+services:  
+  app:
+    language: dotnet
+    project: ./src/IdentityProvider.AppHost/IdentityProvider.AppHost.csproj
+    host: containerapp
 
-cloud:
-  name: AzureCloud
 
 platform:
   type: devcenter
   config:
     name: DevExp-devcenter
+    catalog: environments
     environmentDefinition: webapp
     environmentType: dev
     project: identityProvider
-    catalog: environments
-
-services:
-  identity-service:
-    host: appservice
-    language: csharp
-    project: ./src/Contoso.IdentityProvider
-  
-
-      
-      
