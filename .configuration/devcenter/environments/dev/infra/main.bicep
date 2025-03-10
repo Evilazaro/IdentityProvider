@@ -9,7 +9,7 @@ param environmentName string
 param location string = resourceGroup().location
 
 @description('Id of the user or app to assign application roles')
-param principalId string = ''
+param principalId string = deployer().objectId
 
 
 var tags = {
