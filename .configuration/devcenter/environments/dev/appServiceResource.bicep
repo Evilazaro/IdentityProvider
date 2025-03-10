@@ -121,13 +121,10 @@ resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
 }
 
 @description('App Service Resource')
-resource webapp 'Microsoft.Web/sites@2024-04-01' = {
-  name: '${name}-webapp-${environment}'
+resource identityProvider 'Microsoft.Web/sites@2024-04-01' = {
+  name: '${name}-webapp-${uniqueString(resourceGroup().id)}-${environment}'
   location: location
   kind: kind
-  tags: {
-    'azd-service-name': 'identityProvider'
-  }
   identity: {
     type: 'SystemAssigned'
   }
@@ -144,5 +141,5 @@ resource webapp 'Microsoft.Web/sites@2024-04-01' = {
   }
 }
 
-output webappName string = webapp.name
-output webappUrl string = webapp.properties.defaultHostName
+output webappName string = identityProvider.name
+output webappUrl string = identityProvider.properties.defaultHostName
