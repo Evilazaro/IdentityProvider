@@ -2,22 +2,22 @@
 var workloadName = 'identityProvider'
 
 @description('Location for the resources')
-param location string = resourceGroup().location
+param location string 
 
 @description('The environment for the deployment')
 @allowed([
   'dev'
-  'prod'
+  'staging'
 ])
-param environment string = 'dev'
+param environmentName string = 'dev'
 
 @description('Module for Log Analytics and Application Insights')
 module monitoring 'monitoring/monitoring.bicep' = {
   name: 'monitoring'
   scope: resourceGroup()
   params: {
+    environmentName: environmentName
     workloadName: workloadName
-    environment: environment
   }
 }
 
@@ -25,6 +25,7 @@ module security 'security/security.bicep' = {
   scope: resourceGroup()
   name: 'security'
   params: {
+    environmentName: environmentName
     logAnalyticsWorkspaceId: monitoring.outputs.workspaceId
   }
 }
@@ -35,7 +36,7 @@ module workload 'core/webapp.bicep' = {
   scope: resourceGroup()
   params: {
     workloadName: workloadName
-    environment: environment
+    environmentName: environmentName
     keyVaultName: security.outputs.keyVaultName
     instrumentationKey: monitoring.outputs.instrumentationKey
     connectionString: monitoring.outputs.connectionString

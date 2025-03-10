@@ -4,9 +4,9 @@ param name string
 @description('App Service Environment')
 @allowed([
   'dev'
-  'prod'
+  'staging'
 ])
-param environment string
+param environmentName string
 
 param keyVaultName string
 
@@ -112,7 +112,7 @@ var linuxFxVersion = contains(kind, 'linux') ? '${toUpper(currentStack)}|${dotne
 
 @description('App Service Plan Resource')
 resource servicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
-  name: '${name}-${uniqueString(resourceGroup().id, name)}-svcplan'
+  name: '${name}-${environmentName}-${uniqueString(resourceGroup().id, name)}-svcplan'
   location: resourceGroup().location
   sku: sku
   kind: 'linux'
@@ -126,7 +126,7 @@ resource servicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 
 @description('Log Analytics Diagnostic Settings')
 resource spDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'appsplan'
+  name: 'appsplan-${environmentName}'
   scope: servicePlan
   properties: {
     logAnalyticsDestinationType: 'AzureDiagnostics'
@@ -142,7 +142,7 @@ resource spDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-
 
 @description('App Service Resource')
 resource webApp 'Microsoft.Web/sites@2024-04-01' = {
-  name: '${name}-webapp-${environment}'
+  name: '${name}-webapp-${environmentName}'
   location: resourceGroup().location
   kind: kind
   tags: tags
@@ -164,7 +164,7 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
 
 @description('Log Analytics Diagnostic Settings')
 resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'keyvault'
+  name: 'keyvault-${environmentName}'
   scope: webApp
   properties: {
     logAnalyticsDestinationType: 'AzureDiagnostics'

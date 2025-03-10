@@ -1,10 +1,18 @@
 @description('Log Analytics Workspace')
 param logAnalyticsWorkspaceId string
 
+@description('Environment Name')
+@allowed([
+  'dev'
+  'staging'
+])
+param environmentName string
+
 module keyvault 'keyvault.bicep' = {
   scope: resourceGroup()
   name: 'keyvault'
   params: {
+    keyVaultName: 'identity-keyvault-${environmentName}'
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
   }
 }

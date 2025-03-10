@@ -1,5 +1,5 @@
 @description('Key Vault Name')
-var keyVaultName = 'identity'
+param keyVaultName string 
 
 @description('Secret Name')
 var secretName = 'gha'

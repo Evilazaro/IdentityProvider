@@ -4,9 +4,9 @@ param workloadName string
 @description('The environment for the deployment')
 @allowed([
   'dev'
-  'prod'
+  'staging'
 ])
-param environment string
+param environmentName string
 
 @description('Module for Log Analytics and Application Insights')
 module logAnalytics 'logAnalyticsResource.bicep' = {
@@ -15,7 +15,7 @@ module logAnalytics 'logAnalyticsResource.bicep' = {
   params: {
     name: '${workloadName}-loganalytics'
     tags: {
-      environment: environment
+      environment: environmentName
       name: workloadName
     }
   }

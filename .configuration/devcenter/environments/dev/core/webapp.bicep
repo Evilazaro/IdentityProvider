@@ -4,9 +4,9 @@ param workloadName string
 @description('App Service Environment')
 @allowed([
   'dev'
-  'prod'
+  'staging'
 ])
-param environment string
+param environmentName string
 
 param keyVaultName string
 
@@ -25,7 +25,7 @@ module webapp 'appServiceResource.bicep' = {
   scope: resourceGroup()
   params: {
     name: workloadName
-    environment: environment
+    environmentName: environmentName
     keyVaultName: keyVaultName
     instrumentationKey: instrumentationKey
     connectionString: connectionString
