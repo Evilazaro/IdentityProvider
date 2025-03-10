@@ -3,10 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "environmentName": {
-        "value": "${AZURE_ENV_NAME}"
-      },
-      "location": {
-        "value": "${AZURE_LOCATION}"
+        "value": "dev"
       }
     }
   }

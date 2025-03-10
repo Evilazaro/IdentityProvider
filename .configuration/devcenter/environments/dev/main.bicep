@@ -2,7 +2,7 @@
 var workloadName = 'identityProvider'
 
 @description('Location for the resources')
-param location string 
+param location string = resourceGroup().location
 
 @description('The environment for the deployment')
 @allowed([
