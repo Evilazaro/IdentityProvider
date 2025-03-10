@@ -3,7 +3,6 @@
 name: identityprovider
 services:  
   app:
-    language: dotnet
     project: ./src/IdentityProvider.AppHost/IdentityProvider.AppHost.csproj
     host: containerapp
 
