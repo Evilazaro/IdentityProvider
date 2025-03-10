@@ -6,7 +6,7 @@ param environmentName string
 
 @minLength(1)
 @description('The location used for all deployed resources')
-param location string
+param location string = resourceGroup().location
 
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
