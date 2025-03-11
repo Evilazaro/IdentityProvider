@@ -10,7 +10,6 @@ tasks:
         Set-ExecutionPolicy Bypass -Scope Process -Force
         Install-PackageProvider -Name NuGet -Force
         Install-Module -Name PSDscResources -Force -AllowClobber
-        Import-Module Microsoft.VisualStudio.DSC -Force -Verbose
 
   # Git and GitHub tools
   - name: ~/winget
