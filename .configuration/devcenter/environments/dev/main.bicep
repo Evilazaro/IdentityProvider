@@ -23,11 +23,6 @@ module monitoring 'logAnalyticsResource.bicep' = {
   }
 }
 
-module sql 'sqldb.bicep' = {
-  name: 'sql'
-  scope: rg
-}
-
 module webapp 'appServiceResource.bicep' = {
   name: 'webapp'
   scope: rg
@@ -37,9 +32,6 @@ module webapp 'appServiceResource.bicep' = {
     ConnectionString: monitoring.outputs.ConnectionString
     InstrumentationKey: monitoring.outputs.InstrumentationKey
   }
-  dependsOn: [
-    sql
-  ]
 }
 
 output RESOURCE_NAME string = webapp.outputs.webappName
