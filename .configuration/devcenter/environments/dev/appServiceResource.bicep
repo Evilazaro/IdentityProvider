@@ -122,7 +122,7 @@ resource serviceplan 'Microsoft.Web/serverfarms@2023-12-01' = {
 
 @description('App Service Resource')
 resource identityProvider 'Microsoft.Web/sites@2024-04-01' = {
-  name: '${name}-webapp-${environment}'
+  name: '${name}-${uniqueString(resourceGroup().id)}-${environment}'
   location: location
   kind: kind
   tags: {
