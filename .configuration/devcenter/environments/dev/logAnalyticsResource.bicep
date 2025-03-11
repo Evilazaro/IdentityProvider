@@ -2,7 +2,10 @@
 param name string 
 
 @description('Tags for the Log Analytics workspace')
-param tags object
+param tags object = {
+  environment: 'dev'
+  workload: 'identityProvider'
+}
 
 @description('Create a Log Analytics workspace')
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
