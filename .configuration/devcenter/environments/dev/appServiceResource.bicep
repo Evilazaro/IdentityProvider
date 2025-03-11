@@ -126,7 +126,7 @@ resource identityProvider 'Microsoft.Web/sites@2024-04-01' = {
   location: location
   kind: kind
   tags: {
-    'azd-service-name': '${name}-webapp-${environment}'
+    'azd-service-name': 'identityProvider'
   }
   identity: {
     type: 'SystemAssigned'
