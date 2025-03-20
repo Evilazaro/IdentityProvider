@@ -12,7 +12,7 @@ services:
 platform:
   type: devcenter
   config:
-    name: DevExp-devcenter
+    name: devexp-devcenter
     catalog: environments
     environmentDefinition: webapp
     environmentType: dev
