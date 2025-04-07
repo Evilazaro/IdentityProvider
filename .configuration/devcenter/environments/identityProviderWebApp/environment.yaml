@@ -4,13 +4,3 @@ summary: Dev environment for identityProvider
 description: Dev environment for identityProvider
 templatePath: main.bicep
 runner: bicep
-parameters:
-  - id: environmentName
-    name: environmentName
-    type: string
-    default: dev
-  - id: identityProviderExists
-    name: identityProviderExists
-    type: string
-    default: SERVICE_IDENTITY_PROVIDER_RESOURCE_EXISTS=false
-  

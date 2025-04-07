@@ -1,16 +1,16 @@
 @minLength(1)
 @maxLength(64)
 @description('Name of the environment that can be used as part of naming resource convention')
-param environmentName string
+param environmentName string = 'dev'
 
 @minLength(1)
 @description('Primary location for all resources')
 param location string = resourceGroup().location
 
-param identityProviderExists bool
+param identityProviderExists bool = false
 
 @description('Id of the user or app to assign application roles')
-param principalId string = deployer().objectId
+param principalId string = ''
 
 // Tags that should be applied to all resources.
 // 
