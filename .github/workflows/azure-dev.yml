@@ -43,7 +43,7 @@ jobs:
 
       - name: Test Idetity Provider
         run: |
-          dotnet test ./src/identityProviderTests/idewntityProviderTests.csproj
+          dotnet test ./src/identityProviderTests/identityProviderTests.csproj
 
   deploy:
     needs: test

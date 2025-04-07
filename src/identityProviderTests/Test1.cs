@@ -1,4 +1,4 @@
-﻿namespace idewntityProviderTests
+﻿namespace identityProviderTests
 {
     [TestClass]
     public sealed class Test1
