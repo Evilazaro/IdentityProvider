@@ -31,6 +31,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x.x'
+
       - name: Install azd
         uses: Azure/setup-azd@v2
 
@@ -42,12 +46,6 @@ jobs:
             --tenant-id "$Env:AZURE_TENANT_ID"
         shell: pwsh
 
-      - name: Set up .NET SDK
-        run: |
-          sudo add-apt-repository ppa:dotnet/backports -y
-          sudo apt-get update && \
-          sudo apt-get install -y dotnet-sdk-9.0
-          
       - name: Build Application
         run: azd build --no-prompt
         
@@ -58,8 +56,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x.x'
+
       - name: Install azd
         uses: Azure/setup-azd@v2
+        
       - name: Log in with Azure (Federated Credentials)
         run: |
           azd auth login `
@@ -84,8 +88,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x.x'
+
       - name: Install azd
         uses: Azure/setup-azd@v2
+
       - name: Log in with Azure (Federated Credentials)
         run: |
           azd auth login `
