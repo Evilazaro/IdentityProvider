@@ -1,13 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
-name: identityProvider
+name: identity-provider
 
 services:
   identityProvider:
     host: appservice
     language: dotnet
     project: ./src/IdentityProvider/IdentityProvider.csproj
-    #resourceName: identityProvider-webapp-dev
 
 platform:
   type: devcenter
