@@ -11,6 +11,6 @@ parameters:
     default: dev
   - id: identityProviderExists
     name: identityProviderExists
-    type: boolean
-    default: true
+    type: string
+    default: SERVICE_IDENTITY_PROVIDER_RESOURCE_EXISTS=false
   
