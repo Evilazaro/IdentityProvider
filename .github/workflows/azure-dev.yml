@@ -25,7 +25,7 @@ jobs:
           echo "Installing .NET SDK"
           sudo apt-get update
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          curl -fsSL https://aka.ms/install-azd.sh | bash
+          curl -fsSL https://aka.ms/install-azd.sh | sudo bash
           sudo add-apt-repository ppa:dotnet/backports -y && \
           sudo apt-get update && \
           sudo apt-get install -y dotnet-sdk-9.0
@@ -50,7 +50,7 @@ jobs:
           echo "Installing .NET SDK"
           sudo apt-get update
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          curl -fsSL https://aka.ms/install-azd.sh | bash
+          curl -fsSL https://aka.ms/install-azd.sh | sudo bash
           sudo add-apt-repository ppa:dotnet/backports -y && \
           sudo apt-get update && \
           sudo apt-get install -y dotnet-sdk-9.0
