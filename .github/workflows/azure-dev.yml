@@ -64,7 +64,7 @@ jobs:
       - name: Test Identity Provider
         run: dotnet test 
 
-  provision:
+  deploy:
     needs: test
     runs-on: ubuntu-latest
 
@@ -89,36 +89,7 @@ jobs:
 
 
       - name: Provision Infrastructure
-        run: azd provision -e ${{ env.AZURE_ENV_NAME }} --no-prompt
-        env:
-          AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
-  
-  deploy:
-    needs: provision
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.x.x'
-
-      - name: Install azd
-        uses: Azure/setup-azd@v2
-        
-      - name: Log in with Azure (Federated Credentials)
-        run: |
-          azd auth login `
-            --client-id "$Env:AZURE_CLIENT_ID" `
-            --federated-credential-provider "github" `
-            --tenant-id "$Env:AZURE_TENANT_ID"
-        shell: pwsh
-
-
-      - name: Deploy Application
-        run: azd deploy -e ${{ env.AZURE_ENV_NAME }} --no-prompt
+        run: azd up -e ${{ env.AZURE_ENV_NAME }} --no-prompt
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
 
