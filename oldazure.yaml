@@ -8,3 +8,12 @@ services:
         project: src/IdentityProvider
         host: containerapp
         language: dotnet
+
+# platform:
+#   type: devcenter
+#   config:
+#     catalog: environments
+#     environmentDefinition: webapp
+#     environmentType: dev
+#     name: devexp-devcenter
+#     project: identityProvider
