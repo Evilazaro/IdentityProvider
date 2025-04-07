@@ -27,10 +27,11 @@ jobs:
 
       - name: Build Idetity Provider
         run: |
-          dotnet restore ./src/IdentityProvider/IdentityProvider.csproj
-          dotnet build ./src/IdentityProvider/IdentityProvider.csproj --configuration Release --no-restore
+          dotnet restore 
+          dotnet build --configuration Release --no-restore
 
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,7 +44,7 @@ jobs:
 
       - name: Test Idetity Provider
         run: |
-          dotnet test ./src/identityProviderTests/identityProviderTests.csproj
+          dotnet test
 
   deploy:
     needs: test
