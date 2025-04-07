@@ -31,8 +31,8 @@ jobs:
           sudo apt-get install -y dotnet-sdk-9.0
           sudo dotnet workload install aspire
           echo "Building application"
-          dotnet restore ./src/Contoso.IdentityProvider.sln
-          dotnet build ./src/Contoso.IdentityProvider.sln --configuration Release --no-restore
+          dotnet restore ./src/IdentityProvider/IdentityProvider.csproj
+          dotnet build ./src/IdentityProvider/IdentityProvider.csproj --configuration Release --no-restore
         shell: bash
 
   deploy:
