@@ -1,4 +1,4 @@
-# Run when commits are pushed to feature/containerapp
+name: Continuous Integration and Deployment (CI/CD) for Identity Provider
 on:
   workflow_dispatch:
 
