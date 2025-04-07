@@ -10,7 +10,7 @@ param location string = resourceGroup().location
 param identityProviderExists bool
 
 @description('Id of the user or app to assign application roles')
-param principalId string
+param principalId string = deployer().objectId
 
 // Tags that should be applied to all resources.
 // 
