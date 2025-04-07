@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using IdentityProvider.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityProvider.Components.Account;
 

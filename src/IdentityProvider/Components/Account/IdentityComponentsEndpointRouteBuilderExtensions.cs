@@ -1,14 +1,14 @@
-using System.Security.Claims;
-using System.Text.Json;
+using IdentityProvider.Components.Account.Pages;
+using IdentityProvider.Components.Account.Pages.Manage;
+using IdentityProvider.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using IdentityProvider.Components.Account.Pages;
-using IdentityProvider.Components.Account.Pages.Manage;
-using IdentityProvider.Data;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace Microsoft.AspNetCore.Routing;
 
