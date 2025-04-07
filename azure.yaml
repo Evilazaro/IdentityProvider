@@ -3,7 +3,7 @@
 name: identity-provider
 
 services:
-  identity-provider:
+  identityProvider:
     host: appservice
     language: dotnet
     project: ./src/IdentityProvider/IdentityProvider.csproj
