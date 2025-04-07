@@ -42,11 +42,11 @@ jobs:
         shell: pwsh
 
       - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '9.0.x'
-          source-url: https://dot.net/v1/dotnet-install.sh
-
+        run: |
+          sudo add-apt-repository ppa:dotnet/backports -y
+          sudo apt-get update && \
+          sudo apt-get install -y dotnet-sdk-9.0
+          
       - name: Build Application
         run: azd build --no-prompt
         
