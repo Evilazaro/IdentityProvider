@@ -8,5 +8,5 @@ platform:
     catalog: environments
     environmentDefinition: webapp
     environmentType: dev
-    name: identityProvider
+    name: devexp-devcenter
     project: identityProvider
