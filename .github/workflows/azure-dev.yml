@@ -1,4 +1,4 @@
-# Run when commits are pushed to main
+name: Identity Provider CI/CD
 on:
   workflow_dispatch:
 
