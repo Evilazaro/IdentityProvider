@@ -1,7 +1,10 @@
 name: Identity Provider CI/CD
 on:
   workflow_dispatch:
-
+  push:
+    branches:
+      - main
+    
 permissions:
   id-token: write
   contents: read
