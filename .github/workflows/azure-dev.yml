@@ -6,6 +6,7 @@ on:
       - feature/*
       - bugfix/*
       - hotfix/*
+      - dependabot/*
     
 permissions:
   id-token: write
