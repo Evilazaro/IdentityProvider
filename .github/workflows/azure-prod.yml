@@ -1,11 +1,9 @@
-name: Identity Provider CI/CD
+name: Identity Provider Prod CI/CD
 on:
   workflow_dispatch:
   push:
     branches:
-      - feature/*
-      - bugfix/*
-      - hotfix/*
+      - main
     
 permissions:
   id-token: write
@@ -15,7 +13,7 @@ env:
   AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
   AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
   AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-  AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+  AZURE_ENV_NAME: prod
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
 
 jobs:
