@@ -79,3 +79,6 @@ jobs:
 
       - name: Deploy Application
         run: azd deploy --no-prompt
+
+      - name: Teardown Infrastructure
+        run: azd down --no-prompt
