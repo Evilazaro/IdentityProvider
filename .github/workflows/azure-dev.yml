@@ -78,13 +78,10 @@ jobs:
             --tenant-id "$Env:AZURE_TENANT_ID"
         shell: pwsh
 
-      - name: Provision Infrastructure
-        run: azd provision --no-prompt
+      - name: Provision Infrastructure and Deploy Application
+        run: azd up --no-prompt
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
-
-      - name: Deploy Application
-        run: azd deploy --no-prompt
 
       - name: Teardown Infrastructure
         run: azd down --no-prompt
