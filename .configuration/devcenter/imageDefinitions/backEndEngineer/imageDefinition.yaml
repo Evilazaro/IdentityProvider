@@ -86,11 +86,6 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/containers/containers.dsc.yaml"
 
-  - name: ~/winget
-    description: Install APIs Resources
-    parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
-
   - name: git-clone
     description: Clone IdentityProvider repository into Z:\Workspaces
     parameters:
