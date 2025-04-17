@@ -9,7 +9,6 @@ tasks:
       command: |
         $progressPreference = 'silentlyContinue'
         Write-Host "Installing WinGet PowerShell module from PSGallery..."
-        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
         Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name Microsoft.WinGet.Client -Scope AllUsers -Force -Repository PSGallery | Out-Null
@@ -24,7 +23,6 @@ tasks:
     parameters:
       command: |
         $progressPreference = 'silentlyContinue'
-        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
         Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
         winget configure --enable
         Write-Host "Done."
@@ -32,4 +30,4 @@ tasks:
   - name: ~/winget
     description: Install Common Engineer Tools
     parameters:
-      downloadUrl: 'https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml'
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
