@@ -10,7 +10,7 @@ $schema: "1.0"
 name: identityProvider-frontend-engineer
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
-tasks:
+asks:
   # PowerShell setup
   - name: ~/powershell
     parameters:
@@ -20,6 +20,8 @@ tasks:
         Set-ExecutionPolicy Bypass -Scope Process -Force
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name Microsoft.WinGet.Client -Scope AllUsers -Force -Repository PSGallery | Out-Null
+        Install-Module Microsoft.WinGet.Configuration -AllowPrerelease -Scope AllUsers -Force -Repository PSGallery | Out-Null
+        winget configure --enable
         Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
         Repair-WinGetPackageManager
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
