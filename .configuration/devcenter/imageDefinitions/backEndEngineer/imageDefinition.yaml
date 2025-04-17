@@ -16,7 +16,6 @@ tasks:
         Repair-WinGetPackageManager
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name PSDscResources -Scope AllUsers -Force -AllowClobber
-        winget configure --enable
         Write-Host "Done."
   # Winget setup
   - name: ~/powershell
