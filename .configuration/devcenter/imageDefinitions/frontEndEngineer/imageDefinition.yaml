@@ -7,9 +7,18 @@ tasks:
   - name: ~/powershell
     parameters:
       command: |
+        $progressPreference = 'silentlyContinue'
+        Write-Host "Installing WinGet PowerShell module from PSGallery..."
         Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
-        Install-PackageProvider -Name NuGet -Force
-        Install-Module -Name PSDscResources -Force -AllowClobber
+        Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
+        Install-Module -Name Microsoft.WinGet.Client -Scope AllUsers -Force -Repository PSGallery | Out-Null
+        Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
+        Repair-WinGetPackageManager
+        Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
+        Install-Module -Name PSDscResources -Scope AllUsers -Force -AllowClobber
+        winget configure --enable
+        Write-Host "Done."
+  # Install common engineer tools
   - name: ~/winget
     description: Install Common Engineer Tools
     parameters:
