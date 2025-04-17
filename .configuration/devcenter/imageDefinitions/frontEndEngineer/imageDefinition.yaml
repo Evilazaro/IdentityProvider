@@ -27,7 +27,7 @@ tasks:
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers | Out-Null
         Install-Module -Name PSDscResources -Force -Scope AllUsers -AllowClobber
         Write-Host "Done."
-  
+
   # Install common engineer tools
   - name: ~/winget
     description: Install Common Engineer Tools
@@ -39,7 +39,7 @@ tasks:
     description: Install DotNet SDK and Runtime
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
-  
+
   # Install VS Code and Its extensions
   - name: ~/winget
     description: Install VS Code and Its extensions
