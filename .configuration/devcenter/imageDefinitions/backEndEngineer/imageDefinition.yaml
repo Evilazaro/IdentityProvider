@@ -67,24 +67,9 @@ tasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/baseline.dsc.yaml"
 
   - name: ~/winget
-    description: Install WSL and Ubuntu
-    parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
-
-  - name: ~/winget
     description: Install Visual Studio Code and its Extensions
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
-
-  - name: ~/winget
-    description: Install Visual Studio Code, Extensions and Microsoft Visual Studio Enterprise
-    parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
-
-  - name: ~/winget
-    description: Install Containers Resources
-    parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/containers/containers.dsc.yaml"
 
   - name: git-clone
     description: Clone IdentityProvider repository into Z:\Workspaces
@@ -97,6 +82,22 @@ tasks:
     parameters:
       repositoryUrl: https://github.com/Evilazaro/eShop.git
       directory: Z:\Workspaces
+
+userTasks:
+  - name: ~/winget
+    description: Install WSL and Ubuntu
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+
+  - name: ~/winget
+    description: Install Containers Resources
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/containers/containers.dsc.yaml"
+
+  - name: ~/winget
+    description: Install Visual Studio Code, Extensions and Microsoft Visual Studio Enterprise
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
 
   - name: ~/winget
     description: Clone Identity Provider and eShop-k8s repositories
