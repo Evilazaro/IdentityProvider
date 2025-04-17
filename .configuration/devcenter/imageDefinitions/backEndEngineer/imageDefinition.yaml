@@ -18,14 +18,14 @@ tasks:
         $progressPreference = 'silentlyContinue'
         Write-Host "Installing WinGet PowerShell module from PSGallery..."
         Set-ExecutionPolicy Bypass -Scope Process -Force
-        Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
-        Install-Module -Name Microsoft.WinGet.Client -Scope AllUsers -Force -Repository PSGallery | Out-Null
-        Install-Module Microsoft.WinGet.Configuration -AllowPrerelease -Scope AllUsers -Force -Repository PSGallery | Out-Null
+        Install-PackageProvider -Name NuGet -MinimumVersion "3.0.0.0" -Force -Scope AllUsers | Out-Null
+        Install-Module -Name Microsoft.WinGet.Client -Force -Scope AllUsers -Repository PSGallery | Out-Null
+        Install-Module Microsoft.WinGet.Configuration -AllowPrerelease -Force -Scope AllUsers -Repository PSGallery | Out-Null
         winget configure --enable
         Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
         Repair-WinGetPackageManager
-        Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
-        Install-Module -Name PSDscResources -Scope AllUsers -Force -AllowClobber
+        Install-PackageProvider -Name NuGet -Force -Scope AllUsers | Out-Null
+        Install-Module -Name PSDscResources -Force -Scope AllUsers -AllowClobber
         Write-Host "Done."
   
   # Install common engineer tools
