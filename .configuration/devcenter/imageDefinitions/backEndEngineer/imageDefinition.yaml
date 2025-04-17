@@ -21,6 +21,7 @@ tasks:
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name Microsoft.WinGet.Client -Scope AllUsers -Force -Repository PSGallery | Out-Null
         Install-Module Microsoft.WinGet.Configuration -AllowPrerelease -Scope AllUsers -Force -Repository PSGallery | Out-Null
+        winget configure --enable
         Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
         Repair-WinGetPackageManager
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
