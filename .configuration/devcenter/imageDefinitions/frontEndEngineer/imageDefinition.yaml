@@ -1,3 +1,11 @@
+# This image definition sets up a development environment for backend engineers.
+# It includes the following resources:
+# - WinGet PowerShell module and related tools for package management.
+# - Common engineering tools using a configuration file from a GitHub repository.
+# - .NET SDK and Runtime for developing and running .NET applications.
+# - Visual Studio Code and its extensions for code editing and development.
+# The setup ensures a streamlined and consistent environment for backend development.
+
 $schema: "1.0"
 name: identityProvider-frontend-engineer
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
@@ -9,7 +17,7 @@ tasks:
       command: |
         $progressPreference = 'silentlyContinue'
         Write-Host "Installing WinGet PowerShell module from PSGallery..."
-        Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+        Set-ExecutionPolicy Bypass -Scope Process -Force
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name Microsoft.WinGet.Client -Scope AllUsers -Force -Repository PSGallery | Out-Null
         Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
@@ -17,8 +25,21 @@ tasks:
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name PSDscResources -Scope AllUsers -Force -AllowClobber
         Write-Host "Done."
+  
   # Install common engineer tools
   - name: ~/winget
     description: Install Common Engineer Tools
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+
+  # Install DotNet SDK and Runtime
+  - name: ~/winget
+    description: Install DotNet SDK and Runtime
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
+  
+  # Install VS Code and Its extensions
+  - name: ~/winget
+    description: Install VS Code and Its extensions
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
