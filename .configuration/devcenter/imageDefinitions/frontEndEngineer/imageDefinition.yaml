@@ -2,7 +2,19 @@ $schema: "1.0"
 name: identityProvider-frontend-engineer
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
-tasks: 
+tasks:
+  # Install PowerShell with Winget
+  - name: ~/winget
+    description: Install PowerShell
+    parameters:
+      package: Microsoft.PowerShell
+  # PowerShell setup
+  - name: ~/powershell
+    parameters:
+      command: |
+        Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+        Install-PackageProvider -Name NuGet -Force
+        Install-Module -Name PSDscResources -Force -AllowClobber
   - name: ~/winget
     description: Install Common Engineer Tools
     parameters:
