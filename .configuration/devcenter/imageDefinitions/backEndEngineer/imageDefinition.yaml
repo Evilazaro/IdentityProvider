@@ -17,14 +17,6 @@ tasks:
         Install-PackageProvider -Name NuGet -Scope AllUsers -Force | Out-Null
         Install-Module -Name PSDscResources -Scope AllUsers -Force -AllowClobber
         Write-Host "Done."
-  # Winget setup
-  - name: ~/powershell
-    parameters:
-      command: |
-        $progressPreference = 'silentlyContinue'
-        Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
-        winget configure --enable
-        Write-Host "Done."
   # Install common engineer tools
   - name: ~/winget
     description: Install Common Engineer Tools
