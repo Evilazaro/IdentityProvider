@@ -7,4 +7,3 @@ tasks:
     description: Install Common Engineer Tools
     parameters:
       downloadUrl: 'https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml'
-      configurationFile: 'Z:\wingetConfig\common-config.dsc.yaml'
