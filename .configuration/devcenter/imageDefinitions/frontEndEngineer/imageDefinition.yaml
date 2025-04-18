@@ -2,7 +2,7 @@ $schema: "1.0"
 name: identityProvider-frontend-engineer
 description: "This image definition sets up a development environment for frontend engineers."
 
-image: "microsoftvisualstudio_windowsplustools_base-win11-gen2"
+image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 enableScheduledRefresh: true
 scheduledTimePeriod: hour
 scheduledRecurrence: 24
