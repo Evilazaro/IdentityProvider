@@ -1,7 +1,6 @@
 $schema: "1.0"
 name: identityProvider-backend-engineer
 description: "This image definition sets up a development environment for backend engineers."
-
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 enableScheduledRefresh: true
 scheduledTimePeriod: hour
@@ -16,9 +15,9 @@ tasks:
   # Install common engineer tools
   - name: winget
     parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+      downloadUrl: 'https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml'
 
   # Install DotNet SDK and Runtime
   - name: winget
     parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
+      downloadUrl: 'https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml'
