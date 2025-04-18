@@ -4,11 +4,11 @@ description: "This image definition sets up a development environment for fronte
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
 tasks:
-  # Install PowerShell
-  - name: winget
+  # Run PowerShell command to test the environment
+  - name: powershell
     parameters:
-      package: Microsoft.PowerShell
-
+      command: "Write-Host 'hello, world!'"
+  
   # Install common engineer tools
   - name: winget
     parameters:
