@@ -10,27 +10,31 @@ $schema: "1.0"
 name: identityProvider-backend-engineer
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
+enableScheduledRefresh: true
+scheduledTimePeriod: hour
+scheduledRecurrence: 24
+
 tasks:
   # Install PowerShell
-  - name: ~/winget
+  - name: winget
     parameters:
       package: Microsoft.PowerShell
 
   # Install common engineer tools
-  - name: ~/winget
+  - name: winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\common-config.dsc.yaml'
   
   # Install DotNet SDK and Runtime
-  - name: ~/winget
+  - name: winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\dotnet.dsc.yaml'
 
 userTasks:
   # Install VS Code and Its extensions
-  - name: ~/winget
+  - name: winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
       configurationFile: 'C:\WinGetConfig\vscode.dsc.yaml'
