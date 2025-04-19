@@ -7,7 +7,11 @@ tasks:
   # Run PowerShell command to test the environment
   - name: powershell
     parameters:
-      command: "Write-Host 'hello, world!'"
+      command: |
+        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+        Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
   
   # Install common engineer tools
   - name: winget
