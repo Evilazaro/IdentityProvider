@@ -1,30 +1,49 @@
+#######################################################################################
+# Identity Provider - Backend Engineer Image Definition
+# Purpose: Configures a development environment for backend engineering tasks
+# Last Updated: April 21, 2025
+#######################################################################################
+
 # Schema version for the image definition format
 $schema: "1.0"
+
 # Unique identifier for this image definition
 name: identityProvider-backend-engineer
+
 # Human-readable description of the environment purpose
 description: "This image definition sets up a development environment for backend engineers."
+
 # Base image to use from Microsoft's catalog
+# Note: This image includes Visual Studio 2022 Enterprise with Windows 11 and M365
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
 # Installation tasks to configure the development environment
 tasks:
-  ##### Install common tools and utilities for backend engineering #####
+  #######################################################################################
+  # SECTION: Core Environment Setup
+  # Purpose: Install foundational tools and configure the PowerShell environment
+  #######################################################################################
+  
   # Install PSDSCResources module for PowerShell environment configuration
+  # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
     description: "Configure PowerShell environment and install DSC resources"
     parameters:
       command: |
         # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        
         # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        
         # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+        
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  # Import common engineering tools configuration - shared developer tools and utilities
+  # Import common engineering tools configuration
+  # This imports a predefined set of tools commonly used across engineering teams
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
