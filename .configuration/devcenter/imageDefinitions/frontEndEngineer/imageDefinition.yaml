@@ -1,12 +1,31 @@
+#######################################################################################
+# Identity Provider - Frontend Engineer Image Definition
+# Purpose: Configures a development environment for frontend engineering tasks
+# Last Updated: April 21, 2025
+#######################################################################################
+
+# Schema version for the image definition format
 $schema: "1.0"
+
+# Unique identifier for this image definition
 name: identityProvider-frontend-engineer
+
+# Human-readable description of the environment purpose
 description: "This image definition sets up a development environment for frontend engineers."
+
+# Base image to use from Microsoft's catalog
+# Note: This image includes Windows 11 with basic development tools
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
 # Installation tasks to configure the development environment
 tasks:
-  ##### Install common tools and utilities for backend engineering #####
+  #######################################################################################
+  # SECTION: Core Environment Setup
+  # Purpose: Install foundational tools and configure the PowerShell environment
+  #######################################################################################
+  
   # Install PSDSCResources module for PowerShell environment configuration
+  # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
     description: "Configure PowerShell environment and install DSC resources"
     parameters:
@@ -20,16 +39,22 @@ tasks:
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  # Import common engineering tools configuration - shared developer tools and utilities
+  # Import common engineering tools configuration 
+  # This imports a predefined set of tools commonly used across engineering teams
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
+#######################################################################################
+# SECTION: User Customizable Tasks
+# Purpose: Optional components that users can install based on preferences
+#######################################################################################
 
+# User-specific tasks that can be customized by individual developers
 userTasks:
+  # Configure Visual Studio Code with frontend-specific extensions and settings
   - name: ~/winget
+    description: "Install and configure Visual Studio Code with frontend development extensions"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
-
-  
