@@ -4,11 +4,11 @@ description: "This image definition sets up a development environment for backen
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
 tasks:
-  - name: winget
+  - name: ~/winget
     parameters:
       package: Microsoft.PowerShell
 
-  - name: powershell
+  - name: ~/powershell
     parameters:
       command: |
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
@@ -16,7 +16,7 @@ tasks:
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  - name: powershell
+  - name: ~/powershell
     parameters:
       command: |
         $progressPreference = 'silentlyContinue'
@@ -42,11 +42,11 @@ tasks:
         $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') + ';C:\Program Files\PowerShell\7'
 
   # Install common engineer tools
-  - name: winget
+  - name: ~/winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
   # Install DotNet SDK and Runtime
-  - name: winget
+  - name: ~/winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
