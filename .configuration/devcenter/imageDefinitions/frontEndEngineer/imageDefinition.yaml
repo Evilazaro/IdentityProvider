@@ -23,7 +23,7 @@ tasks:
   # SECTION: Core Environment Setup
   # Purpose: Install foundational tools and configure the PowerShell environment
   #######################################################################################
-  
+
   # Install PSDSCResources module for PowerShell environment configuration
   # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
@@ -39,7 +39,7 @@ tasks:
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  # Import common engineering tools configuration 
+  # Import common engineering tools configuration
   # This imports a predefined set of tools commonly used across engineering teams
   - name: ~/winget
     description: "Import common engineering tools and configurations"
@@ -50,22 +50,34 @@ tasks:
   # SECTION: Frontend Development Tools
   # Purpose: Install specialized tools for frontend engineering tasks
   #######################################################################################
-  
+
   # Install Visual Studio Code - lightweight code editor optimized for web development
   - name: ~/winget
-    description: "Install and configure Visual Studio Code"
+    description: "Install Visual Studio Code for web development"
     parameters:
       package: Microsoft.VisualStudioCode
 
-#######################################################################################
-# SECTION: User Customizable Tasks
-# Purpose: Optional components that users can install based on preferences
-#######################################################################################
-
 # User-specific tasks that can be customized by individual developers
 userTasks:
+  #######################################################################################
+  # SECTION: IDE Extensions and Configurations
+  # Purpose: Set up development environment with specialized extensions
+  #######################################################################################
+
   # Configure Visual Studio Code with frontend-specific extensions and settings
   - name: ~/winget
-    description: "Install and configure Visual Studio Code with frontend development extensions"
+    description: "Install VS Code extensions for frontend development"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+
+  #######################################################################################
+  # SECTION: API Development Tools
+  # Purpose: Install tools for API development, testing and documentation
+  #######################################################################################
+
+  # Import API development tools and utilities
+  # This includes Postman, Swagger tools, and API testing utilities
+  - name: ~/winget
+    description: "Install API development and testing tools"
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
