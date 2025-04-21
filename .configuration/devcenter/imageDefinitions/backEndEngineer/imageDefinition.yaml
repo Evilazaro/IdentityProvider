@@ -10,7 +10,6 @@ image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m36
 # Installation tasks to configure the development environment
 tasks:
   ##### Install common tools and utilities for backend engineering #####
-
   # Install PSDSCResources module for PowerShell environment configuration
   - name: ~/powershell
     description: "Configure PowerShell environment and install DSC resources"
@@ -24,6 +23,12 @@ tasks:
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
+
+  # Import common engineering tools configuration - shared developer tools and utilities
+  - name: ~/winget
+    description: "Import common engineering tools and configurations"
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
   # Install Git - distributed version control system
   - name: ~/winget
@@ -120,12 +125,6 @@ tasks:
 
 # User-specific tasks that can be customized
 userTasks:
-  # Import common engineering tools configuration - shared developer tools and utilities
-  - name: ~/winget
-    description: "Import common engineering tools and configurations"
-    parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
-
   # Import .NET Aspire configuration - cloud-native application development framework
   - name: ~/winget
     description: "Add .NET Aspire capabilities for cloud-native application development"
