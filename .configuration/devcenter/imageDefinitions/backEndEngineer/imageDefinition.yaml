@@ -1,52 +1,55 @@
+# Schema version for the image definition format
 $schema: "1.0"
+# Unique identifier for this image definition
 name: identityProvider-backend-engineer
+# Human-readable description of the environment purpose
 description: "This image definition sets up a development environment for backend engineers."
+# Base image to use from Microsoft's catalog
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
+# Installation tasks to configure the development environment
 tasks:
+  # Install PowerShell Core - modern version of PowerShell with cross-platform support
   - name: ~/winget
     parameters:
       package: Microsoft.PowerShell
 
+  # Install PSDSCResources module - PowerShell Desired State Configuration resources for environment setup
   - name: ~/powershell
     parameters:
       command: |
+        # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+        # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  - name: ~/powershell
+  # Install Git - distributed version control system
+  - name: ~/winget
     parameters:
-      command: |
-        $progressPreference = 'silentlyContinue'
-        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        Write-Host "Installing WinGet PowerShell module from PSGallery..."
-        Install-PackageProvider -Name NuGet -Force -Scope AllUsers | Out-Null
-        Install-Module -Name Microsoft.WinGet.Client -Force -Scope AllUsers -Repository PSGallery | Out-Null
-        Install-Module -Name Microsoft.WinGet.Configuration -Force -Scope AllUsers -Repository PSGallery | Out-Null
-        Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
-        Repair-WinGetPackageManager
-        Write-Host "Done."
-        $MsUiXaml = '$env:TEMP\$([System.IO.Path]::GetRandomFileName())-Microsoft.UI.Xaml.2.8.7'
-        $MsUiXamlZip = '$($MsUiXaml).zip'
-        Invoke-WebRequest -Uri 'https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.8.7' -OutFile $MsUiXamlZip
-        Expand-Archive $MsUiXamlZip -DestinationPath $MsUiXaml
-        Add-AppxPackage -Path '$($MsUiXaml)\tools\AppX\$($architecture)\Release\Microsoft.UI.Xaml.2.8.appx' -ForceApplicationShutdown
-        $DesktopAppInstallerAppx = '$env:TEMP\$([System.IO.Path]::GetRandomFileName())-DesktopAppInstaller.appx'
-        Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile $DesktopAppInstallerAppx
-        Add-AppxPackage -Path $DesktopAppInstallerAppx -ForceApplicationShutdown
-        Write-Host 'Done Installing Microsoft.DesktopAppInstaller'
+      package: Git.Git
 
-        Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
-        $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') + ';C:\Program Files\PowerShell\7'
+  # Install GitHub CLI - command-line tool for GitHub workflow integration
+  - name: ~/winget
+    parameters:
+      package: GitHub.cli
 
-  # Install common engineer tools
+  # Install GitHub Desktop - GUI client for Git repositories
+  - name: ~/winget
+    parameters:
+      package: GitHub.GitHubDesktop
+
+  # Install Windows Terminal - modern command-line interface for Windows
+  - name: ~/winget
+    parameters:
+      package: Microsoft.WindowsTerminal
+
+userTasks:
+  # Install common engineering tools from external configuration
+  # This imports additional tools defined in the common-config.dsc.yaml file
   - name: ~/winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
-
-  # Install DotNet SDK and Runtime
-  - name: ~/winget
-    parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
