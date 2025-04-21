@@ -26,4 +26,10 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
+
+userTasks:
+  - name: ~/winget
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+
   
