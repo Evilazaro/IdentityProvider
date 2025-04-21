@@ -4,6 +4,18 @@ description: "This image definition sets up a development environment for backen
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
 tasks:
+  - name: winget
+    parameters:
+      package: Microsoft.PowerShell
+
+  - name: powershell
+    parameters:
+      command: |
+        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+        Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
+
   - name: powershell
     parameters:
       command: |
@@ -28,14 +40,6 @@ tasks:
 
         Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
         $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') + ';C:\Program Files\PowerShell\7'
-  
-  - name: powershell
-    parameters:
-      command: |
-        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-        Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-        Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
   # Install common engineer tools
   - name: winget
