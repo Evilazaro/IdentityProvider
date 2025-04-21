@@ -9,6 +9,7 @@ image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m36
 
 # Installation tasks to configure the development environment
 tasks:
+  ##### Install common tools and utilities for backend engineering #####
   # Install PowerShell Core - modern version of PowerShell with cross-platform support
   - name: ~/winget
     parameters:
@@ -47,9 +48,28 @@ tasks:
     parameters:
       package: Microsoft.WindowsTerminal
 
+  ##### Install .NET tools and SDKs for backend development #####
+
+  # Install .NET SDK 9 - development tools for creating .NET applications
+  - name: ~/winget
+    parameters:
+      package: Microsoft.DotNet.SDK.9
+
+  # Install .NET Runtime 9 - runtime environment for executing .NET applications
+  - name: ~/winget
+    parameters:
+      package: Microsoft.DotNet.Runtime.9
+
+# User-specific tasks that can be customized
 userTasks:
-  # Install common engineering tools from external configuration
-  # This imports additional tools defined in the common-config.dsc.yaml file
+  # Import common engineering tools configuration
+  # This downloads and applies shared configurations for development tools
   - name: ~/winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+
+  # Import .NET Aspire configuration
+  # Adds cloud-native application development capabilities for .NET
+  - name: ~/winget
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/aspire.dsc.yaml"

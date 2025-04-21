@@ -3,22 +3,77 @@ name: identityProvider-frontend-engineer
 description: "This image definition sets up a development environment for frontend engineers."
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
+# Installation tasks to configure the development environment
 tasks:
-  # Run PowerShell command to test the environment
+  ##### Install common tools and utilities for frontend engineering #####
+  # Install PowerShell Core - modern version of PowerShell with cross-platform support
+  - name: ~/winget
+    parameters:
+      package: Microsoft.PowerShell
+
+  # Install PSDSCResources module - PowerShell Desired State Configuration resources for environment setup
   - name: ~/powershell
     parameters:
       command: |
+        # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+        # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
-  
-  # Install common engineer tools
+
+  # Install Git - distributed version control system
+  - name: ~/winget
+    parameters:
+      package: Git.Git
+
+  # Install GitHub CLI - command-line tool for GitHub workflow integration
+  - name: ~/winget
+    parameters:
+      package: GitHub.cli
+
+  # Install GitHub Desktop - GUI client for Git repositories
+  - name: ~/winget
+    parameters:
+      package: GitHub.GitHubDesktop
+
+  # Install Windows Terminal - modern command-line interface for Windows
+  - name: ~/winget
+    parameters:
+      package: Microsoft.WindowsTerminal
+
+  ##### Install .NET tools and SDKs for frontend development #####
+
+  # Install .NET SDK 9 - development tools for creating .NET applications
+  - name: ~/winget
+    parameters:
+      package: Microsoft.DotNet.SDK.9
+
+  # Install .NET Runtime 9 - runtime environment for executing .NET applications
+  - name: ~/winget
+    parameters:
+      package: Microsoft.DotNet.Runtime.9
+
+  - name: ~/winget
+    parameters:
+      package: Microsoft.VisualStudioCode
+
+# User-specific tasks that can be customized
+userTasks:
+  # Import common engineering tools configuration
+  # This downloads and applies shared configurations for development tools
   - name: ~/winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
-  # Install DotNet SDK and Runtime
+  # Import .NET Aspire configuration
+  # Adds cloud-native application development capabilities for .NET
   - name: ~/winget
     parameters:
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/aspire.dsc.yaml"
+
+  - name: ~/winget
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
