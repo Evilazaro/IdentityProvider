@@ -48,3 +48,15 @@ tasks:
     description: "Import common engineering tools and configurations"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+
+  #######################################################################################
+  # SECTION: Azure Development Environment
+  # Purpose: Install tools and SDKs for Azure cloud development
+  #######################################################################################
+  
+  # Import Azure tools and configurations
+  # This includes SDKs, CLI tools, and extensions for Azure development
+  - name: ~/winget
+    description: "Install Azure development tools and cloud service integrations"
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/azure/azure.dsc.yaml"
