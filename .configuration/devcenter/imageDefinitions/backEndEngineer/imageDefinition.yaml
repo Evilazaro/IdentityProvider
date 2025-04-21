@@ -61,6 +61,7 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/azure/azure.dsc.yaml"
 
+userTasks:
   #######################################################################################
   # SECTION: Virtualization Tools
   # Purpose: Install virtualization capabilities for containerized development
