@@ -16,6 +16,18 @@ tasks:
         Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
         Repair-WinGetPackageManager
         Write-Host "Done."
+        $MsUiXaml = '$env:TEMP\$([System.IO.Path]::GetRandomFileName())-Microsoft.UI.Xaml.2.8.7'
+        $MsUiXamlZip = '$($MsUiXaml).zip'
+        Invoke-WebRequest -Uri 'https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.8.7' -OutFile $MsUiXamlZip
+        Expand-Archive $MsUiXamlZip -DestinationPath $MsUiXaml
+        Add-AppxPackage -Path '$($MsUiXaml)\tools\AppX\$($architecture)\Release\Microsoft.UI.Xaml.2.8.appx' -ForceApplicationShutdown
+        $DesktopAppInstallerAppx = '$env:TEMP\$([System.IO.Path]::GetRandomFileName())-DesktopAppInstaller.appx'
+        Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile $DesktopAppInstallerAppx
+        Add-AppxPackage -Path $DesktopAppInstallerAppx -ForceApplicationShutdown
+        Write-Host 'Done Installing Microsoft.DesktopAppInstaller'
+
+        Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+        $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') + ';C:\Program Files\PowerShell\7'
   
   - name: powershell
     parameters:
@@ -25,47 +37,6 @@ tasks:
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  - name: powershell
-    parameters:
-      command: |
-        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        try {
-                Write-Host 'Installing Microsoft.UI.Xaml'
-                $architecture = 'x64'
-                if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') {
-                    $architecture = 'arm64'
-                }
-                $MsUiXaml = '$env:TEMP\$([System.IO.Path]::GetRandomFileName())-Microsoft.UI.Xaml.2.8.7'
-                $MsUiXamlZip = '$($MsUiXaml).zip'
-                Invoke-WebRequest -Uri 'https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.8.7' -OutFile $MsUiXamlZip
-                Expand-Archive $MsUiXamlZip -DestinationPath $MsUiXaml
-                Add-AppxPackage -Path '$($MsUiXaml)\tools\AppX\$($architecture)\Release\Microsoft.UI.Xaml.2.8.appx' -ForceApplicationShutdown
-                Write-Host 'Done Installing Microsoft.UI.Xaml'
-            } catch {
-                Write-Host 'Failed to install Microsoft.UI.Xaml'
-                Write-Error $_
-            }
-
-  - name: powershell
-    parameters:
-      command: |
-        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-         try {
-                Write-Host 'Installing Microsoft.DesktopAppInstaller'
-                $DesktopAppInstallerAppx = '$env:TEMP\$([System.IO.Path]::GetRandomFileName())-DesktopAppInstaller.appx'
-                Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile $DesktopAppInstallerAppx
-                Add-AppxPackage -Path $DesktopAppInstallerAppx -ForceApplicationShutdown
-                Write-Host 'Done Installing Microsoft.DesktopAppInstaller'
-
-                Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
-                $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') + ';C:\Program Files\PowerShell\7'
-                Write-Host 'WinGet version: $(winget -v)'
-            }
-            catch {
-                Write-Host 'Failed to install DesktopAppInstaller appx package'
-                Write-Error $_
-            }
-  
   # Install common engineer tools
   - name: winget
     parameters:
