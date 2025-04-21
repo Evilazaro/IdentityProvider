@@ -5,7 +5,7 @@ image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
 tasks:
   # Run PowerShell command to test the environment
-  - name: powershell
+  - name: ~\powershell
     parameters:
       command: |
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
@@ -14,11 +14,11 @@ tasks:
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
   
   # Install common engineer tools
-  - name: winget
+  - name: ~\winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
   # Install DotNet SDK and Runtime
-  - name: winget
+  - name: ~\winget
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/dotnet/dotnet.dsc.yaml"
