@@ -46,6 +46,17 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
 
+  #######################################################################################
+  # SECTION: Frontend Development Tools
+  # Purpose: Install specialized tools for frontend engineering tasks
+  #######################################################################################
+  
+  # Install Visual Studio Code - lightweight code editor optimized for web development
+  - name: ~/winget
+    description: "Install and configure Visual Studio Code"
+    parameters:
+      package: Microsoft.VisualStudioCode
+
 #######################################################################################
 # SECTION: User Customizable Tasks
 # Purpose: Optional components that users can install based on preferences
