@@ -23,7 +23,7 @@ tasks:
   # SECTION: Core Environment Setup
   # Purpose: Install foundational tools and configure the PowerShell environment
   #######################################################################################
-  
+
   # Install PSDSCResources module for PowerShell environment configuration
   # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
@@ -32,13 +32,13 @@ tasks:
       command: |
         # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        
+
         # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-        
+
         # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-        
+
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
@@ -53,7 +53,7 @@ tasks:
   # SECTION: Azure Development Environment
   # Purpose: Install tools and SDKs for Azure cloud development
   #######################################################################################
-  
+
   # Import Azure tools and configurations
   # This includes SDKs, CLI tools, and extensions for Azure development
   - name: ~/winget
@@ -61,18 +61,18 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/azure/azure.dsc.yaml"
 
-userTasks:
-  #######################################################################################
-  # SECTION: Virtualization Tools
-  # Purpose: Install virtualization capabilities for containerized development
-  #######################################################################################
-  
   # Import Windows virtualization tools and configurations
   # This includes WSL2, Hyper-V and Windows container support
   - name: ~/winget
     description: "Install Windows virtualization features and WSL2"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+
+userTasks:
+  #######################################################################################
+  # SECTION: Virtualization Tools
+  # Purpose: Install virtualization capabilities for containerized development
+  #######################################################################################
 
   # Import container development tools and runtimes
   # This includes Docker Desktop, Kubernetes tools, and container utilities
