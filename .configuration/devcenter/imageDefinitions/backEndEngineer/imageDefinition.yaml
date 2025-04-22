@@ -52,17 +52,6 @@ tasks:
       # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
-  # Configure additional source code management and quality tools
-  # This installs extensions for Git integration, code metrics, and quality analysis
-  # to enhance developer productivity and maintain code standards
-  - name: ~/winget
-    description: "Install source code management and quality tools"
-    parameters:
-      # Source URL for the configuration file containing source code tool definitions
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/sourceCode/sourcecode.dsc.yaml"
-      # Local path where the configuration file will be saved
-      configurationFile: "c:\\winget\\sourcecode.dsc.yaml"
-
   #######################################################################################
   # SECTION: Development Tools
   # Purpose: Install core development applications and utilities
@@ -122,6 +111,17 @@ userTasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
       # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\vscode.dsc.yaml"
+
+  # Configure additional source code management and quality tools
+  # This installs extensions for Git integration, code metrics, and quality analysis
+  # to enhance developer productivity and maintain code standards
+  - name: ~/winget
+    description: "Install source code management and quality tools"
+    parameters:
+      # Source URL for the configuration file containing source code tool definitions
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/sourceCode/sourcecode.dsc.yaml"
+      # Local path where the configuration file will be saved
+      configurationFile: "c:\\winget\\sourcecode.dsc.yaml"
 
   #######################################################################################
   # SECTION: Virtualization Tools
