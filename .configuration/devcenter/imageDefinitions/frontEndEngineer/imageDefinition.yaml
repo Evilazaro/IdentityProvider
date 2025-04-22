@@ -47,6 +47,17 @@ tasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
+  # Configure additional source code management and quality tools
+  # This installs extensions for Git integration, code metrics, and quality analysis
+  # to enhance developer productivity and maintain code standards
+  - name: ~/winget
+    description: "Install source code management and quality tools"
+    parameters:
+      # Source URL for the configuration file containing source code tool definitions
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/sourceCode/sourcecode.dsc.yaml"
+      # Local path where the configuration file will be saved
+      configurationFile: "c:\\winget\\sourcecode.dsc.yaml"
+
   #######################################################################################
   # SECTION: Development Tools
   # Purpose: Install core development applications and utilities
@@ -57,7 +68,7 @@ tasks:
     description: "Install GitHub Desktop for visual Git management"
     parameters:
       package: GitHub.GitHubDesktop
-  
+
   # Install Visual Studio Code - lightweight code editor optimized for web development
   - name: ~/winget
     description: "Install Visual Studio Code for web development"
