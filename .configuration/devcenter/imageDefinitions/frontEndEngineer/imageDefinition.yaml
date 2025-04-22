@@ -57,6 +57,7 @@ tasks:
     description: "Install GitHub Desktop for visual Git management"
     parameters:
       package: GitHub.GitHubDesktop
+  
   # Install Visual Studio Code - lightweight code editor optimized for web development
   - name: ~/winget
     description: "Install Visual Studio Code for web development"
