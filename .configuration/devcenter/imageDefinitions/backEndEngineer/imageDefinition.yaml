@@ -23,7 +23,7 @@ tasks:
   # SECTION: Core Environment Setup
   # Purpose: Install foundational tools and configure the PowerShell environment
   #######################################################################################
-  
+
   # Install PSDSCResources module for PowerShell environment configuration
   # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
@@ -32,13 +32,13 @@ tasks:
       command: |
         # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        
+
         # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-        
+
         # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-        
+
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
@@ -86,33 +86,6 @@ tasks:
 
 userTasks:
   #######################################################################################
-  # SECTION: IDE Extensions and Configurations
-  # Purpose: Set up development environment with specialized extensions
-  #######################################################################################
-
-  # Configure Visual Studio with backend-specific extensions and settings
-  # This installs extensions for C#, .NET, Azure, and database development
-  # along with productivity tools optimized for backend development workflows
-  - name: ~/winget
-    description: "Install Visual Studio extensions for backend development"
-    parameters:
-      # Source URL for the configuration file containing VS extension definitions
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
-      # Local path where the configuration file will be saved
-      configurationFile: "c:\\winget\\vstudio.dsc.yaml"
-
-  # Configure Visual Studio Code with backend-specific extensions and settings
-  # This installs extensions for C#, .NET, Azure, and database development
-  # along with linters, formatters, and debugging tools optimized for backend workflows
-  - name: ~/winget
-    description: "Install VS Code extensions for backend development"
-    parameters:
-      # Source URL for the configuration file containing VS Code extension definitions
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
-      # Local path where the configuration file will be saved
-      configurationFile: "c:\\winget\\vscode.dsc.yaml"
-
-  #######################################################################################
   # SECTION: Virtualization Tools
   # Purpose: Install virtualization capabilities for containerized development
   #######################################################################################
@@ -151,3 +124,30 @@ userTasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
       # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\apis.dsc.yaml"
+
+  #######################################################################################
+  # SECTION: IDE Extensions and Configurations
+  # Purpose: Set up development environment with specialized extensions
+  #######################################################################################
+
+  # Configure Visual Studio Code with backend-specific extensions and settings
+  # This installs extensions for C#, .NET, Azure, and database development
+  # along with linters, formatters, and debugging tools optimized for backend workflows
+  - name: ~/winget
+    description: "Install VS Code extensions for backend development"
+    parameters:
+      # Source URL for the configuration file containing VS Code extension definitions
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+      # Local path where the configuration file will be saved
+      configurationFile: "c:\\winget\\vscode.dsc.yaml"
+
+  # Configure Visual Studio with backend-specific extensions and settings
+  # This installs extensions for C#, .NET, Azure, and database development
+  # along with productivity tools optimized for backend development workflows
+  - name: ~/winget
+    description: "Install Visual Studio extensions for backend development"
+    parameters:
+      # Source URL for the configuration file containing VS extension definitions
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
+      # Local path where the configuration file will be saved
+      configurationFile: "c:\\winget\\vstudio.dsc.yaml"
