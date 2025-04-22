@@ -23,7 +23,7 @@ tasks:
   # SECTION: Core Environment Setup
   # Purpose: Install foundational tools and configure the PowerShell environment
   #######################################################################################
-
+  
   # Install PSDSCResources module for PowerShell environment configuration
   # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
@@ -32,13 +32,13 @@ tasks:
       command: |
         # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-
+        
         # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-
+        
         # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-
+        
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
@@ -50,11 +50,28 @@ tasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
-  # Install Visual Studio Code - lightweight code editor optimized for web development
+  #######################################################################################
+  # SECTION: Development Tools
+  # Purpose: Install core development applications and utilities
+  #######################################################################################
+
+  # Install GitHub Desktop - GUI tool for Git repository management
   - name: ~/winget
-    description: "Install Visual Studio Code for web development"
+    description: "Install GitHub Desktop for visual Git management"
+    parameters:
+      package: GitHub.GitHubDesktop
+
+  # Install Visual Studio Code - lightweight code editor for quick edits
+  - name: ~/winget
+    description: "Install Visual Studio Code for lightweight code editing"
     parameters:
       package: Microsoft.VisualStudioCode
+
+  # Install Visual Studio 2022 Enterprise - primary IDE for backend development
+  - name: ~/winget
+    description: "Install Visual Studio 2022 Enterprise for comprehensive .NET development"
+    parameters:
+      package: Microsoft.VisualStudio.2022.Enterprise
 
   #######################################################################################
   # SECTION: Azure Development Environment
@@ -69,6 +86,24 @@ tasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/azure/azure.dsc.yaml"
       configurationFile: "c:\\winget\\azure.dsc.yaml"
 
+userTasks:
+  #######################################################################################
+  # SECTION: IDE Extensions and Configurations
+  # Purpose: Set up development environment with specialized extensions
+  #######################################################################################
+
+  # Configure Visual Studio Code with backend-specific extensions and settings
+  - name: ~/winget
+    description: "Install VS Code extensions for backend development"
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+      configurationFile: "c:\\winget\\vscode.dsc.yaml"
+
+  #######################################################################################
+  # SECTION: Virtualization Tools
+  # Purpose: Install virtualization capabilities for containerized development
+  #######################################################################################
+
   # Import Windows virtualization tools and configurations
   # This includes WSL2, Hyper-V and Windows container support
   - name: ~/winget
@@ -76,12 +111,6 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
       configurationFile: "c:\\winget\\virtualization.dsc.yaml"
-
-userTasks:
-  #######################################################################################
-  # SECTION: Virtualization Tools
-  # Purpose: Install virtualization capabilities for containerized development
-  #######################################################################################
 
   # Import container development tools and runtimes
   # This includes Docker Desktop, Kubernetes tools, and container utilities
