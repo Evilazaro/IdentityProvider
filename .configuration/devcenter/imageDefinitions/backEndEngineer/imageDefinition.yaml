@@ -47,7 +47,9 @@ tasks:
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
+      # Source URL for the configuration file containing common tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
   #######################################################################################
@@ -77,7 +79,9 @@ tasks:
   - name: ~/winget
     description: "Install Azure development tools and cloud service integrations"
     parameters:
+      # Source URL for the configuration file containing Azure tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/azure/azure.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\azure.dsc.yaml"
 
 userTasks:
@@ -86,11 +90,26 @@ userTasks:
   # Purpose: Set up development environment with specialized extensions
   #######################################################################################
 
+  # Configure Visual Studio with backend-specific extensions and settings
+  # This installs extensions for C#, .NET, Azure, and database development
+  # along with productivity tools optimized for backend development workflows
+  - name: ~/winget
+    description: "Install Visual Studio extensions for backend development"
+    parameters:
+      # Source URL for the configuration file containing VS extension definitions
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
+      # Local path where the configuration file will be saved
+      configurationFile: "c:\\winget\\vstudio.dsc.yaml"
+
   # Configure Visual Studio Code with backend-specific extensions and settings
+  # This installs extensions for C#, .NET, Azure, and database development
+  # along with linters, formatters, and debugging tools optimized for backend workflows
   - name: ~/winget
     description: "Install VS Code extensions for backend development"
     parameters:
+      # Source URL for the configuration file containing VS Code extension definitions
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\vscode.dsc.yaml"
 
   #######################################################################################
@@ -103,7 +122,9 @@ userTasks:
   - name: ~/winget
     description: "Install Windows virtualization features and WSL2"
     parameters:
+      # Source URL for the configuration file containing virtualization tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\virtualization.dsc.yaml"
 
   # Import container development tools and runtimes
@@ -111,7 +132,9 @@ userTasks:
   - name: ~/winget
     description: "Install Docker and container orchestration tools"
     parameters:
+      # Source URL for the configuration file containing container tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/containers/containers.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\containers.dsc.yaml"
 
   #######################################################################################
@@ -124,5 +147,7 @@ userTasks:
   - name: ~/winget
     description: "Install API development and testing tools"
     parameters:
+      # Source URL for the configuration file containing API development tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\apis.dsc.yaml"
