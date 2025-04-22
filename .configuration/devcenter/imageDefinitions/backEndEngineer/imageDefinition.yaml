@@ -48,6 +48,13 @@ tasks:
     description: "Import common engineering tools and configurations"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+      configurationFile: "c:\\winget\\common-config.dsc.yaml"
+
+  # Install Visual Studio Code - lightweight code editor optimized for web development
+  - name: ~/winget
+    description: "Install Visual Studio Code for web development"
+    parameters:
+      package: Microsoft.VisualStudioCode
 
   #######################################################################################
   # SECTION: Azure Development Environment
@@ -60,6 +67,7 @@ tasks:
     description: "Install Azure development tools and cloud service integrations"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/azure/azure.dsc.yaml"
+      configurationFile: "c:\\winget\\azure.dsc.yaml"
 
   # Import Windows virtualization tools and configurations
   # This includes WSL2, Hyper-V and Windows container support
@@ -67,6 +75,7 @@ tasks:
     description: "Install Windows virtualization features and WSL2"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+      configurationFile: "c:\\winget\\virtualization.dsc.yaml"
 
 userTasks:
   #######################################################################################
@@ -80,6 +89,7 @@ userTasks:
     description: "Install Docker and container orchestration tools"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/containers/containers.dsc.yaml"
+      configurationFile: "c:\\winget\\containers.dsc.yaml"
 
   #######################################################################################
   # SECTION: API Development Tools
@@ -92,3 +102,4 @@ userTasks:
     description: "Install API development and testing tools"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
+      configurationFile: "c:\\winget\\apis.dsc.yaml"

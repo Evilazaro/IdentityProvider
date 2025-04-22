@@ -45,6 +45,7 @@ tasks:
     description: "Import common engineering tools and configurations"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+      configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
   #######################################################################################
   # SECTION: Frontend Development Tools
@@ -69,6 +70,7 @@ userTasks:
     description: "Install VS Code extensions for frontend development"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vscode.dsc.yaml"
+      configurationFile: "c:\\winget\\vscode.dsc.yaml"
 
   #######################################################################################
   # SECTION: API Development Tools
@@ -81,3 +83,4 @@ userTasks:
     description: "Install API development and testing tools"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
+      configurationFile: "c:\\winget\\apis.dsc.yaml"
