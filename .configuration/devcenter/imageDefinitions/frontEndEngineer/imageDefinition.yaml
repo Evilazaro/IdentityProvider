@@ -77,7 +77,7 @@ tasks:
       # URL of the Azure DevOps repository to clone
       repositoryUrl: "https://github.com/Evilazaro/IdentityProvider.git"
       # Local path where the repository will be cloned
-      directory: "Z:\\workspaces\\IdentityProvider"
+      directory: "Z:\\workspaces"
 
 # User-specific tasks that can be customized by individual developers
 userTasks:
