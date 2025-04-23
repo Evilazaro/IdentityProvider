@@ -42,12 +42,6 @@ tasks:
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-    # Install Windows Package Manager (winget) for application management
-  - name: ~/winget
-    description: "Configure Windows Package Manager (winget) for application management"
-    parameters:
-      package: Microsoft.DesktopAppInstaller
-
   # Import common engineering tools configuration
   # This imports a predefined set of tools commonly used across engineering teams
   - name: ~/winget
