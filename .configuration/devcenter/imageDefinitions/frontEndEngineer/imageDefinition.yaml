@@ -64,6 +64,15 @@ tasks:
     parameters:
       package: Microsoft.VisualStudioCode
 
+  # Clone IdenityProvider repository for frontend development
+  - name: ~/git-clone
+    description: "Clone Azure DevOps repository for frontend development"
+    parameters:
+      # URL of the Azure DevOps repository to clone
+      repositoryUrl: "https://github.com/Evilazaro/IdentityProvider.git"
+      # Local path where the repository will be cloned
+      directory: "Z:\\workspaces\\IdentityProvider"
+
 # User-specific tasks that can be customized by individual developers
 userTasks:
   #######################################################################################
