@@ -42,6 +42,12 @@ tasks:
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
+    # Install Windows Package Manager (winget) for application management
+  - name: ~/winget
+    description: "Configure Windows Package Manager (winget) for application management"
+    parameters:
+      package: Microsoft.DesktopAppInstaller
+
   # Import common engineering tools configuration
   # This imports a predefined set of tools commonly used across engineering teams
   - name: ~/winget
@@ -85,7 +91,7 @@ tasks:
       # URL of the Azure DevOps repository to clone
       repositoryUrl: "https://github.com/Evilazaro/IdentityProvider.git"
       # Local path where the repository will be cloned
-      directory: "Z:\\workspaces\\IdentityProvider"
+      directory: "Z:\\workspaces"
 
 userTasks:
   #######################################################################################
@@ -156,10 +162,9 @@ userTasks:
       configurationFile: "c:\\winget\\apis.dsc.yaml"
 
   # Updates the Winget Packages Installed
-  - name: ~/winget
-    description: "Install API development and testing tools"
+  - name: ~/powershell
+    description: "Update all installed packages to the latest versions"
     parameters:
-      # Source URL for the configuration file containing API development tools
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/winget-update.dsc.yaml"
-      # Local path where the configuration file will be saved
-      configurationFile: "c:\\winget\\winget-update.dsc.yaml"
+      command: |
+        # Update all installed packages to their latest versions
+        winget upgrade --all --silent --accept-source-agreements --accept-package-agreements
