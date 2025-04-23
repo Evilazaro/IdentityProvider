@@ -114,3 +114,13 @@ userTasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/apis/apis.dsc.yaml"
       configurationFile: "c:\\winget\\apis.dsc.yaml"
+
+
+  # Updates the Winget Packages Installed
+  - name: ~/winget
+    description: "Install API development and testing tools"
+    parameters:
+      # Source URL for the configuration file containing API development tools
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/winget-update.dsc.yaml"
+      # Local path where the configuration file will be saved
+      configurationFile: "c:\\winget\\winget-update.dsc.yaml"
