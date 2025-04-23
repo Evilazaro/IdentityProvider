@@ -69,12 +69,6 @@ tasks:
     parameters:
       package: GitHub.GitHubDesktop
 
-  # Install Visual Studio Code - lightweight code editor for quick edits
-  - name: ~/winget
-    description: "Install Visual Studio Code for lightweight code editing"
-    parameters:
-      package: Microsoft.VisualStudioCode
-
   #######################################################################################
   # SECTION: Azure Development Environment
   # Purpose: Install tools and SDKs for Azure cloud development
@@ -104,17 +98,6 @@ userTasks:
   # SECTION: IDE Extensions and Configurations
   # Purpose: Set up development environment with specialized extensions
   #######################################################################################
-
-  # Configure Visual Studio with backend-specific extensions and settings
-  # This installs extensions for C#, .NET, Azure, and database development
-  # along with productivity tools optimized for backend development workflows
-  - name: ~/winget
-    description: "Install Visual Studio extensions for backend development"
-    parameters:
-      # Source URL for the configuration file containing VS extension definitions
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/ides/vstudio.dsc.yaml"
-      # Local path where the configuration file will be saved
-      configurationFile: "c:\\winget\\vstudio.dsc.yaml"
 
   # Configure Visual Studio Code with backend-specific extensions and settings
   # This installs extensions for C#, .NET, Azure, and database development
