@@ -6,47 +6,76 @@ description: "This image definition sets up a development environment for fronte
 
 image: microsoftvisualstudio_windowsplustools_base-win11-gen2
 
-# Core tasks that run during image setup (run as admin)
+# ------------------------------------------------------------------------------
+# AUTOMATED SETUP TASKS
+# ------------------------------------------------------------------------------
+# These tasks run automatically during image creation with admin privileges
 tasks:
-  # Setup 1: PowerShell Configuration
-  - name: ~/powershell
+  # ------------------------------------------------------------------------------
+  # TASK 1: PowerShell Environment Setup
+  # ------------------------------------------------------------------------------
+  - name: ~/powershell # Built-in PowerShell task provider
     description: "Configure PowerShell environment and install DSC resources"
     parameters:
       command: |
-        # Set execution policy to allow script execution
+        # Allow script execution with sufficient privileges for setup
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        # Install NuGet package provider for module installation
+
+        # Install package provider needed for module management
+        # Forces installation without prompts and applies to all users
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-        # Configure PowerShell Gallery as trusted repository
+
+        # Trust the PowerShell Gallery to enable automated module installation
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-        # Install PowerShell DSC Resources module (required for config management)
+
+        # Install PowerShell Desired State Configuration resources
+        # Required for declarative configuration management
+        # AllowClobber permits overwriting any existing versions
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  # Setup 2: Common Engineering Tools
-  - name: ~/winget
+  # ------------------------------------------------------------------------------
+  # TASK 2: Common Engineering Tools Installation
+  # ------------------------------------------------------------------------------
+  - name: ~/winget # Uses WinGet task provider for package installation
     description: "Import common engineering tools and configurations"
     parameters:
-      # Source configuration from GitHub repository
+      # External DSC configuration hosted on GitHub
+      # Contains definitions for tools used across all engineering roles
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
-      # Local path where configuration will be stored
+
+      # Local file path where the configuration will be saved
+      # Stored in a dedicated directory for WinGet configurations
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
-  # Setup 3: Backend-specific Tools
+  # ------------------------------------------------------------------------------
+  # TASK 3: Backend-specific Development Tools
+  # ------------------------------------------------------------------------------
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
-      # Source backend-specific configuration from GitHub repository
+      # Backend-specific tools configuration (likely includes database tools,
+      # API development tools, server frameworks, etc.)
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
-      # Local path where configuration will be stored
+
+      # Local storage path for configuration reference
       configurationFile: "c:\\winget\\common-backend-config.dsc.yaml"
 
-# Optional tasks that users can choose to run after setup
+# ------------------------------------------------------------------------------
+# USER-INITIATED OPTIONAL TASKS
+# ------------------------------------------------------------------------------
+# Tasks that are not run automatically but can be executed by users post-setup
+# Useful for personalization and role-specific tooling that isn't required for all users
 userTasks:
-  # Optional Task 1: Virtualization Support
+  # ------------------------------------------------------------------------------
+  # OPTIONAL TASK: Backend User Tools
+  # ------------------------------------------------------------------------------
   - name: ~/winget
-    description: "Install Windows virtualization features and WSL2"
+    description: "Import common engineering tools and configurations"
     parameters:
-      # Source virtualization configuration from GitHub repository
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
-      # Local path where configuration will be stored
-      configurationFile: "c:\\winget\\virtualization.dsc.yaml"
+      # Contains optional tools that backend engineers might need based on specific projects
+      # Not installed by default to keep base image lean
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-usertasks-config.dsc.yaml"
+
+      # Local path for configuration storage
+      # Follows same convention as other WinGet configurations
+      configurationFile: "c:\\winget\\common-backend-usertasks-config.dsc.yaml"
