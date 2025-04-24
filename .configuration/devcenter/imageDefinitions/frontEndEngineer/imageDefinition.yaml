@@ -121,4 +121,4 @@ userTasks:
     parameters:
       command: |
         # Update all installed packages to their latest versions
-        winget upgrade --all --silent --accept-source-agreements --accept-package-agreements
+        winget upgrade --all --accept-source-agreements --accept-package-agreements
