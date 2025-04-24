@@ -23,6 +23,11 @@ tasks:
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
   - name: ~/winget
+    description: "Install GitHub Desktop for visual Git management"
+    parameters:
+      package: GitHub.GitHubDesktop
+
+  - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
