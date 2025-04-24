@@ -1,41 +1,57 @@
+# Schema version for the image definition format
 $schema: "1.0"
 
+# Unique identifier for this image definition
 name: identityProvider-backend-engineer
 
+# Brief explanation of the image's purpose
 description: "This image definition sets up a development environment for backend engineers."
 
+# Base image to use from the Microsoft catalog
+# This is a Visual Studio 2022 Enterprise image with Windows 11 and Microsoft 365
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
+# Core tasks that run during image setup (run as admin)
 tasks:
+  # Setup 1: PowerShell Configuration
   - name: ~/powershell
     description: "Configure PowerShell environment and install DSC resources"
     parameters:
       command: |
+        # Set execution policy to allow script execution
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        # Install NuGet package provider for module installation
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        # Configure PowerShell Gallery as trusted repository
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+        # Install PowerShell DSC Resources module (required for config management)
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
+  # Setup 2: Common Engineering Tools
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
+      # Source configuration from GitHub repository
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
+      # Local path where configuration will be stored
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
-  - name: ~/winget
-    description: "Install GitHub Desktop for visual Git management"
-    parameters:
-      package: GitHub.GitHubDesktop
-
+  # Setup 3: Backend-specific Tools
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
+      # Source backend-specific configuration from GitHub repository
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
+      # Local path where configuration will be stored
       configurationFile: "c:\\winget\\common-backend-config.dsc.yaml"
 
+# Optional tasks that users can choose to run after setup
 userTasks:
+  # Optional Task 1: Virtualization Support
   - name: ~/winget
     description: "Install Windows virtualization features and WSL2"
     parameters:
+      # Source virtualization configuration from GitHub repository
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+      # Local path where configuration will be stored
       configurationFile: "c:\\winget\\virtualization.dsc.yaml"
