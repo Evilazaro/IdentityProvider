@@ -32,3 +32,10 @@ tasks:
     parameters:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
       configurationFile: "c:\\winget\\common-backend-config.dsc.yaml"
+
+userTasks:
+  - name: ~/winget
+    description: "Install Windows virtualization features and WSL2"
+    parameters:
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/customizations/windows/virtualization.dsc.yaml"
+      configurationFile: "c:\\winget\\virtualization.dsc.yaml"
