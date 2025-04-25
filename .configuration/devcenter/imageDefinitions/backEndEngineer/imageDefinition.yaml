@@ -1,96 +1,110 @@
-# ------------------------------------------------------------------------------
-# SCHEMA DEFINITION
-# ------------------------------------------------------------------------------
-# Defines the schema version for DevCenter image definition validation
+#######################################################################################
+# Identity Provider - Backend Engineer Image Definition
+# Purpose: Configures a development environment for backend engineering tasks
+# Last Updated: April 25, 2025
+#######################################################################################
+
+# Schema version for the image definition format
 $schema: "1.0"
 
-# ------------------------------------------------------------------------------
-# BASIC IMAGE INFORMATION
-# ------------------------------------------------------------------------------
-# Unique identifier for this image definition - should be descriptive and follow naming conventions
+# Unique identifier for this image definition
 name: identityProvider-backend-engineer
 
-# Detailed description explaining the purpose of this image
+# Human-readable description of the environment purpose
 description: "This image definition sets up a development environment for backend engineers."
 
-# ------------------------------------------------------------------------------
-# BASE IMAGE CONFIGURATION
-# ------------------------------------------------------------------------------
-# Microsoft-provided base image with Visual Studio 2022 Enterprise
-# Includes Windows 11 and Microsoft 365 apps pre-installed
+# Base image to use from Microsoft's catalog
+# Note: This image includes Visual Studio 2022 Enterprise with Windows 11 and M365
 # Reference: https://learn.microsoft.com/en-us/azure/dev-box/tutorial-dev-box-service
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
-# ------------------------------------------------------------------------------
-# AUTOMATED SETUP TASKS
-# ------------------------------------------------------------------------------
-# These tasks run automatically during image creation with admin privileges
+# Installation tasks to configure the development environment
 tasks:
-  # ------------------------------------------------------------------------------
-  # TASK 1: PowerShell Environment Setup
-  # ------------------------------------------------------------------------------
-  - name: ~/powershell # Built-in PowerShell task provider
+  #######################################################################################
+  # SECTION: Core Environment Setup
+  # Purpose: Install foundational tools and configure the PowerShell environment
+  #######################################################################################
+  
+  # Install PSDSCResources module for PowerShell environment configuration
+  # This enables PowerShell DSC functionality for subsequent configuration tasks
+  - name: ~/powershell
     description: "Configure PowerShell environment and install DSC resources"
     parameters:
       command: |
-        # Allow script execution with sufficient privileges for setup
+        # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-
-        # Install package provider needed for module management
-        # Forces installation without prompts and applies to all users
+        
+        # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-
-        # Trust the PowerShell Gallery to enable automated module installation
+        
+        # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-
-        # Install PowerShell Desired State Configuration resources
-        # Required for declarative configuration management
-        # AllowClobber permits overwriting any existing versions
+        
+        # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  # ------------------------------------------------------------------------------
-  # TASK 2: Common Engineering Tools Installation
-  # ------------------------------------------------------------------------------
-  - name: ~/winget # Uses WinGet task provider for package installation
+  # Install GitHub Desktop - GUI tool for Git repository management
+  # Provides visual interface for commits, branches, and pull requests
+  - name: ~/winget
+    description: "Install GitHub Desktop for visual Git management"
+    parameters:
+      package: "GitHub.GitHubDesktop"
+
+  #######################################################################################
+  # SECTION: Common Development Tools
+  # Purpose: Install shared tools used across engineering teams
+  #######################################################################################
+  
+  # Import common engineering tools configuration
+  # This imports a predefined set of tools commonly used across engineering teams
+  - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
-      # External DSC configuration hosted on GitHub
-      # Contains definitions for tools used across all engineering roles
+      # Source URL for the configuration file containing common tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
-
-      # Local file path where the configuration will be saved
-      # Stored in a dedicated directory for WinGet configurations
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
-  # ------------------------------------------------------------------------------
-  # TASK 3: Backend-specific Development Tools
-  # ------------------------------------------------------------------------------
-  - name: ~/winget
-    description: "Import common engineering tools and configurations"
+  # Clone the Identity Provider repository into the workspace
+  # This provides immediate access to project code and resources
+  - name: ~/git-clone
+    description: "Clone the Identity Provider repository to the local workspace"
     parameters:
-      # Backend-specific tools configuration (likely includes database tools,
-      # API development tools, server frameworks, etc.)
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
+      # Source repository URL for the project code
+      repositoryUrl: https://github.com/Evilazaro/IdentityProvider.git
+      # Local directory where the repository will be cloned
+      directory: Z:\Workspaces
 
-      # Local storage path for configuration reference
+  #######################################################################################
+  # SECTION: Backend Development Environment
+  # Purpose: Install specialized tools for backend engineering tasks
+  #######################################################################################
+  
+  # Import backend-specific development tools
+  # This includes database tools, API development frameworks, and server utilities
+  - name: ~/winget
+    description: "Install specialized backend development tools"
+    parameters:
+      # Backend-specific tools configuration including database tools,
+      # API development tools, server frameworks, etc.
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-backend-config.dsc.yaml"
 
-# ------------------------------------------------------------------------------
-# USER-INITIATED OPTIONAL TASKS
-# ------------------------------------------------------------------------------
-# Tasks that are not run automatically but can be executed by users post-setup
-# Useful for personalization and role-specific tooling that isn't required for all users
+# User-specific tasks that can be customized by individual developers
 userTasks:
-  # ------------------------------------------------------------------------------
-  # OPTIONAL TASK: Backend User Tools
-  # ------------------------------------------------------------------------------
+  #######################################################################################
+  # SECTION: Optional Backend Tools
+  # Purpose: Additional tools that engineers can install based on project needs
+  #######################################################################################
+  
+  # Import optional backend development tools
+  # This includes specialized tools for specific backend scenarios
+  # Not installed by default to keep base image lean
   - name: ~/winget
-    description: "Import common engineering tools and configurations"
+    description: "Install additional backend-specific tools"
     parameters:
       # Contains optional tools that backend engineers might need based on specific projects
-      # Not installed by default to keep base image lean
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-usertasks-config.dsc.yaml"
-
-      # Local path for configuration storage
-      # Follows same convention as other WinGet configurations
+      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-backend-usertasks-config.dsc.yaml"
