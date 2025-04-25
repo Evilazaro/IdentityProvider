@@ -24,7 +24,7 @@ tasks:
   # SECTION: Core Environment Setup
   # Purpose: Install foundational tools and configure the PowerShell environment
   #######################################################################################
-  
+
   # Install PSDSCResources module for PowerShell environment configuration
   # This enables PowerShell DSC functionality for subsequent configuration tasks
   - name: ~/powershell
@@ -33,28 +33,21 @@ tasks:
       command: |
         # Set execution policy to allow running scripts for this session
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        
+
         # Install NuGet package provider required for PowerShell modules
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-        
+
         # Configure PowerShell Gallery as a trusted source
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-        
+
         # Install DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
-
-  # Install GitHub Desktop - GUI tool for Git repository management
-  # Provides visual interface for commits, branches, and pull requests
-  - name: ~/winget
-    description: "Install GitHub Desktop for visual Git management"
-    parameters:
-      package: "GitHub.GitHubDesktop"
 
   #######################################################################################
   # SECTION: Common Development Tools
   # Purpose: Install shared tools used across engineering teams
   #######################################################################################
-  
+
   # Import common engineering tools configuration
   # This imports a predefined set of tools commonly used across engineering teams
   - name: ~/winget
@@ -64,6 +57,13 @@ tasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
       # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
+
+  # Install GitHub Desktop - GUI tool for Git repository management
+  # Provides visual interface for commits, branches, and pull requests
+  - name: ~/winget
+    description: "Install GitHub Desktop for visual Git management"
+    parameters:
+      package: "GitHub.GitHubDesktop"
 
   # Clone the Identity Provider repository into the workspace
   # This provides immediate access to project code and resources
@@ -76,10 +76,31 @@ tasks:
       directory: Z:\Workspaces
 
   #######################################################################################
+  # SECTION: Project Build and Validation
+  # Purpose: Build and verify the solution to ensure development environment is working
+  #######################################################################################
+
+  # Build and test the Identity Provider solution
+  # This validates that all development dependencies are correctly installed
+  # and ensures the project can be built and tested in the new environment
+  - name: ~/powershell
+    description: "Build and test the Identity Provider solution"
+    parameters:
+      command: |
+        # Restore NuGet dependencies for the solution
+        dotnet restore Z:\Workspaces\IdentityProvider\IdentityProvider.sln
+
+        # Build the solution in Release configuration without restoring packages again
+        dotnet build Z:\Workspaces\IdentityProvider\IdentityProvider.sln --configuration Release --no-restore
+
+        # Run tests to verify solution integrity and environment functionality
+        dotnet test Z:\Workspaces\IdentityProvider\IdentityProvider.sln --configuration Release --verbosity normal
+
+  #######################################################################################
   # SECTION: Backend Development Environment
   # Purpose: Install specialized tools for backend engineering tasks
   #######################################################################################
-  
+
   # Import backend-specific development tools
   # This includes database tools, API development frameworks, and server utilities
   - name: ~/winget
@@ -97,7 +118,7 @@ userTasks:
   # SECTION: Optional Backend Tools
   # Purpose: Additional tools that engineers can install based on project needs
   #######################################################################################
-  
+
   # Import optional backend development tools
   # This includes specialized tools for specific backend scenarios
   # Not installed by default to keep base image lean
