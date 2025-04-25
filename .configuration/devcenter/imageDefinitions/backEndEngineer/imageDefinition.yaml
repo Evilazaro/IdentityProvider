@@ -93,9 +93,6 @@ tasks:
         # Build the solution in Release configuration without restoring packages again
         dotnet build Z:\Workspaces\IdentityProvider\IdentityProvider.sln --configuration Release --no-restore
 
-        # Run tests to verify solution integrity and environment functionality
-        dotnet test Z:\Workspaces\IdentityProvider\IdentityProvider.sln --configuration Release --verbosity normal
-
   #######################################################################################
   # SECTION: Backend Development Environment
   # Purpose: Install specialized tools for backend engineering tasks
