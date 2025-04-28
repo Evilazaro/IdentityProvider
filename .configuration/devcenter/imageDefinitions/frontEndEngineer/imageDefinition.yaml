@@ -97,7 +97,7 @@ tasks:
         dotnet restore Z:\Workspaces\IdentityProvider\IdentityProvider.sln
 
         # Build the solution in Release configuration without restoring packages again
-        dotnet build Z:\Workspaces\IdentityProvider\IdentityProvider.sln --configuration Release --no-restore
+        dotnet build Z:\Workspaces\IdentityProvider\src\IdentityProvider\IdentityProvider.csproj --configuration Release --no-restore
 
   #######################################################################################
   # SECTION: Backend Development Environment
