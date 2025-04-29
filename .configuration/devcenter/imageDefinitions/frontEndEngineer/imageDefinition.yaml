@@ -111,7 +111,7 @@ userTasks:
     description: "Install additional backend-specific tools"
     parameters:
       # Contains optional tools that backend engineers might need based on specific projects
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-usertasks-config.dsc.yaml"
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-frontend-usertasks-config.dsc.yaml"
       # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-backend-usertasks-config.dsc.yaml"
 
