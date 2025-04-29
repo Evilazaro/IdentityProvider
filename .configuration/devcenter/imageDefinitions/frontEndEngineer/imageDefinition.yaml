@@ -81,22 +81,6 @@ tasks:
       # Local directory where the repository will be cloned
       directory: Z:\Workspaces
 
-  #######################################################################################
-  # SECTION: Backend Development Environment
-  # Purpose: Install specialized tools for backend engineering tasks
-  #######################################################################################
-
-  # Import backend-specific development tools
-  # This includes database tools, API development frameworks, and server utilities
-  - name: ~/winget
-    description: "Install specialized backend development tools"
-    parameters:
-      # Backend-specific tools configuration including database tools,
-      # API development tools, server frameworks, etc.
-      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
-      # Local path where the configuration file will be saved
-      configurationFile: "c:\\winget\\common-backend-config.dsc.yaml"
-
 # User-specific tasks that can be customized by individual developers
 userTasks:
   #######################################################################################
