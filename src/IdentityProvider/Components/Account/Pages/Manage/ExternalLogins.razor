@@ -99,10 +99,17 @@
 
         showRemoveButton = passwordHash is not null || currentLogins.Count > 1;
 
-        if (HttpMethods.IsGet(HttpContext.Request.Method) && Action == LinkLoginCallbackAction)
+        if (HttpMethods.IsGet(HttpContext.Request.Method) && IsValidAction(Action))
         {
             await OnGetLinkLoginCallbackAsync();
         }
+    }
+
+    private bool IsValidAction(string? action)
+    {
+        // Add your validation logic here
+        // For example, check if the action is allowed and the user is authorized
+        return action == LinkLoginCallbackAction && UserManager.IsSignedIn(HttpContext.User);
     }
 
     private async Task OnSubmitAsync()
