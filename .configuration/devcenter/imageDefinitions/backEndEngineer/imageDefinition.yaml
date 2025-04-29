@@ -76,25 +76,6 @@ tasks:
       directory: Z:\Workspaces
 
   #######################################################################################
-  # SECTION: Project Build and Validation
-  # Purpose: Build and verify the solution to ensure development environment is working
-  #######################################################################################
-
-  # Build and test the Identity Provider solution
-  # This validates that all development dependencies are correctly installed
-  # and ensures the project can be built and tested in the new environment
-  - name: ~/powershell
-    description: "Build and test the Identity Provider solution"
-    parameters:
-      command: |
-        dotnet workload update --ignore-failed-sources
-        # Restore NuGet dependencies for the solution
-        dotnet restore Z:\Workspaces\IdentityProvider\IdentityProvider.sln
-
-        # Build the solution in Release configuration without restoring packages again
-        dotnet build Z:\Workspaces\IdentityProvider\src\IdentityProvider\IdentityProvider.csproj --configuration Release --no-restore
-
-  #######################################################################################
   # SECTION: Backend Development Environment
   # Purpose: Install specialized tools for backend engineering tasks
   #######################################################################################
@@ -127,3 +108,26 @@ userTasks:
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-usertasks-config.dsc.yaml"
       # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-backend-usertasks-config.dsc.yaml"
+
+  #######################################################################################
+  # SECTION: Project Build and Validation
+  # Purpose: Build and verify the solution to ensure development environment is working
+  #######################################################################################
+
+  # Build and test the Identity Provider solution
+  # This validates that all development dependencies are correctly installed
+  # and ensures the project can be built and tested in the new environment
+  - name: ~/powershell
+    description: "Build and test the Identity Provider solution"
+    parameters:
+      command: |
+        # Set execution policy to allow running scripts for this session
+        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+        
+        dotnet workload update --ignore-failed-sources
+        # Restore NuGet dependencies for the solution
+        dotnet restore Z:\Workspaces\IdentityProvider\IdentityProvider.sln
+
+        # Build the solution in Release configuration without restoring packages again
+        dotnet build Z:\Workspaces\IdentityProvider\ --configuration Release --no-restore
+        dotnet test Z:\Workspaces\IdentityProvider\ --configuration Release --no-restore
