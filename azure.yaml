@@ -15,5 +15,5 @@ platform:
     catalog: environments
     environmentDefinition: webapp
     environmentType: dev
-    name: contoso-devexp
+    name: contoso-devcenter
     project: identityProvider
