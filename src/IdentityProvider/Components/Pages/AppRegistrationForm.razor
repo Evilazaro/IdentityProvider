@@ -1,0 +1,95 @@
+﻿@page "/AppRegistrationForm"
+@using IdentityProvider.Components
+@inject NavigationManager NavigationManager
+
+<h3>New App Registration</h3>
+
+<EditForm Model="@appRegistration" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="ClientId" class="form-label">Client ID</label>
+        <InputText id="ClientId" class="form-control" @bind-Value="appRegistration.ClientId" />
+        <ValidationMessage For="@(() => appRegistration.ClientId)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="ClientSecret" class="form-label">Client Secret</label>
+        <InputText id="ClientSecret" class="form-control" @bind-Value="appRegistration.ClientSecret" />
+        <ValidationMessage For="@(() => appRegistration.ClientSecret)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="TenantId" class="form-label">Tenant ID</label>
+        <InputText id="TenantId" class="form-control" @bind-Value="appRegistration.TenantId" />
+        <ValidationMessage For="@(() => appRegistration.TenantId)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="RedirectUri" class="form-label">Redirect URI</label>
+        <InputText id="RedirectUri" class="form-control" @bind-Value="appRegistration.RedirectUri" />
+        <ValidationMessage For="@(() => appRegistration.RedirectUri)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Scopes" class="form-label">Scopes (comma-separated)</label>
+        <InputText id="Scopes" class="form-control" @bind-Value="appRegistration.Scopes" />
+        <ValidationMessage For="@(() => appRegistration.Scopes)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Authority" class="form-label">Authority</label>
+        <InputText id="Authority" class="form-control" @bind-Value="appRegistration.Authority" />
+        <ValidationMessage For="@(() => appRegistration.Authority)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="AppName" class="form-label">App Name</label>
+        <InputText id="AppName" class="form-control" @bind-Value="appRegistration.AppName" />
+        <ValidationMessage For="@(() => appRegistration.AppName)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="AppDescription" class="form-label">App Description</label>
+        <InputTextArea id="AppDescription" class="form-control" @bind-Value="appRegistration.AppDescription" />
+        <ValidationMessage For="@(() => appRegistration.AppDescription)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="GrantTypes" class="form-label">Grant Types (comma-separated)</label>
+        <InputText id="GrantTypes" class="form-control" @bind-Value="appRegistration.GrantTypes" />
+        <ValidationMessage For="@(() => appRegistration.GrantTypes)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="ResponseTypes" class="form-label">Response Types (comma-separated)</label>
+        <InputText id="ResponseTypes" class="form-control" @bind-Value="appRegistration.ResponseTypes" />
+        <ValidationMessage For="@(() => appRegistration.ResponseTypes)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
+
+@code {
+    private AppRegistration appRegistration = new()
+    {
+        ClientId = string.Empty,
+        ClientSecret = string.Empty,
+        TenantId = string.Empty,
+        RedirectUri = string.Empty,
+        Scopes = string.Empty,
+        Authority = string.Empty,
+        AppName = string.Empty,
+        AppDescription = string.Empty,
+        GrantTypes = string.Empty,
+        ResponseTypes = string.Empty
+    };
+
+    private void HandleValidSubmit()
+    {
+        // TODO: Add logic to persist the new AppRegistration (e.g., call an API or service)
+        // For now, just navigate back or show a success message
+        NavigationManager.NavigateTo("/");
+    }
+}
