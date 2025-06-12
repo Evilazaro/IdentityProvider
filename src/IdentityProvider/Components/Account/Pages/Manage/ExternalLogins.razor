@@ -105,6 +105,13 @@
         }
     }
 
+    private bool IsValidAction(string? action)
+    {
+        // Add your validation logic here
+        // For example, check if the action is allowed and the user is authorized
+        return action == LinkLoginCallbackAction && UserManager.IsSignedIn(HttpContext.User);
+    }
+
     private async Task OnSubmitAsync()
     {
         var result = await UserManager.RemoveLoginAsync(user, LoginProvider!, ProviderKey!);
