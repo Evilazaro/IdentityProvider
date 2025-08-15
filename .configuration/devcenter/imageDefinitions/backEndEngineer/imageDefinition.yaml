@@ -25,7 +25,12 @@ tasks:
   # SECTION: Core Environment Setup
   # Purpose: Install foundational tools and configure the PowerShell environment
   #######################################################################################
-  
+
+  - name: ~/winget
+    description: "Install Microsoft PowerShell"
+    parameters:
+      package: "Microsoft.PowerShell"
+
   # Install PSDSCResources module for PowerShell environment configuration
   # This enables PowerShell DSC functionality for subsequent configuration tasks
   # Azure best practice: Use DSC for consistent and idempotent environment configuration
@@ -36,15 +41,15 @@ tasks:
         # Set execution policy to allow running scripts for this session
         # Azure security best practice: Use scoped execution policy instead of global changes
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-        
+
         # Install NuGet package provider required for PowerShell modules
         # Azure best practice: Install for AllUsers to ensure consistent environment
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
-        
+
         # Configure PowerShell Gallery as a trusted source
         # Azure best practice: Use trusted Microsoft repositories for modules
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-        
+
         # Install DSC resources for system configuration
         # Azure best practice: Use standard Microsoft DSC resources for compatibility
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
@@ -53,7 +58,7 @@ tasks:
   # SECTION: Common Development Tools
   # Purpose: Install shared tools used across engineering teams
   #######################################################################################
-  
+
   # Import common engineering tools configuration
   # This imports a predefined set of tools commonly used across engineering teams
   # Azure best practice: Use centralized configuration files for consistency across environments
