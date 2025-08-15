@@ -1,229 +1,111 @@
-#######################################################################################
+# =============================================================================
 # Identity Provider - Backend Engineer Image Definition
-# Purpose: Configures a development environment for backend engineering tasks
-# Last Updated: April 25, 2025
-# Azure DevBox Reference: https://learn.microsoft.com/en-us/azure/dev-box/tutorial-dev-box-service
-#######################################################################################
+# =============================================================================
+# Purpose: Configures a specialized development environment for backend engineers
+# Last Updated: August 15, 2025
+# Documentation: https://learn.microsoft.com/en-us/azure/dev-box/tutorial-dev-box-service
+# =============================================================================
 
-# Schema version for the image definition format
+# Schema version for Azure DevBox image definition format
 $schema: "1.0"
 
 # Unique identifier for this image definition
 name: identityProvider-backend-engineer
 
-# Human-readable description of the environment purpose
+# Environment description visible in Azure DevBox portal
 description: "This image definition sets up a development environment for backend engineers."
 
-# Base image to use from Microsoft's catalog
-# Note: This image includes Visual Studio 2022 Enterprise with Windows 11 and M365
-# Azure DevBox best practice: Use Microsoft-provided base images for better performance and compatibility
+# Base image from Microsoft's verified catalog
+# Includes: Visual Studio 2022 Enterprise, Windows 11, Microsoft 365 apps
+# Best practice: Always use Microsoft-provided base images for security and compatibility
 image: microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2
 
 # Installation tasks to configure the development environment
 tasks:
-  #######################################################################################
-  # SECTION: Core Environment Setup
-  # Purpose: Install foundational tools and configure the PowerShell environment
-  #######################################################################################
-
+  # -------------------------------------------------------------------------
+  # Core Environment Setup
+  # -------------------------------------------------------------------------
+  # Installs foundational tools and configures PowerShell environment
+  
+  # Install latest Microsoft PowerShell for enhanced scripting capabilities
   - name: ~/winget
     description: "Install Microsoft PowerShell"
     parameters:
       package: "Microsoft.PowerShell"
 
-  # Install PSDSCResources module for PowerShell environment configuration
-  # This enables PowerShell DSC functionality for subsequent configuration tasks
-  # Azure best practice: Use DSC for consistent and idempotent environment configuration
+  # Configure PowerShell environment with DSC resources
+  # DSC enables consistent, idempotent environment configuration
   - name: ~/powershell
     description: "Configure PowerShell environment and install DSC resources"
     parameters:
       command: |
-        # Set execution policy to allow running scripts for this session
-        # Azure security best practice: Use scoped execution policy instead of global changes
+        # Set execution policy for current session only (security best practice)
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
 
-        # Install NuGet package provider required for PowerShell modules
-        # Azure best practice: Install for AllUsers to ensure consistent environment
+        # Install NuGet provider required for PowerShell module management
         Install-PackageProvider -Name NuGet -Force -Scope AllUsers
 
-        # Configure PowerShell Gallery as a trusted source
-        # Azure best practice: Use trusted Microsoft repositories for modules
+        # Trust PowerShell Gallery for module installation
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 
-        # Install DSC resources for system configuration
-        # Azure best practice: Use standard Microsoft DSC resources for compatibility
+        # Install PowerShell DSC resources for system configuration
         Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
 
-  #######################################################################################
-  # SECTION: Common Development Tools
-  # Purpose: Install shared tools used across engineering teams
-  #######################################################################################
-
-  # Import common engineering tools configuration
-  # This imports a predefined set of tools commonly used across engineering teams
-  # Azure best practice: Use centralized configuration files for consistency across environments
+  # -------------------------------------------------------------------------
+  # Common Development Tools
+  # -------------------------------------------------------------------------
+  # Installs shared tools used across all engineering teams
+  
+  # Import standardized engineering tools configuration
   - name: ~/winget
     description: "Import common engineering tools and configurations"
     parameters:
-      # Source URL for the configuration file containing common tools
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-config.dsc.yaml"
-      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-config.dsc.yaml"
 
-  # Install GitHub Desktop - GUI tool for Git repository management
-  # Provides visual interface for commits, branches, and pull requests
-  # Azure best practice: Include source control tools in development environments
+  # Install GitHub Desktop for visual Git repository management
   - name: ~/winget
     description: "Install GitHub Desktop for visual Git management"
     parameters:
       package: "GitHub.GitHubDesktop"
 
-  # Clone the Identity Provider repository into the workspace
-  # This provides immediate access to project code and resources
-  # Azure best practice: Pre-populate workspaces with relevant repositories
+  # Clone project repository to local workspace (Z: drive follows Azure DevBox conventions)
   - name: ~/git-clone
     description: "Clone the Identity Provider repository to the local workspace"
     parameters:
-      # Source repository URL for the project code
       repositoryUrl: https://github.com/Evilazaro/IdentityProvider.git
-      # Local directory where the repository will be cloned
-      # Azure DevBox best practice: Use Z: drive for workspaces to follow Microsoft conventions
       directory: Z:\Workspaces
 
-  #######################################################################################
-  # SECTION: Backend Development Environment
-  # Purpose: Install specialized tools for backend engineering tasks
-  #######################################################################################
-
-  # Import backend-specific development tools
-  # This includes database tools, API development frameworks, and server utilities
-  # Azure best practice: Use specialized tool configurations for different developer roles
+  # -------------------------------------------------------------------------
+  # Backend Development Specialization
+  # -------------------------------------------------------------------------
+  # Installs backend-specific tools and frameworks
+  
+  # Import backend development tools (databases, APIs, server frameworks)
   - name: ~/winget
     description: "Install specialized backend development tools"
     parameters:
-      # Backend-specific tools configuration including database tools,
-      # API development tools, server frameworks, etc.
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-config.dsc.yaml"
-      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-backend-config.dsc.yaml"
 
-# User-specific tasks that can be customized by individual developers
-# Azure DevBox best practice: Separate mandatory tasks from optional user tasks
+# Optional user-customizable tasks
+# These tasks allow individual developers to install additional tools based on project needs
 userTasks:
-  #######################################################################################
-  # SECTION: Optional Backend Tools
-  # Purpose: Additional tools that engineers can install based on project needs
-  #######################################################################################
-
-  # Import optional backend development tools
-  # This includes specialized tools for specific backend scenarios
-  # Not installed by default to keep base image lean
-  # Azure best practice: Optimize image size by making specialized tools optional
+  # -------------------------------------------------------------------------
+  # Optional Backend Tools
+  # -------------------------------------------------------------------------
+  # Additional specialized tools that can be installed on-demand
+  
+  # Install optional backend development tools for specific project scenarios
   - name: ~/winget
     description: "Install additional backend-specific tools"
     parameters:
-      # Contains optional tools that backend engineers might need based on specific projects
       downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/common-backend-usertasks-config.dsc.yaml"
-      # Local path where the configuration file will be saved
       configurationFile: "c:\\winget\\common-backend-usertasks-config.dsc.yaml"
 
-  #######################################################################################
-  # SECTION: Environment Maintenance
-  # Purpose: Keep development environment updated and optimized
-  #######################################################################################
-
   # Update all installed packages to latest versions
-  # This ensures the development environment has the latest security patches and features
-  # Azure best practice: Keep development environments updated with latest security patches
-  - name: ~/powershell
+  - name: ~/winget
     description: "Update Winget Packages"
     parameters:
-      command: |
-        try {
-          # This ensures scripts can run without manual confirmation prompts
-          # Azure security best practice: Use scoped execution policies for automated processes
-          Set-ExecutionPolicy Bypass -Scope Process -Force -ErrorAction SilentlyContinue            
-
-          # Ensure path is properly set
-          # This combines both machine and user paths to ensure we can find winget
-          # Azure DevBox best practice: Ensure consistent PATH environment across sessions
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-
-          # Check if winget command exists before attempting updates
-          if (Get-Command winget -ErrorAction SilentlyContinue) {
-              Write-Verbose "Updating packages with WinGet - this may take several minutes..." -Verbose
-
-              # Update all packages except Windows Terminal
-              # Using --ignore-unavailable to prevent failures if sources are unreachable
-              # Using --silent to prevent interactive prompts during automated installation
-              # Azure best practice: Use non-interactive package management for automation
-              winget upgrade --all --silent --accept-source-agreements --accept-package-agreements --disable-interactivity --force 
-
-              Write-Verbose "WinGet package updates completed successfully" -Verbose
-          } else {
-              Write-Warning "WinGet command not found. Windows Package Manager may not be installed."
-          }
-          
-          # Set execution policy to allow running scripts for this session
-          # Azure security best practice: Reset execution policy after completing operations
-          Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
-
-          # Update .NET workloads to ensure latest SDK components
-          # Azure best practice: Keep .NET SDK components updated for security and compatibility
-          dotnet workload update --ignore-failed-sources
-          
-          # Restore NuGet dependencies for the solution
-          # Azure DevBox best practice: Pre-restore packages to improve developer startup time
-          dotnet restore Z:\Workspaces\IdentityProvider\IdentityProvider.sln
-
-          # Build the solution in Release configuration without restoring packages again
-          # Azure DevBox best practice: Pre-build solutions to validate environment setup
-          dotnet build Z:\Workspaces\IdentityProvider\ --configuration Release --no-restore
-          
-          # Run tests to ensure environment is correctly configured
-          # Azure DevBox best practice: Verify environment with automated tests
-          dotnet test Z:\Workspaces\IdentityProvider\ --configuration Release --no-restore
-        } catch {
-              Write-Error "Failed to update packages with WinGet: $_"
-        }
-
-  #######################################################################################
-  # SECTION: Project Setup
-  # Purpose: Build and validate the Identity Provider solution
-  #######################################################################################
-
-  # Build and test the Identity Provider solution
-  # This ensures the development environment is properly configured for the project
-  # Azure best practice: Verify project builds in new environments to validate setup
-  - name: ~/powershell
-    description: "Build Identity Provider Solution"
-    parameters:
-      command: |
-        try {
-          # This ensures scripts can run without manual confirmation prompts
-          # Azure security best practice: Use scoped execution policy changes
-          Set-ExecutionPolicy Bypass -Scope Process -Force -ErrorAction SilentlyContinue            
-
-          # Ensure path is properly set
-          # This combines both machine and user paths to ensure consistent environment
-          # Azure DevBox best practice: Follow Microsoft's PATH management recommendations
-          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-
-          # Update .NET workloads to ensure latest SDK components
-          # Azure best practice: Keep development tools updated with latest features
-          dotnet workload update --ignore-failed-sources
-          
-          # Restore NuGet dependencies for the solution
-          # Azure best practice: Use official NuGet feeds for package restoration
-          dotnet restore Z:\Workspaces\IdentityProvider\IdentityProvider.sln
-
-          # Build the solution in Release configuration without restoring packages again
-          # Azure best practice: Validate solution builds in release configuration
-          dotnet build Z:\Workspaces\IdentityProvider\ --configuration Release --no-restore
-          
-          # Run tests to ensure code quality and environment configuration
-          # Azure DevOps best practice: Run tests as part of environment validation
-          dotnet test Z:\Workspaces\IdentityProvider\ --configuration Release --no-restore
-        } catch {
-              Write-Error "Failed to build Identity Provider solution : $_"
-        }
+      downloadUrl: "https://raw.githubusercontent.com/Evilazaro/DevExp-DevBox/refs/heads/main/.configuration/devcenter/workloads/winget-upgrade-packages.dsc.yaml"
+      configurationFile: "c:\\winget\\winget-upgrade-packages.dsc.yaml"
