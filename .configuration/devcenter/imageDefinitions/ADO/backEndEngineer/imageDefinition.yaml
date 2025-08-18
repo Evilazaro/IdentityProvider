@@ -1,0 +1,112 @@
+$schema: "1.0"
+
+name: identityProvider-backend-engineer
+
+description: "This image definition sets up a development environment for backend engineers."
+
+image: microsoftvisualstudio_visualstudioplustools_vs-2022-pro-general-win11-m365-gen2
+
+tasks:
+  - name: ~/powershell
+    description: "Configure PowerShell environment and install DSC resources"
+    parameters:
+      command: |
+        # Set execution policy to allow running scripts for this session
+        # Azure security best practice: Use scoped execution policy instead of global changes
+        Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -Scope Process
+
+        # Install NuGet package provider required for PowerShell modules
+        # Azure best practice: Install for AllUsers to ensure consistent environment
+        Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+
+        # Configure PowerShell Gallery as a trusted source
+        # Azure best practice: Use trusted Microsoft repositories for modules
+        Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+
+        # Install DSC resources for system configuration
+        # Azure best practice: Use standard Microsoft DSC resources for compatibility
+        Install-Module -Name PSDSCResources -Force -AllowClobber -Scope AllUsers
+
+  - name: ~/winget
+    description: "Install Git for visual Git management"
+    parameters:
+      package: "Git.Git"
+
+  - name: ~/winget
+    description: "Install GitHub CLI for command-line Git management"
+    parameters:
+      package: "GitHub.cli"
+
+  - name: ~/winget
+    description: "Install GitHub Desktop for visual Git management"
+    parameters:
+      package: "GitHub.GitHubDesktop"
+
+  - name: ~/winget
+    description: "Install .NET SDK 9 for application development"
+    parameters:
+      package: "Microsoft.DotNet.SDK.9"
+
+  - name: ~/winget
+    description: "Install .NET Runtime 9 for application development"
+    parameters:
+      package: "Microsoft.DotNet.Runtime.9"
+
+  - name: ~/winget
+    description: "Install Node.js"
+    parameters:
+      package: "OpenJS.NodeJS"
+
+  - name: ~/winget
+    description: "Install Visual Studio Code"
+    parameters:
+      package: "Microsoft.VisualStudioCode"
+
+  - name: ~/winget
+    description: "Install Azure CLI for cloud management"
+    parameters:
+      package: "Microsoft.AzureCLI"
+
+  - name: ~/winget
+    description: "Install Azure Developer CLI for cloud management"
+    parameters:
+      package: "Microsoft.Azd"
+
+  - name: ~/winget
+    description: "Install Bicep"
+    parameters:
+      package: "Microsoft.Bicep"
+
+  - name: ~/winget
+    description: "Install Bicep"
+    parameters:
+      package: "Microsoft.Bicep"
+
+  - name: ~/winget
+    description: "Install Azure Storage Emulator"
+    parameters:
+      package: "Microsoft.Azure.StorageEmulator"
+
+userTasks:
+  - name: ~/git-clone
+    description: "Clone the Identity Provider repository to the local workspace"
+    parameters:
+      # Source repository URL for the project code
+      repositoryUrl: https://dev.azure.com/contososa2/DevExp-DevBox/_git/DevExp-DevBox
+      # Local directory where the repository will be cloned
+      # Azure DevBox best practice: Use c: drive for workspaces to follow Microsoft conventions
+      directory: c:\winget
+
+  - name: ~/winget
+    description: "Import common backend user tasks configuration"
+    parameters:
+      configurationFile: "c:\\winget\\DevExp-DevBox\\.configuration\\devcenter\\workloads\\common-backend-usertasks-config.dsc.yaml"
+
+  - name: ~/git-clone
+    description: "Clone the Identity Provider repository to the local workspace"
+    parameters:
+      # Source repository URL for the project code
+      repositoryUrl: https://dev.azure.com/contososa2/IdentityProvider/_git/IdentityProvider
+      # Local directory where the repository will be cloned
+      # Azure DevBox best practice: Use c: drive for workspaces to follow Microsoft conventions
+      directory: c:\Workspaces
