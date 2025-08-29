@@ -10,6 +10,9 @@ param identityProviderExists bool
 @description('Id of the user or app to assign application roles')
 param principalId string
 
+@description('Principal type of user or app')
+param principalType string
+
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = uniqueString(subscription().id, resourceGroup().id, location)
 
@@ -24,7 +27,6 @@ module monitoring 'br/public:avm/ptn/azd/monitoring:0.1.0' = {
     tags: tags
   }
 }
-
 // Container registry
 module containerRegistry 'br/public:avm/res/container-registry/registry:0.1.1' = {
   name: 'registry'
@@ -61,7 +63,6 @@ module identityProviderIdentity 'br/public:avm/res/managed-identity/user-assigne
     location: location
   }
 }
-
 module identityProviderFetchLatestImage './modules/fetch-container-image.bicep' = {
   name: 'identityProvider-fetch-image'
   params: {

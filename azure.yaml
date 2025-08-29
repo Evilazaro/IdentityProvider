@@ -2,18 +2,13 @@
 
 name: identity-provider
 metadata:
-    template: azd-init@1.14.0
+    template: azd-init@1.18.2
 services:
     identity-provider:
         project: src/IdentityProvider
         host: containerapp
         language: dotnet
-
-platform:
-  type: devcenter
-  config:
-    catalog: environments
-    environmentDefinition: webapp
-    environmentType: dev
-    name: contoso-devcenter
-    project: identityProvider
+resources:
+    identity-provider:
+        type: host.containerapp
+        port: 8080

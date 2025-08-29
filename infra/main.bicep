@@ -9,10 +9,14 @@ param environmentName string
 @description('Primary location for all resources')
 param location string
 
+
 param identityProviderExists bool
 
 @description('Id of the user or app to assign application roles')
 param principalId string
+
+@description('Principal type of user or app')
+param principalType string
 
 // Tags that should be applied to all resources.
 // 
@@ -37,9 +41,9 @@ module resources 'resources.bicep' = {
     location: location
     tags: tags
     principalId: principalId
+    principalType: principalType
     identityProviderExists: identityProviderExists
   }
 }
-
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = resources.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
 output AZURE_RESOURCE_IDENTITY_PROVIDER_ID string = resources.outputs.AZURE_RESOURCE_IDENTITY_PROVIDER_ID
