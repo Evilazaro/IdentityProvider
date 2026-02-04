@@ -93,13 +93,13 @@ flowchart TB
         end
 
         subgraph services["Service Layer"]
-            identity["🔒 ASP.NET Core<br/>Identity"]:::mdGreen
-            auth["🔑 Authentication<br/>Services"]:::mdGreen
+            identity["🔒 ASP.NET Core<br/>Identity"]:::mdOrange
+            auth["🔑 Authentication<br/>Services"]:::mdOrange
         end
 
         subgraph data["Data Layer"]
-            ef["⚙️ Entity Framework<br/>Core"]:::mdOrange
-            db[("🗄️ SQLite Database<br/>(Dev/Prod)")]:::mdOrange
+            ef["⚙️ Entity Framework<br/>Core"]:::mdTeal
+            db[("🗄️ SQLite Database<br/>(Dev/Prod)")]:::mdTeal
         end
 
         blazor -->|"User Interactions"| identity
