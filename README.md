@@ -199,21 +199,38 @@ dotnet user-secrets set "ConnectionStrings:DefaultConnection" "YourConnectionStr
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME
+    %% ============================================
+    %% Main Group (Neutral background - MANDATORY)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Sub Group
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+
+    %% Content (Semantic colors)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+    %% ============================================
 
+    %% Main system container
     subgraph system["IdentityProvider Architecture"]
         direction TB
 
+        %% Presentation tier - handles user interface
         subgraph presentation["Presentation Layer"]
             direction LR
             blazor["Blazor Server<br/>Components"]:::mdBlue
             pages["Razor Pages<br/>(Account UI)"]:::mdBlue
         end
 
+        %% Application tier - business logic and authentication
         subgraph application["Application Layer"]
             direction LR
             identity["ASP.NET Core<br/>Identity"]:::mdGreen
@@ -221,18 +238,21 @@ flowchart TB
             email["Email Service<br/>Interface"]:::mdGreen
         end
 
+        %% Data tier - persistence and database operations
         subgraph data["Data Layer"]
             direction LR
             efcore["Entity Framework<br/>Core 9.0"]:::mdOrange
             appdb[("Application<br/>Database")]:::mdOrange
         end
 
+        %% Infrastructure tier - cloud and external services
         subgraph infrastructure["Infrastructure"]
             direction LR
             azure["Azure Container<br/>Apps"]:::mdPurple
             keyvault["Azure Key<br/>Vault"]:::mdPurple
         end
 
+        %% Component relationships
         blazor --> identity
         pages --> identity
         identity --> auth
@@ -240,11 +260,13 @@ flowchart TB
         email -.-> identity
         efcore --> appdb
 
+        %% Infrastructure connections (dotted = optional/runtime)
         azure -.-> blazor
         azure -.-> pages
         keyvault -.-> auth
     end
 
+    %% Apply styles to groups
     class system mainGroup
     class presentation,application,data,infrastructure subGroup
 ```
