@@ -63,10 +63,13 @@ flowchart TB
     %%   - Purpose: Visual separation and hierarchy
     %%   - Stroke: Indigo 500 (#3F51B5), 3px
     %%
-    %% Level 2 (Sub Groups): None in this diagram
+    %% Level 2 (Sub Groups): Indigo 100 (#C5CAE9)
+    %%   - Used for: Presentation, Application, Data, Azure layers
+    %%   - Purpose: Visual separation of architectural layers
+    %%   - Stroke: Indigo 500 (#3F51B5), 2px
     %%
     %% Level 3 (Content): Material Design semantic colors
-    %%   - Blue (#BBDEFB): Presentation layer, Azure hosting
+    %%   - Blue (#BBDEFB): Presentation layer components, Azure hosting
     %%   - Green (#C8E6C9): Application layer, business logic
     %%   - Orange (#FFE0B2): Data layer, persistence
     %% ============================================
@@ -111,6 +114,7 @@ flowchart TB
     end
 
     class system mainGroup
+    class presentation,application,data,azure subGroup
 ```
 
 ## 🚀 Quick Start
