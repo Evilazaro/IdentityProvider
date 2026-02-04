@@ -220,11 +220,26 @@ Azure Container Apps provides the hosting infrastructure with automatic HTTPS te
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME
+    %% ============================================
+    %% Main Group (Neutral background - MANDATORY)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Content (Semantic colors)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+
+    %% ============================================
+    %% ARCHITECTURE LAYERS
+    %% ============================================
+    %% Layer 1: Presentation handles user interface and interaction
+    %% Layer 2: Application manages business logic and authentication
+    %% Layer 3: Data provides persistence and storage
+    %% Layer 4: Azure Services host, deploy, and monitor the application
+    %% ============================================
 
     subgraph system["IdentityProvider Architecture"]
         direction TB
@@ -255,16 +270,32 @@ flowchart TB
             insights["Application<br/>Insights"]:::mdPurple
         end
 
+        %% Presentation Layer interactions
+        %% Blazor components authenticate users via Identity
         blazor --> identity
+        %% Razor Pages handle account management through Identity
         razor --> identity
+
+        %% Application Layer interactions
+        %% Identity stores user data via EF Core
         identity --> efcore
+        %% Auth state provider syncs with Identity system
         auth --> identity
+        %% Email validator enforces registration policies
         email --> identity
+
+        %% Data Layer interactions
+        %% EF Core persists data to SQLite/SQL database
         efcore --> db
 
+        %% Azure deployment relationships
+        %% Container Apps host Blazor components
         containerapp -.deploys.-> blazor
+        %% Container Apps host Razor Pages
         containerapp -.deploys.-> razor
+        %% Registry provides container images
         acr -.stores.-> containerapp
+        %% Application Insights tracks telemetry
         insights -.monitors.-> containerapp
     end
 
