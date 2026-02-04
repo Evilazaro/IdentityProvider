@@ -45,22 +45,28 @@ flowchart TB
     %% ============================================
 
     %% ============================================
-    %% COLOR SCHEME DOCUMENTATION
+    %% COLOR SCHEME DOCUMENTATION (v2.1)
     %% ============================================
-    %% Level 1 (Main Groups): Indigo 50 (#E8EAF6)
+    %% Level 1 (Main Container): Indigo 50 (#E8EAF6)
     %%   - Used for: Top-level system container
     %%   - Purpose: Visual separation and hierarchy
     %%   - Stroke: Indigo 500 (#3F51B5), 3px
     %%
-    %% Level 2 (Sub Groups): Indigo 100 (#C5CAE9)
-    %%   - Used for: Architecture layer groupings
-    %%   - Purpose: Distinguish presentation/service/data tiers
-    %%   - Stroke: Indigo 500 (#3F51B5), 2px
+    %% Level 2 (Functional Siblings): SEMANTIC COLORS
+    %%   - Presentation Layer → Blue (#BBDEFB)
+    %%     Purpose: UI/interface components
+    %%     Stroke: Blue 700 (#1976D2), 2px
+    %%   - Service Layer → Orange (#FFE0B2)
+    %%     Purpose: Security/authentication services
+    %%     Stroke: Orange 800 (#E64A19), 2px
+    %%   - Data Layer → Teal (#B2DFDB)
+    %%     Purpose: Storage/persistence components
+    %%     Stroke: Teal 700 (#00796B), 2px
     %%
-    %% Level 3 (Content): Material Design semantic colors
-    %%   - Blue (#BBDEFB): Presentation layer components
-    %%   - Green (#C8E6C9): Service layer components
-    %%   - Orange (#FFE0B2): Data layer components
+    %% Level 3 (Content Nodes): Inherit parent subgraph color class
+    %%   - Presentation nodes: mdBlue
+    %%   - Service nodes: mdGreen (legacy mapping)
+    %%   - Data nodes: mdOrange (legacy mapping)
     %%
     %% Accessibility: All colors meet WCAG AA contrast ratio
     %% requirements (4.5:1 minimum) against text (#000)
@@ -82,32 +88,35 @@ flowchart TB
         direction TB
 
         subgraph presentation["Presentation Layer"]
-            blazor["Blazor Server<br/>Components"]:::mdBlue
-            razor["Razor Pages<br/>(Account UI)"]:::mdBlue
+            blazor["🎨 Blazor Server<br/>Components"]:::mdBlue
+            razor["📄 Razor Pages<br/>(Account UI)"]:::mdBlue
         end
 
         subgraph services["Service Layer"]
-            identity["ASP.NET Core<br/>Identity"]:::mdGreen
-            auth["Authentication<br/>Services"]:::mdGreen
+            identity["🔒 ASP.NET Core<br/>Identity"]:::mdGreen
+            auth["🔑 Authentication<br/>Services"]:::mdGreen
         end
 
         subgraph data["Data Layer"]
-            ef["Entity Framework<br/>Core"]:::mdOrange
-            db[("SQLite Database<br/>(Dev/Prod)")]:::mdOrange
+            ef["⚙️ Entity Framework<br/>Core"]:::mdOrange
+            db[("🗄️ SQLite Database<br/>(Dev/Prod)")]:::mdOrange
         end
 
-        blazor -->|"User Actions"| identity
+        blazor -->|"User Interactions"| identity
         razor -->|"Login/Register"| identity
         identity -->|"User Management"| auth
         auth -->|"Data Access"| ef
         ef -->|"SQL Queries"| db
     end
 
-    %% Apply hierarchical colors to subgraphs
+    %% Apply semantic colors to functional sibling subgraphs
+    %% Presentation = UI layer -> Blue (#BBDEFB)
+    %% Services = Security/Auth layer -> Orange (#FFE0B2)
+    %% Data = Storage layer -> Teal (#B2DFDB)
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style presentation fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style services fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style data fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style presentation fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style services fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
+    style data fill:#B2DFDB,stroke:#00796B,stroke-width:2px
 ```
 
 ## 🚀 Quick Start
