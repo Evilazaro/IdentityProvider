@@ -114,7 +114,11 @@ After successful login, users access protected Blazor components with authentica
 
 ## ✨ Features
 
-Modern identity management with enterprise-grade security and Azure cloud integration.
+**Overview**
+
+This identity provider delivers a complete authentication solution built on ASP.NET Core's proven security framework. The architecture combines modern Blazor Server technology for responsive user interfaces with Entity Framework Core for robust data persistence. Every component is designed for production deployment on Azure Container Apps, enabling automatic scaling and enterprise-grade reliability.
+
+The system implements industry-standard security practices including secure password hashing, token-based authentication, and configurable email validation. Infrastructure as Code with Bicep ensures reproducible deployments across environments, while Application Insights provides real-time monitoring and diagnostics. This integrated approach reduces development time while maintaining the flexibility to customize authentication workflows for specific business requirements.
 
 | Feature                        | Description                                                                                       | Benefits                                                                  |
 | ------------------------------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -127,7 +131,11 @@ Modern identity management with enterprise-grade security and Azure cloud integr
 
 ## 📋 Requirements
 
-System requirements and runtime dependencies for development and production environments.
+**Overview**
+
+The application targets .NET 9.0, leveraging the latest performance improvements and security features in the ASP.NET Core framework. Development environments support cross-platform development on Windows, macOS, and Linux, with SQLite providing a zero-configuration database for rapid local iteration. Production deployments can scale to Azure SQL Database or SQL Server for enterprise workloads.
+
+All dependencies are managed through NuGet packages with specific version pinning to ensure consistent builds across development teams. The optional Azure deployment path requires an active subscription but includes free tier options for development and testing scenarios. This flexible architecture allows teams to start development immediately while maintaining a clear path to production-grade infrastructure.
 
 | Category         | Requirements                                                                  | More Information                                                                                    |
 | ---------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -139,7 +147,11 @@ System requirements and runtime dependencies for development and production envi
 
 ## 🔧 Configuration
 
-Configure application settings using `appsettings.json` and environment variables.
+**Overview**
+
+The application uses ASP.NET Core's hierarchical configuration system, combining JSON files with environment variables for maximum flexibility. Development settings in `appsettings.json` provide sensible defaults for local testing, while production configurations leverage Azure Key Vault or Container Apps environment variables for secure credential management. This separation ensures sensitive data never appears in source control.
+
+Configuration follows the twelve-factor app methodology, allowing the same application binary to deploy across multiple environments with environment-specific settings. Identity options, database connections, and email validation rules are all externalized and can be modified without code changes. The system automatically applies Entity Framework migrations in development mode, while production deployments require explicit migration commands for controlled schema updates.
 
 ### Connection Strings
 
@@ -197,7 +209,13 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 
 ## 🏗️ Architecture
 
-The application follows a multi-tier architecture with Azure cloud services integration.
+**Overview**
+
+The system implements a layered architecture separating presentation, business logic, and data access concerns. Blazor Server components handle the interactive user interface through a persistent SignalR connection, eliminating the need for complex client-side JavaScript frameworks while maintaining rich interactivity. The presentation layer communicates exclusively with the application layer, ensuring proper separation of concerns and testability.
+
+ASP.NET Core Identity forms the core of the application layer, managing authentication workflows, password policies, and user session state. The authentication state provider synchronizes user identity across all Blazor components in real-time, while the custom email validator enforces domain-based registration policies. Entity Framework Core abstracts database operations through a repository pattern, supporting both SQLite for development and SQL Server for production without code changes.
+
+Azure Container Apps provides the hosting infrastructure with automatic HTTPS termination, health monitoring, and horizontal scaling based on demand. The container registry stores versioned application images, while Application Insights collects telemetry for performance monitoring and diagnostics. This cloud-native design ensures the application can scale from development workloads to production traffic seamlessly.
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
