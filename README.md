@@ -65,8 +65,8 @@ flowchart TB
     %%
     %% Level 3 (Content Nodes): Inherit parent subgraph color class
     %%   - Presentation nodes: mdBlue
-    %%   - Service nodes: mdGreen (legacy mapping)
-    %%   - Data nodes: mdOrange (legacy mapping)
+    %%   - Service nodes: mdOrange
+    %%   - Data nodes: mdTeal
     %%
     %% Accessibility: All colors meet WCAG AA contrast ratio
     %% requirements (4.5:1 minimum) against text (#000)
