@@ -38,35 +38,56 @@ This separation of concerns enables independent scaling of UI rendering, authent
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - Material Design
+    %% ============================================
+    %% Main Group Level (Neutral background)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Functional Layer Colors (Semantic - Different Purposes)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Container): Indigo 50 (#E8EAF6)
+    %%   - Purpose: Top-level architecture container
+    %%   - Stroke: Indigo 500 (#3F51B5), 3px
+    %%
+    %% Functional Layers (Semantic Colors):
+    %%   - Presentation Layer: Blue (#BBDEFB) - UI/Interface
+    %%   - Business Logic: Green (#C8E6C9) - Core functionality
+    %%   - Data Access: Teal (#B2DFDB) - Data operations
+    %%   - Infrastructure: Yellow (#FFF9C4) - Cloud/deployment
+    %% ============================================
 
     subgraph system["IdentityProvider Architecture"]
         direction TB
 
-        subgraph presentation["Presentation Layer"]
-            blazor["Blazor Server<br/>Components"]:::mdBlue
-            signalr["SignalR<br/>Real-time Connection"]:::mdBlue
+        subgraph presentation["🖥️ Presentation Layer"]
+            blazor["🎯 Blazor Server<br/>Components"]:::mdBlue
+            signalr["🔌 SignalR<br/>Real-time Connection"]:::mdBlue
         end
 
-        subgraph business["Business Logic Layer"]
-            identity["ASP.NET Core<br/>Identity"]:::mdGreen
-            auth["Authentication<br/>Service"]:::mdGreen
-            emailSvc["Email<br/>Service"]:::mdGreen
+        subgraph business["⚙️ Business Logic Layer"]
+            identity["🔐 ASP.NET Core<br/>Identity"]:::mdGreen
+            auth["🔑 Authentication<br/>Service"]:::mdGreen
+            emailSvc["📧 Email<br/>Service"]:::mdGreen
         end
 
-        subgraph data["Data Access Layer"]
-            ef["Entity Framework<br/>Core"]:::mdOrange
-            db[("SQLite/SQL Server<br/>Database")]:::mdOrange
+        subgraph data["🗄️ Data Access Layer"]
+            ef["📊 Entity Framework<br/>Core"]:::mdTeal
+            db[("💾 SQLite/SQL Server<br/>Database")]:::mdTeal
         end
 
-        subgraph azure["Azure Infrastructure"]
-            containerApp["Azure Container<br/>Apps"]:::mdPurple
-            acr["Azure Container<br/>Registry"]:::mdPurple
-            monitor["Application<br/>Insights"]:::mdPurple
+        subgraph azure["☁️ Azure Infrastructure"]
+            containerApp["📦 Azure Container<br/>Apps"]:::mdYellow
+            acr["🐳 Azure Container<br/>Registry"]:::mdYellow
+            monitor["📈 Application<br/>Insights"]:::mdYellow
         end
 
         blazor -->|"Component Interaction"| signalr
@@ -82,6 +103,10 @@ flowchart TB
     end
 
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style presentation fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style business fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style data fill:#B2DFDB,stroke:#00796B,stroke-width:2px
+    style azure fill:#FFF9C4,stroke:#F57F17,stroke-width:2px
 ```
 
 ## ✨ Features
