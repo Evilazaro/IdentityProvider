@@ -226,6 +226,9 @@ flowchart TB
     %% Main Group (Neutral background - MANDATORY)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
 
+    %% Sub Group
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+
     %% Content (Semantic colors)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
@@ -299,7 +302,9 @@ flowchart TB
         insights -.monitors.-> containerapp
     end
 
+    %% Apply styles to subgraphs
     class system mainGroup
+    class presentation,application,data,azure subGroup
 ```
 
 **Key Components:**
