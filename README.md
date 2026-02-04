@@ -24,10 +24,59 @@ Database operations utilize Entity Framework Core with automatic migration suppo
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - DO NOT MODIFY
+    %% ============================================
+    %% Main Group Level (Neutral background)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Sub Group Level
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+
+    %% Content Level (Semantic colors)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+    %% ============================================
+
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Groups): Indigo 50 (#E8EAF6)
+    %%   - Used for: Top-level system container
+    %%   - Purpose: Visual separation and hierarchy
+    %%   - Stroke: Indigo 500 (#3F51B5), 3px
+    %%
+    %% Level 2 (Sub Groups): Indigo 100 (#C5CAE9)
+    %%   - Used for: Architecture layer groupings
+    %%   - Purpose: Distinguish presentation/service/data tiers
+    %%   - Stroke: Indigo 500 (#3F51B5), 2px
+    %%
+    %% Level 3 (Content): Material Design semantic colors
+    %%   - Blue (#BBDEFB): Presentation layer components
+    %%   - Green (#C8E6C9): Service layer components
+    %%   - Orange (#FFE0B2): Data layer components
+    %%
+    %% Accessibility: All colors meet WCAG AA contrast ratio
+    %% requirements (4.5:1 minimum) against text (#000)
+    %% ============================================
+
+    %% ============================================
+    %% ARCHITECTURE OVERVIEW
+    %% ============================================
+    %% This diagram represents a three-tier architecture:
+    %% - Presentation Layer: User-facing Blazor components
+    %% - Service Layer: Authentication & authorization logic
+    %% - Data Layer: Database persistence with EF Core
+    %%
+    %% Design Pattern: Layered architecture with clear
+    %% separation of concerns for maintainability
+    %% ============================================
 
     subgraph system["IdentityProvider Architecture"]
         direction TB
@@ -54,7 +103,11 @@ flowchart TB
         ef -->|"SQL Queries"| db
     end
 
+    %% Apply hierarchical colors to subgraphs
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style presentation fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style services fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style data fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
 ```
 
 ## 🚀 Quick Start
