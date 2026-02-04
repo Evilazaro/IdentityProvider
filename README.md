@@ -154,17 +154,25 @@ info: Microsoft.Hosting.Lifetime[0]
 
 **Overview**: IdentityProvider leverages ASP.NET Core Identity to deliver enterprise-grade authentication and authorization capabilities. Built with Blazor Server for interactive UI experiences, it provides secure user management with minimal configuration.
 
-| Feature                       | Description                                                                                                   | Benefits                                                                                               |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| **ASP.NET Core Identity**     | Full-featured authentication system with password hashing, account lockout, and security stamps               | Industry-standard security practices built-in, reducing custom authentication code and vulnerabilities |
-| **Two-Factor Authentication** | Support for TOTP authenticator apps (Microsoft Authenticator, Google Authenticator) with QR codes             | Enhanced account security with second authentication factor, protecting against password compromise    |
-| **External Login Providers**  | Integration points for OAuth providers (Google, Microsoft, Facebook) via extensible authentication middleware | Simplified user onboarding and reduced password management burden for users                            |
-| **Email Confirmation**        | Account activation workflow with email verification tokens                                                    | Validates user email addresses and reduces spam/bot registrations                                      |
-| **Blazor Server UI**          | Interactive web UI with server-side rendering and SignalR real-time communication                             | Rich user experience with .NET code execution on server, no JavaScript frameworks required             |
+The application implements industry-standard security patterns including secure password hashing with PBKDF2, account lockout protection against brute force attacks, and email verification workflows. Two-factor authentication support adds an additional security layer, while external login provider integration enables seamless OAuth-based authentication.
+
+Designed for modern web applications, IdentityProvider combines the rich interactivity of Blazor Server with the robust security features of ASP.NET Core Identity. The result is a production-ready authentication solution that requires minimal custom code while maintaining flexibility for customization.
+
+| Feature                          | Description                                                                                                   | Benefits                                                                                               |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| 🔐 **ASP.NET Core Identity**     | Full-featured authentication system with password hashing, account lockout, and security stamps               | Industry-standard security practices built-in, reducing custom authentication code and vulnerabilities |
+| 🔒 **Two-Factor Authentication** | Support for TOTP authenticator apps (Microsoft Authenticator, Google Authenticator) with QR codes             | Enhanced account security with second authentication factor, protecting against password compromise    |
+| 🌐 **External Login Providers**  | Integration points for OAuth providers (Google, Microsoft, Facebook) via extensible authentication middleware | Simplified user onboarding and reduced password management burden for users                            |
+| ✉️ **Email Confirmation**        | Account activation workflow with email verification tokens                                                    | Validates user email addresses and reduces spam/bot registrations                                      |
+| ⚡ **Blazor Server UI**          | Interactive web UI with server-side rendering and SignalR real-time communication                             | Rich user experience with .NET code execution on server, no JavaScript frameworks required             |
 
 ## 📋 Requirements
 
-**Overview**: IdentityProvider is built on modern .NET 9.0 technologies and requires minimal system dependencies. The application uses SQLite for local development, making it easy to run without external database setup. For production deployments, Azure Container Apps provides scalable cloud hosting with integrated monitoring.
+**Overview**: IdentityProvider is built on modern .NET 9.0 technologies and requires minimal system dependencies. The application uses SQLite for local development, making it easy to run without external database setup.
+
+The development environment requires only the .NET 9.0 SDK and a modern web browser with WebSocket support for Blazor Server's real-time communication. SQLite is included as an embedded database, eliminating the need for separate database server setup during local development. Database migrations are automatically applied on application startup in development mode.
+
+For production deployments, Azure Container Apps provides scalable cloud hosting with integrated monitoring through Application Insights. The containerized architecture ensures consistent behavior across development and production environments. You can easily swap SQLite for SQL Server, PostgreSQL, or other Entity Framework Core providers without code changes.
 
 | Category     | Requirements                                                              | More Information                                                                                |
 | ------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -176,7 +184,9 @@ info: Microsoft.Hosting.Lifetime[0]
 
 ## 🔧 Configuration
 
-The application is configured via `appsettings.json` and supports environment-specific overrides.
+**Overview**: The application is configured via `appsettings.json` and supports environment-specific overrides. Configuration follows ASP.NET Core's standard hierarchical model, allowing settings to be overridden through environment variables, user secrets, or command-line arguments.
+
+For local development, the SQLite connection string points to a file-based database that's automatically created in the project directory. In production environments, you should use environment variables to configure connection strings and other sensitive settings, preventing credentials from being committed to source control.
 
 **Connection String Configuration:**
 
