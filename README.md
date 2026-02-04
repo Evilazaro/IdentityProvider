@@ -1,48 +1,40 @@
 # IdentityProvider
 
-![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?logo=dotnet)
+![Build Status](https://img.shields.io/github/actions/workflow/status/Evilazaro/IdentityProvider/ci.yml?branch=main)
+![.NET Version](https://img.shields.io/badge/.NET-9.0-512BD4)
 ![License](https://img.shields.io/github/license/Evilazaro/IdentityProvider)
-![Azure](https://img.shields.io/badge/Azure-Container%20Apps-0078D4?logo=microsoftazure)
-![Build](https://img.shields.io/github/actions/workflow/status/Evilazaro/IdentityProvider/azure-dev.yml?branch=main)
+![Language](https://img.shields.io/github/languages/top/Evilazaro/IdentityProvider)
 
-A modern ASP.NET Core 9.0 Blazor Server application providing secure user authentication and identity management with Azure Container Apps deployment.
+A modern ASP.NET Core Blazor Server application providing secure user authentication and identity management. Built with .NET 9.0 and ASP.NET Core Identity, it delivers a complete authentication solution ready for Azure Container Apps deployment.
 
 **Overview**
 
-IdentityProvider is a production-ready authentication solution built on ASP.NET Core Identity, designed for organizations requiring secure user registration, login, and account management. The application leverages Blazor Server's interactive components for a responsive user experience while maintaining server-side security. It uses Entity Framework Core with SQLite for local development and supports seamless migration to Azure SQL Database for production deployments.
+IdentityProvider solves the challenge of implementing secure, production-ready authentication for web applications. It targets developers and teams who need a reliable identity management system without building authentication from scratch. The application provides user registration, login, email confirmation, and account management capabilities out of the box.
 
-The system provides comprehensive identity management capabilities including email confirmation workflows, password reset functionality, two-factor authentication support, and role-based access control. Built with Azure-first architecture, IdentityProvider deploys as a containerized application on Azure Container Apps with integrated monitoring through Application Insights and Azure Monitor. This approach ensures scalability, high availability, and enterprise-grade security for authentication services.
+The system uses ASP.NET Core Identity as its foundation, integrating seamlessly with Entity Framework Core for data persistence and Blazor Server for interactive UI components. This combination enables rapid development while maintaining enterprise-grade security standards. The included Azure infrastructure templates allow teams to deploy the complete authentication system to the cloud in minutes, not days.
 
-Organizations benefit from reduced development time for authentication infrastructure, compliance-ready audit logging, and extensible user profile management. The modular design allows integration with existing applications through standard ASP.NET Core Identity APIs, while the included Azure infrastructure as code (Bicep) enables consistent, repeatable deployments across development, staging, and production environments.
+By providing a working reference implementation, IdentityProvider accelerates project timelines and reduces security risks. Teams can focus on building business features while relying on battle-tested authentication patterns. The modular architecture supports customization for specific requirements while maintaining security best practices throughout the codebase.
 
----
-
-## 📋 Table of Contents
+## 📑 Table of Contents
 
 - [Architecture](#-architecture)
 - [Features](#-features)
 - [Requirements](#-requirements)
 - [Quick Start](#-quick-start)
 - [Deployment](#-deployment)
-  - [Local Development](#local-development)
-  - [Azure Deployment](#azure-deployment)
 - [Usage](#-usage)
 - [Configuration](#-configuration)
-- [Testing](#-testing)
+- [Demo](#-demo)
 - [Contributing](#-contributing)
 - [License](#-license)
-
----
 
 ## 🏗️ Architecture
 
 **Overview**
 
-The IdentityProvider architecture follows a three-tier design pattern optimized for cloud-native deployment on Azure Container Apps. At the presentation layer, Blazor Server components deliver interactive user interfaces with server-side rendering, eliminating the need for client-side JavaScript frameworks while maintaining real-time responsiveness through SignalR connections. The authentication layer leverages ASP.NET Core Identity's built-in security features including password hashing (PBKDF2), secure cookie management, and anti-forgery token validation.
+IdentityProvider follows a three-tier architecture pattern optimized for cloud deployment. The presentation layer uses Blazor Server components for real-time interactivity, the business logic layer leverages ASP.NET Core Identity for authentication workflows, and the data layer employs Entity Framework Core with SQLite for development and SQL Server for production.
 
-Data persistence occurs through Entity Framework Core with a database-agnostic design supporting SQLite for local development and Azure SQL Database for production. The application automatically applies Entity Framework migrations on startup in development mode, ensuring schema consistency without manual intervention. Azure Container Registry stores application container images with role-based access control limiting pull permissions to the Container Apps managed identity.
-
-Infrastructure provisioning uses Azure Bicep templates defining Container Apps Environment, Application Insights workspace, Log Analytics workspace, and Container Registry with consistent naming conventions and resource tagging. This declarative infrastructure approach enables repeatable deployments across multiple environments while maintaining security best practices through managed identities and Azure RBAC policies.
+This architecture separates concerns effectively, allowing independent scaling of UI components, authentication services, and database resources. The stateful SignalR connections in Blazor Server provide responsive user experiences while maintaining server-side security controls. Azure Container Apps deployment ensures automatic scaling and high availability across geographic regions.
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
@@ -58,102 +50,90 @@ flowchart TB
 
         subgraph presentation["Presentation Layer"]
             blazor["Blazor Server<br/>Components"]:::mdBlue
-            account["Account<br/>Management UI"]:::mdBlue
+            pages["Account Pages<br/>(Login, Register)"]:::mdBlue
         end
 
-        subgraph auth["Authentication Layer"]
+        subgraph business["Business Logic Layer"]
             identity["ASP.NET Core<br/>Identity"]:::mdGreen
-            cookie["Cookie<br/>Authentication"]:::mdGreen
+            auth["Authentication<br/>Services"]:::mdGreen
+            email["Email<br/>Sender"]:::mdGreen
         end
 
         subgraph data["Data Layer"]
-            efcore["Entity Framework<br/>Core 9.0"]:::mdOrange
-            db[("SQLite / Azure SQL<br/>Database")]:::mdOrange
+            ef["Entity Framework<br/>Core"]:::mdOrange
+            db[("SQLite/SQL<br/>Database")]:::mdOrange
         end
 
-        subgraph azure["Azure Infrastructure"]
-            containerApp["Azure Container<br/>Apps"]:::mdPurple
-            acr["Azure Container<br/>Registry"]:::mdPurple
-            monitor["Application<br/>Insights"]:::mdPurple
+        subgraph cloud["Azure Infrastructure"]
+            containerapp["Container App"]:::mdPurple
+            acr["Container<br/>Registry"]:::mdPurple
         end
 
         blazor --> identity
-        account --> identity
-        identity --> cookie
-        identity --> efcore
-        efcore --> db
+        pages --> identity
+        identity --> auth
+        identity --> email
+        auth --> ef
+        ef --> db
 
-        containerApp --> blazor
-        containerApp --> monitor
-        acr --> containerApp
+        containerapp -.->|"Hosts"| blazor
+        acr -.->|"Deploys to"| containerapp
     end
 
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
 ```
 
----
-
 ## ✨ Features
 
 **Overview**
 
-IdentityProvider delivers enterprise-grade authentication capabilities through ASP.NET Core Identity's proven security framework. The feature set addresses common authentication requirements including user lifecycle management, credential security, and access control while maintaining extensibility for custom business logic. Each capability integrates seamlessly with existing ASP.NET Core applications through standard middleware and dependency injection patterns.
+IdentityProvider delivers essential authentication capabilities required for modern web applications. Each feature addresses specific security and user experience needs, from secure password storage using industry-standard hashing algorithms to automated email confirmation workflows. These capabilities reduce development time while ensuring compliance with authentication best practices.
 
-The system prioritizes security-first design with features like automatic account lockout after failed login attempts, secure password storage using industry-standard hashing algorithms, and built-in protection against common web vulnerabilities (CSRF, XSS). Development teams benefit from pre-built UI components reducing implementation time from weeks to hours, while security teams gain confidence from battle-tested authentication patterns used by thousands of production applications worldwide.
+The feature set integrates tightly with ASP.NET Core middleware, providing consistent security policies across the entire application. Developers can extend base functionality through Identity's extensibility points without compromising security. The Blazor Server architecture enables real-time validation and feedback during authentication workflows.
 
-Advanced features like two-factor authentication support and email confirmation workflows enable compliance with regulatory requirements (GDPR, HIPAA, SOC 2) while maintaining user-friendly experiences. The containerized deployment model ensures consistent behavior across development laptops and production cloud environments, eliminating "works on my machine" deployment issues.
-
-| Feature                                | Description                                                                                                                                                                                                           | Benefits                                                                                                                                                                                                                                                    |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔐 **User Authentication**             | Cookie-based authentication with ASP.NET Core Identity supporting user registration, login, logout, and password management. Includes automatic database migrations and SQLite storage for rapid development.         | Eliminates custom authentication code reducing security vulnerabilities. Provides proven patterns for session management, password hashing (PBKDF2), and anti-forgery protection. Accelerates time-to-market for applications requiring user accounts.      |
-| 📧 **Email Confirmation**              | Email verification workflow for new account registration with token-based confirmation links. Configurable email sender integration supporting SMTP, SendGrid, or custom providers.                                   | Prevents fake account creation and ensures valid user contact information. Reduces spam registrations and improves user data quality. Enables compliance with data protection regulations requiring verified user consent.                                  |
-| 🔄 **Password Reset**                  | Secure password recovery flow with time-limited reset tokens sent via email. Includes password strength validation and confirmation requirements.                                                                     | Reduces help desk burden from locked-out users. Maintains security through token expiration and one-time use policies. Provides user-friendly self-service password management.                                                                             |
-| 👤 **User Profile Management**         | Extensible `ApplicationUser` model based on `IdentityUser` allowing custom profile fields, claims, and metadata. Supports profile editing through Blazor interactive components.                                      | Enables application-specific user data without database schema modifications. Provides type-safe access to user properties through Entity Framework. Supports multi-tenancy scenarios with custom claims and roles.                                         |
-| ☁️ **Azure Container Apps Deployment** | Infrastructure as code (Bicep) provisioning Azure Container Apps, Container Registry, Application Insights, and Log Analytics. Includes automated CI/CD via GitHub Actions and Azure Developer CLI (azd) integration. | Simplifies production deployment with managed containers eliminating server maintenance. Provides auto-scaling based on HTTP traffic with consumption-based pricing. Enables blue-green deployments and zero-downtime updates through container versioning. |
-
----
+| Feature                        | Description                                                                                                                                                               | Benefits                                                                                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🔐 **User Authentication**     | Complete login and registration system with secure password hashing using ASP.NET Core Identity. Supports cookie-based authentication with configurable timeout policies. | Eliminates need to build authentication from scratch. Reduces security vulnerabilities through proven implementation patterns.                  |
+| 📧 **Email Confirmation**      | Account verification workflow requiring email confirmation before granting access. Includes token generation and validation mechanisms.                                   | Prevents spam registrations and verifies user identity. Configurable email sender interface supports custom SMTP providers.                     |
+| 👤 **Account Management**      | Self-service profile management including password changes, email updates, and account deletion. Built-in security checks validate user ownership.                        | Reduces support burden by enabling users to manage accounts independently. Maintains audit trails for security compliance.                      |
+| 🗄️ **Database Migrations**     | Automatic schema updates via Entity Framework Core migrations. Supports SQLite for development and SQL Server for production environments.                                | Eliminates manual database maintenance. Version-controlled schema changes enable reproducible deployments across environments.                  |
+| ☁️ **Azure Deployment**        | Production-ready Bicep templates provision Container Apps, Container Registry, and supporting infrastructure. Includes managed identity configuration.                    | Accelerates cloud deployment from hours to minutes. Infrastructure as Code ensures consistent environments across dev, staging, and production. |
+| 🎨 **Interactive UI**          | Blazor Server components provide responsive authentication forms with real-time validation. Server-side rendering maintains security while delivering rich interactions.  | Improves user experience with instant feedback. Reduces client-side attack surface by keeping logic server-side.                                |
+| 🔒 **Security Best Practices** | Implements HTTPS enforcement, anti-forgery tokens, secure cookie handling, and Content Security Policy headers. Follows OWASP authentication guidelines.                  | Protects against common web vulnerabilities including CSRF, XSS, and session hijacking. Simplifies security audit compliance.                   |
 
 ## 📋 Requirements
 
 **Overview**
 
-IdentityProvider requires a modern .NET development environment with specific runtime versions to ensure compatibility with ASP.NET Core 9.0 features and Entity Framework Core 9.0 improvements. The application supports cross-platform development on Windows, macOS, and Linux through .NET's unified runtime. Local development uses SQLite requiring no external database server, while production deployments typically migrate to Azure SQL Database for enterprise scalability and managed backups.
+IdentityProvider requires a modern .NET development environment and supporting tools for both local development and cloud deployment. These prerequisites ensure compatibility with the latest security patches and framework features. Development dependencies differ from production requirements, allowing lightweight local environments while supporting enterprise-scale deployments.
 
-Azure deployment prerequisites include an active Azure subscription with permissions to create resource groups, Container Apps, and Container Registry resources. Organizations using Azure Active Directory benefit from seamless integration with managed identities for secure authentication between Azure resources without storing credentials in application code. Development teams should provision separate Azure environments (dev, staging, production) to isolate workloads and enable safe experimentation without production impact.
+The .NET 9.0 SDK provides the latest language features and performance improvements essential for modern web applications. Entity Framework Core requires database providers matching your target environment. Azure deployments need the Azure Developer CLI for infrastructure provisioning and container orchestration.
 
-Tool requirements focus on the Azure Developer CLI (azd) which orchestrates infrastructure provisioning, container builds, and deployments through a single command-line interface. While optional for local development, azd becomes essential for teams adopting infrastructure as code practices and seeking repeatable, auditable deployments aligned with DevOps best practices.
+| Category        | Requirements                                                        | More Information                                                                                                                                    |
+| --------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Runtime**     | .NET 9.0 SDK or later                                               | [Download .NET](https://dotnet.microsoft.com/download)                                                                                              |
+| **Database**    | SQLite 3.x (development)<br/>SQL Server 2019+ (production)          | [EF Core Database Providers](https://docs.microsoft.com/ef/core/providers/)                                                                         |
+| **IDE**         | Visual Studio 2022 17.8+<br/>or VS Code with C# extension           | [Visual Studio](https://visualstudio.microsoft.com/)<br/>[VS Code](https://code.visualstudio.com/)                                                  |
+| **Azure Tools** | Azure Developer CLI (azd)<br/>Azure subscription (for deployment)   | [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/)<br/>[Azure Free Account](https://azure.microsoft.com/free/) |
+| **Optional**    | Docker Desktop (for containerization)<br/>Git (for version control) | [Docker Desktop](https://www.docker.com/products/docker-desktop)<br/>[Git](https://git-scm.com/)                                                    |
 
-| Category               | Requirements                                                                                                              | More Information                                                                                                                                                                                                                       |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Runtime**            | .NET 9.0 SDK or later                                                                                                     | [Download .NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)                                                                                                                                                                  |
-| **Database**           | SQLite (included) for local development<br/>Azure SQL Database (optional) for production                                  | [Entity Framework Core documentation](https://docs.microsoft.com/ef/core/)                                                                                                                                                             |
-| **IDE**                | Visual Studio 2022 17.8+, Visual Studio Code with C# extension, or JetBrains Rider 2024.1+                                | [Visual Studio 2022](https://visualstudio.microsoft.com/)<br/>[VS Code C# Extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)                                                                        |
-| **Azure (Production)** | Azure subscription<br/>Azure CLI 2.50+ or Azure Developer CLI (azd) 1.5+<br/>Docker Desktop (for local container testing) | [Azure Free Account](https://azure.microsoft.com/free/)<br/>[Install Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)<br/>[Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
-| **Git**                | Git 2.30+ for source control and CI/CD workflows                                                                          | [Git Downloads](https://git-scm.com/downloads)                                                                                                                                                                                         |
-
-> ⚠️ **Note**: Azure deployment requires contributor-level permissions to create resources in a resource group. Contact your Azure administrator if you lack sufficient privileges.
-
----
+> ⚠️ **Note**: SQLite is suitable for development only. Production deployments should use SQL Server, PostgreSQL, or Azure SQL Database for scalability and reliability.
 
 ## 🚀 Quick Start
+
+Get IdentityProvider running locally in under 5 minutes:
 
 ```bash
 # Clone the repository
 git clone https://github.com/Evilazaro/IdentityProvider.git
 cd IdentityProvider
 
-# Restore dependencies
+# Restore dependencies and run
 dotnet restore
-
-# Run the application
 dotnet run --project src/IdentityProvider
-
-# Access the application at https://localhost:5001
 ```
 
-> 💡 **Tip**: The database is automatically created and migrated on first run in development mode. No manual database setup required.
-
----
+> 💡 **Tip**: The application automatically applies database migrations on first run in development mode. Access the application at `https://localhost:7001`.
 
 ## 📦 Deployment
 
