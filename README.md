@@ -114,14 +114,14 @@ flowchart TD
 
 **Component Roles:**
 
-| Component | Role | Source |
+| Component | Role | Benefits |
 | --- | --- | --- |
-| 📄 Razor Pages | Interactive UI components for identity workflows | `src/IdentityProvider/Components/` |
-| 🔐 ASP.NET Core Identity | Authentication, authorization, and account management | `Program.cs` (lines 17–36) |
-| 📊 Entity Framework Core | ORM for database access and migrations | `Data/ApplicationDbContext.cs` |
-| 💾 SQLite | Lightweight embedded database for identity data | `appsettings.json` |
-| ☁️ Azure Container Apps | Serverless container hosting with auto-scaling | `infra/resources.bicep` |
-| 📈 Application Insights | Performance monitoring and diagnostics | `infra/resources.bicep` (monitoring module) |
+| 📄 Razor Pages | Interactive UI components for identity workflows | Server-side rendering with real-time interactivity via SignalR |
+| 🔐 ASP.NET Core Identity | Authentication, authorization, and account management | Battle-tested security with extensible authentication pipeline |
+| 📊 Entity Framework Core | ORM for database access and migrations | Code-first schema management with automatic migration support |
+| 💾 SQLite | Lightweight embedded database for identity data | Zero-configuration setup with no external database server required |
+| ☁️ Azure Container Apps | Serverless container hosting with auto-scaling | Pay-per-use scaling from 1 to 10 replicas with built-in load balancing |
+| 📈 Application Insights | Performance monitoring and diagnostics | End-to-end telemetry with real-time alerting and diagnostics dashboards |
 
 ## Features
 
