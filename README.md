@@ -24,19 +24,15 @@ The application provides a full suite of identity features including user regist
 
 ## Overview
 
-**Overview**
+Contoso Identity Provider serves as a **centralized authentication and authorization gateway** for enterprise applications. It enables organizations to manage digital identities, enforce security policies, and provide seamless single sign-on experiences across multiple platforms.
 
-Contoso Identity Provider serves as a centralized authentication and authorization gateway for enterprise applications. It enables organizations to manage digital identities, enforce security policies, and provide seamless single sign-on experiences across multiple platforms.
-
-The system is built on a layered architecture using ASP.NET Core Blazor Server with interactive server-side rendering, ASP.NET Core Identity for authentication workflows, Entity Framework Core with SQLite for data persistence, and Azure Container Apps for cloud deployment. This combination delivers a production-ready identity solution with minimal infrastructure overhead.
+The system is built on a **layered architecture** using ASP.NET Core Blazor Server with interactive server-side rendering, ASP.NET Core Identity for authentication workflows, Entity Framework Core with SQLite for data persistence, and Azure Container Apps for cloud deployment. This combination delivers a **production-ready identity solution** with minimal infrastructure overhead.
 
 > 📌 **Key Benefits**: Multi-factor authentication (MFA), cookie-based session management, automatic database migrations in development, and one-command Azure deployment with `azd up`.
 
 ## Architecture
 
-**Overview**
-
-The application follows a layered architecture pattern with clear separation between the presentation layer (Blazor components), business logic (ASP.NET Core Identity services), and data access (Entity Framework Core with SQLite). The infrastructure layer uses Azure Container Apps with supporting services for monitoring, container registry, and managed identity.
+The application follows a **layered architecture pattern** with clear separation between the presentation layer (Blazor components), business logic (ASP.NET Core Identity services), and data access (Entity Framework Core with SQLite). The infrastructure layer uses **Azure Container Apps** with supporting services for monitoring, container registry, and managed identity.
 
 ```mermaid
 ---
@@ -125,9 +121,7 @@ flowchart TD
 
 ## Features
 
-**Overview**
-
-Contoso Identity Provider delivers a comprehensive set of identity management capabilities designed for enterprise environments. These features reduce the complexity of implementing authentication from scratch while maintaining full control over user data and security policies.
+Contoso Identity Provider delivers a **comprehensive set of identity management capabilities** designed for enterprise environments. These features reduce the complexity of implementing authentication from scratch while maintaining full control over user data and security policies.
 
 > 💡 **Why This Matters**: Building identity from scratch is error-prone and time-consuming. This solution provides battle-tested ASP.NET Core Identity patterns with Azure-ready deployment, enabling teams to focus on business logic instead of security plumbing.
 
@@ -148,11 +142,9 @@ Contoso Identity Provider delivers a comprehensive set of identity management ca
 
 ## Requirements
 
-**Overview**
+The following prerequisites are needed to build, run, and deploy the Identity Provider application. The local development setup requires **.NET 9.0 SDK**, while Azure deployment additionally requires **Azure Developer CLI** and an active Azure subscription.
 
-The following prerequisites are needed to build, run, and deploy the Identity Provider application. The local development setup requires .NET 9.0 SDK, while Azure deployment additionally requires Azure Developer CLI and an active Azure subscription.
-
-> ⚠️ **Important**: Ensure you have the correct .NET SDK version installed before attempting to build. The application targets `net9.0` and will not compile with earlier SDK versions.
+> ⚠️ **Important**: Ensure you have the correct .NET SDK version installed before attempting to build. The application targets `net9.0` and **will not compile** with earlier SDK versions.
 
 | Requirement | Version | Purpose |
 | --- | --- | --- |
@@ -165,9 +157,7 @@ The following prerequisites are needed to build, run, and deploy the Identity Pr
 
 ## Getting Started
 
-**Overview**
-
-Get the application running locally in three steps: clone the repository, restore dependencies, and run the application. The SQLite database is created automatically on first run in development mode.
+Get the application running locally in **three steps**: clone the repository, restore dependencies, and run the application. The SQLite database is **created automatically** on first run in development mode.
 
 ### 1. Clone the Repository
 
@@ -208,9 +198,7 @@ Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6
 
 ## Configuration
 
-**Overview**
-
-The application uses the standard ASP.NET Core configuration system with JSON-based settings files. Connection strings, logging levels, and environment-specific overrides are managed through `appsettings.json` and environment-specific variants.
+The application uses the standard **ASP.NET Core configuration system** with JSON-based settings files. Connection strings, logging levels, and environment-specific overrides are managed through `appsettings.json` and environment-specific variants.
 
 > 📌 **How It Works**: Configuration is loaded hierarchically — `appsettings.json` provides base settings, `appsettings.Development.json` overrides for local development, and environment variables override both for production deployments.
 
@@ -263,11 +251,9 @@ For Azure Container Apps deployment, the following environment variables are inj
 
 ## Deployment
 
-**Overview**
+The application is designed for **one-command deployment** to Azure Container Apps using Azure Developer CLI (`azd`). The infrastructure is **defined as code** using Bicep templates that provision a resource group, container registry, container apps environment, Application Insights, and a user-assigned managed identity.
 
-The application is designed for one-command deployment to Azure Container Apps using Azure Developer CLI (`azd`). The infrastructure is defined as code using Bicep templates that provision a resource group, container registry, container apps environment, Application Insights, and a user-assigned managed identity.
-
-> ⚠️ **Important**: You must be logged into both Azure CLI and Azure Developer CLI before deploying. Run `az login` and `azd auth login` first.
+> ⚠️ **Important**: You **must** be logged into both Azure CLI and Azure Developer CLI before deploying. Run `az login` and `azd auth login` first.
 
 ### Deploy to Azure
 
@@ -278,10 +264,10 @@ azd up
 
 The `azd up` command performs the following steps:
 
-1. Provisions Azure resources defined in `infra/main.bicep`
-2. Builds the .NET application container image
-3. Pushes the image to Azure Container Registry
-4. Deploys the container to Azure Container Apps
+1. **Provisions** Azure resources defined in `infra/main.bicep`
+2. **Builds** the .NET application container image
+3. **Pushes** the image to Azure Container Registry
+4. **Deploys** the container to Azure Container Apps
 
 ### Azure Resources Provisioned
 
@@ -307,9 +293,7 @@ The deployment uses parameterized Bicep templates in the `infra/` directory:
 
 ## Testing
 
-**Overview**
-
-The project includes unit tests using the MSTest framework. Tests are located in the `src/identityProviderTests` project and validate core business logic such as email validation.
+The project includes unit tests using the **MSTest framework**. Tests are located in the `src/identityProviderTests` project and validate core business logic such as email validation.
 
 ### Run Tests
 
@@ -327,9 +311,7 @@ dotnet test IdentityProvider.sln
 
 ## Project Structure
 
-**Overview**
-
-The repository follows a standard .NET solution layout with source code, tests, infrastructure definitions, and prompt engineering resources organized into top-level directories.
+The repository follows a **standard .NET solution layout** with source code, tests, infrastructure definitions, and prompt engineering resources organized into top-level directories.
 
 ```text
 IdentityProvider/
@@ -358,8 +340,6 @@ IdentityProvider/
 ```
 
 ## Contributing
-
-**Overview**
 
 Contributions to Contoso Identity Provider are welcome. Whether you are fixing a bug, improving documentation, or adding a new feature, your contributions help improve the project for everyone.
 
