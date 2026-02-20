@@ -32,6 +32,69 @@ Key findings include:
 - **KPIs & Metrics**: 7 implied performance indicators derived from system telemetry and business process analysis
 - **Average Maturity**: 3.1 (Defined) — processes are standardized and documented, with measurement infrastructure in place for key capabilities
 
+### Strategic Alignment Map
+
+```mermaid
+---
+title: Strategic Alignment Map — Contoso Identity Provider
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TB
+    accTitle: Business Strategy Alignment Map
+    accDescr: Shows 3 strategic objectives and their alignment to 6 business capabilities for the Contoso Identity Provider
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph strategy["🎯 Strategic Objectives"]
+        direction LR
+        s1["🏢 Centralized Identity<br/>Management"]:::core
+        s2["🛡️ Enterprise-Grade<br/>Security"]:::core
+        s3["☁️ Cloud-Native<br/>Deployment"]:::core
+    end
+
+    subgraph capabilities["🏛️ Enabled Capabilities"]
+        direction LR
+        c1["🔐 Authentication<br/>Management"]:::success
+        c2["🔑 Authorization<br/>Management"]:::warning
+        c3["👤 Identity Lifecycle<br/>Management"]:::warning
+        c4["🛡️ Security Policy<br/>Enforcement"]:::success
+        c5["📜 Compliance<br/>Management"]:::warning
+        c6["🔗 Application<br/>Integration"]:::danger
+    end
+
+    s1 -->|"enables"| c1
+    s1 -->|"enables"| c3
+    s1 -->|"enables"| c6
+    s2 -->|"drives"| c1
+    s2 -->|"drives"| c2
+    s2 -->|"drives"| c4
+    s2 -->|"drives"| c5
+    s3 -->|"supports"| c1
+    s3 -->|"supports"| c6
+
+    style strategy fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style capabilities fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+```
+
 ---
 
 ## 2. Architecture Landscape
@@ -41,6 +104,67 @@ Key findings include:
 This section provides a structured inventory of all Business layer components identified in the Contoso Identity Provider repository. Components are organized by the 11 canonical TOGAF Business Architecture types, with each component traced to its source file. Classification follows the weighted confidence formula: 30% filename signal + 25% path signal + 35% content signal + 10% cross-reference signal, with a minimum threshold of 0.70.
 
 The inventory reveals a mature identity management domain with strong coverage in authentication services, account lifecycle processes, and security policy enforcement. Business rules are explicitly encoded in source code, and strategic objectives are documented in the project README with clear alignment to enterprise identity management goals.
+
+### Business Capability Map
+
+```mermaid
+---
+title: Business Capability Map — Contoso Identity Provider
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TB
+    accTitle: Business Capability Map
+    accDescr: Shows 6 core business capabilities with maturity levels and dependency relationships for the Contoso Identity Provider
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph core["🏛️ Core Identity Capabilities"]
+        direction LR
+        cap1["🔐 Authentication Management<br/>Maturity: 4 - Measured"]:::success
+        cap2["🔑 Authorization Management<br/>Maturity: 3 - Defined"]:::warning
+    end
+
+    subgraph lifecycle["👤 Lifecycle & Compliance"]
+        direction LR
+        cap3["👤 Identity Lifecycle Management<br/>Maturity: 3 - Defined"]:::warning
+        cap4["🛡️ Security Policy Enforcement<br/>Maturity: 4 - Measured"]:::success
+        cap5["📜 Compliance Management<br/>Maturity: 3 - Defined"]:::warning
+    end
+
+    subgraph integration["🔗 Integration"]
+        direction LR
+        cap6["🔗 Application Integration<br/>Maturity: 2 - Repeatable"]:::danger
+    end
+
+    cap2 -->|"depends on"| cap1
+    cap3 -->|"requires"| cap1
+    cap4 -->|"enforces"| cap1
+    cap5 -->|"governed by"| cap3
+    cap6 -->|"requires"| cap1
+    cap6 -->|"governed by"| cap2
+
+    style core fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style lifecycle fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style integration fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+```
 
 ### 2.1 Business Strategy (3)
 
