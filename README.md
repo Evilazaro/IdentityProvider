@@ -97,13 +97,12 @@ flowchart TD
     aca -->|"telemetry"| monitor
     aca -->|"authenticates via"| managedId
 
-    %% Subgraph styling — semantic colors for functional siblings (MRM-C001)
-    %% client: external boundary (neutral), blazor: core application (blue)
-    %% dataLayer: data persistence (purple/data), azure: infrastructure (yellow/warning)
-    style client fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style blazor fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    style dataLayer fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
-    style azure fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
+    %% Subgraph styling — neutral containers per AZURE/FLUENT v1.1 (MRM-C001)
+    %% All subgraphs use Neutral Gray 10 (#F3F2F1) — semantic meaning conveyed through node classDefs only
+    style client fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style blazor fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style dataLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azure fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% classDef declarations — centralized at end per pattern compliance
     %% Semantic: core=Blue(API/info), success=Green(services), data=Purple(persistence), warning=Yellow(infra)
