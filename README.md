@@ -61,11 +61,6 @@ flowchart TD
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
-    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    classDef data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef infra fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
-
     subgraph client["🌐 Client Layer"]
         direction LR
         browser["🖥️ Web Browser"]:::core
@@ -86,10 +81,10 @@ flowchart TD
 
     subgraph azure["☁️ Azure Infrastructure"]
         direction LR
-        aca["📦 Container Apps"]:::infra
-        acr["🐳 Container Registry"]:::infra
-        monitor["📈 Application Insights"]:::infra
-        managedId["🔒 Managed Identity"]:::infra
+        aca["📦 Container Apps"]:::warning
+        acr["🐳 Container Registry"]:::warning
+        monitor["📈 Application Insights"]:::warning
+        managedId["🔒 Managed Identity"]:::warning
     end
 
     browser -->|"HTTPS / SignalR"| pages
@@ -102,10 +97,20 @@ flowchart TD
     aca -->|"telemetry"| monitor
     aca -->|"authenticates via"| managedId
 
-    style client fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
-    style blazor fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
-    style dataLayer fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
-    style azure fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
+    %% Subgraph styling — semantic colors for functional siblings (MRM-C001)
+    %% client: external boundary (neutral), blazor: core application (blue)
+    %% dataLayer: data persistence (purple/data), azure: infrastructure (yellow/warning)
+    style client fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style blazor fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    style dataLayer fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
+    style azure fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
+
+    %% classDef declarations — centralized at end per pattern compliance
+    %% Semantic: core=Blue(API/info), success=Green(services), data=Purple(persistence), warning=Yellow(infra)
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
 ```
 
 **Component Roles:**
