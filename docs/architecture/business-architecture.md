@@ -4,9 +4,13 @@
 
 ### Overview
 
-The Contoso IdentityProvider repository implements a full-featured identity and access management (IAM) platform built on ASP.NET Core Identity with Blazor Server interactive rendering. The application exposes 14 distinct business capabilities spanning user authentication, multi-factor authentication, password lifecycle management, external identity federation (OAuth/OIDC), GDPR data rights compliance, and OAuth client application registration. Analysis of 55 source files produced 38 business components across all 11 TOGAF Business Architecture component types.
+The Contoso IdentityProvider repository implements a full-featured identity and access management (IAM) platform built on ASP.NET Core Identity with Blazor Server interactive rendering. The application exposes **14 distinct business capabilities** spanning user authentication, multi-factor authentication, password lifecycle management, external identity federation (OAuth/OIDC), GDPR data rights compliance, and OAuth client application registration. Analysis of 55 source files produced **38 business components** across all **11 TOGAF Business Architecture component types**.
 
-Strategic alignment is strong in identity management and GDPR compliance domains. The primary gaps are the absence of a production email sender (currently a no-op stub), incomplete OAuth App Registration persistence, and no formal business-process orchestration engine. The platform targets Azure Container Apps deployment with Azure Monitor observability, demonstrating a clear cloud-native operational strategy.
+Strategic alignment is strong in identity management and GDPR compliance domains.
+
+> ⚠️ **Key Gaps Identified**: The primary gaps are the **absence of a production email sender** (currently a no-op stub), **incomplete OAuth App Registration persistence**, and no formal business-process orchestration engine.
+
+The platform targets Azure Container Apps deployment with Azure Monitor observability, demonstrating a clear cloud-native operational strategy.
 
 **Strategic Alignment Map:**
 
@@ -22,7 +26,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TD
+flowchart LR
     accTitle: Strategic Alignment Map — Contoso IdentityProvider
     accDescr: Maps strategic objectives to the three business domains showing alignment with Digital Identity Enablement vision
 
@@ -358,7 +362,9 @@ flowchart LR
 
 The Architecture Landscape identifies 38 business components across all 11 TOGAF Business Architecture component types. The strongest coverage is in Business Capabilities (8 components), Business Processes (5), Business Rules (5), and Business Events (5).
 
-Primary gaps include: (1) the Email Notification Service is a development-only no-op stub with no production implementation, (2) OAuth App Registration lacks persistence logic (TODO noted in source), and (3) KPI tracking relies solely on infrastructure-level Application Insights without application-level business metrics. Recommended next steps: implement a production email sender, complete AppRegistration CRUD persistence, and add business-level telemetry events for capability usage tracking.
+Primary gaps include: (1) the Email Notification Service is a development-only no-op stub with no production implementation, (2) OAuth App Registration lacks persistence logic (TODO noted in source), and (3) KPI tracking relies solely on infrastructure-level Application Insights without application-level business metrics.
+
+> 📌 **Recommended Next Steps**: implement a production email sender, complete AppRegistration CRUD persistence, and add business-level telemetry events for capability usage tracking.
 
 ---
 
@@ -376,7 +382,7 @@ Each principle is stated with its rationale (why it exists) and implications (wh
 
 **Rationale**: The ASP.NET Core Identity framework provides PBKDF2 password hashing, CSRF antiforgery tokens, and security stamp validation out of the box. The application activates `RequireConfirmedAccount = true` (src/IdentityProvider/Program.cs:32) and revalidates authentication state every 30 minutes (src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:19).
 
-**Implications**: New features inherit security controls automatically. Custom extensions must not bypass framework-provided protections. Password reset and email resend endpoints follow information non-disclosure (src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:47-50).
+**Implications**: New features inherit security controls automatically. Custom extensions **must not** bypass framework-provided protections. Password reset and email resend endpoints follow information non-disclosure (src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:47-50).
 
 ### Principle 2: Privacy Compliance by Design
 
@@ -384,7 +390,7 @@ Each principle is stated with its rationale (why it exists) and implications (wh
 
 **Rationale**: The Manage section includes personal data download as JSON (src/IdentityProvider/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs:75-108), account deletion with password confirmation (src/IdentityProvider/Components/Account/Pages/Manage/DeletePersonalData.razor:55-78), and explicit consent tracking for 2FA browser remembering (src/IdentityProvider/Components/Account/Pages/Manage/TwoFactorAuthentication.razor:67-71).
 
-**Implications**: All new data collection requires corresponding data access and deletion implementations. External integrations must respect the right-to-erasure workflow.
+**Implications**: All new data collection **requires** corresponding data access and deletion implementations. External integrations **must respect** the right-to-erasure workflow.
 
 ### Principle 3: Separation of Authentication Concerns
 
@@ -604,7 +610,9 @@ flowchart TB
 
 The Current State Baseline reveals a well-structured, framework-driven identity platform with 38 components across all 11 TOGAF Business Architecture types. Authentication core capabilities (login, registration, password management) demonstrate well-tested patterns inherited from ASP.NET Core Identity. The three business domains (Authentication, Identity Management, Integration) demonstrate clear separation of concerns.
 
-Six gaps require attention: the no-op email sender (GAP-001) is the highest-impact issue blocking production readiness, followed by the incomplete App Registration persistence (GAP-002) and hardcoded email domain whitelist (GAP-003). Security-related gaps (disabled lockout GAP-005, 2FA bypass for external login GAP-006) represent policy decisions that should be reviewed against enterprise security requirements. Recommended next steps: prioritize GAP-001 with a production email provider, address GAP-005/GAP-006 security policy alignment, and implement business-level telemetry (GAP-004).
+> ⚠️ **Production Blocker**: Six gaps require attention: the no-op email sender (**GAP-001**) is the **highest-impact issue blocking production readiness**, followed by the incomplete App Registration persistence (GAP-002) and hardcoded email domain whitelist (GAP-003).
+
+Security-related gaps (**disabled lockout GAP-005**, **2FA bypass for external login GAP-006**) represent policy decisions that **should be reviewed** against enterprise security requirements. Recommended next steps: prioritize GAP-001 with a production email provider, address GAP-005/GAP-006 security policy alignment, and implement business-level telemetry (GAP-004).
 
 ---
 
@@ -659,7 +667,7 @@ The catalog covers 38 components across 11 Business Architecture component types
 **Business Rules Applied:**
 
 - Security Stamp Revalidation: Authentication state revalidated every 30 minutes (IdentityRevalidatingAuthenticationStateProvider.cs:19)
-- Account lockout currently disabled (`lockoutOnFailure: false`) — see GAP-005
+- **Account lockout currently disabled** (`lockoutOnFailure: false`) — see GAP-005
 - Requires confirmed email account (`RequireConfirmedAccount = true` in Program.cs:32)
 
 #### 5.2.2 Two-Factor Authentication
@@ -850,7 +858,7 @@ flowchart LR
 
 - All 5 business processes depend on `UserManager<ApplicationUser>` for identity operations
 - `ApplicationDbContext` (SQLite) provides the single persistence backend
-- `IEmailSender<ApplicationUser>` bound to `IdentityNoOpEmailSender` (no-op stub — GAP-001)
+- `IEmailSender<ApplicationUser>` bound to `IdentityNoOpEmailSender` (**no-op stub — GAP-001**)
 
 ### 5.6 Business Functions
 
@@ -916,7 +924,7 @@ flowchart LR
 - `ConfirmEmail.razor` validates token via `UserManager.ConfirmEmailAsync` and activates account
 - Unconfirmed users receive "Account not confirmed" redirect when attempting login
 
-**Dependency:** Requires functional `IEmailSender` for production use — currently blocked by GAP-001 (no-op stub)
+> ⚠️ **Blocked Dependency**: Requires functional `IEmailSender` for production use — **currently blocked by GAP-001** (no-op stub)
 
 ### 5.9 Business Events
 
@@ -1037,7 +1045,7 @@ flowchart TD
 
 **Persistence:** `ApplicationDbContext : IdentityDbContext<ApplicationUser>` mapped to SQLite via EF Core 9.0.13. Migrations in `Migrations/20250311003709_InitialCreate.cs`.
 
-**PersonalData Attributes:** Fields decorated with `[PersonalData]` are included in the GDPR data download JSON export via `DownloadPersonalData` endpoint.
+> 💡 **GDPR Compliance**: Fields decorated with `[PersonalData]` are included in the GDPR data download JSON export via `DownloadPersonalData` endpoint.
 
 ### 5.11 KPIs & Metrics
 
@@ -1379,4 +1387,8 @@ flowchart TB
 
 The dependency analysis reveals a hub-and-spoke integration pattern centered on ASP.NET Core Identity's `UserManager` and `SignInManager` services. All 5 business processes depend on these core services for identity operations, with `ApplicationDbContext` (SQLite) as the single persistence backend and `AuthenticationStateProvider` cascading authentication context across the Blazor component tree.
 
-Integration health is strong for the in-process authentication domain but has two notable gaps: (1) the `IEmailSender` interface is bound to `IdentityNoOpEmailSender`, creating a broken integration point for all email-dependent processes (registration confirmation, password reset, email change), and (2) the `AppRegistration` entity has no persistence integration — the form submits but data is discarded. External integration with Azure Container Apps and Azure Monitor is fully configured through Infrastructure as Code. Recommended next steps: bind a production SMTP or SendGrid email sender to `IEmailSender`, implement `ApplicationDbContext` entity mapping for `AppRegistration`, and add health check endpoints for runtime dependency monitoring.
+> ⚠️ **Integration Gaps**: Integration health is strong for the in-process authentication domain but has two notable gaps: (1) the `IEmailSender` interface is bound to `IdentityNoOpEmailSender`, creating a **broken integration point** for all email-dependent processes (registration confirmation, password reset, email change), and (2) the `AppRegistration` entity has **no persistence integration** — the form submits but data is discarded.
+
+External integration with Azure Container Apps and Azure Monitor is fully configured through Infrastructure as Code.
+
+> 📌 **Recommended Next Steps**: bind a production SMTP or SendGrid email sender to `IEmailSender`, implement `ApplicationDbContext` entity mapping for `AppRegistration`, and add health check endpoints for runtime dependency monitoring.
