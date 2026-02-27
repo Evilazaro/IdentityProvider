@@ -380,7 +380,7 @@ flowchart TB
 
 ## Section 4: Current State Baseline
 
-### Overview
+### Baseline Overview
 
 The current state baseline captures the as-is data architecture as implemented in the IdentityProvider repository. The assessment examines the deployed data topology, storage distribution, quality posture, governance maturity, and compliance readiness based on source file evidence.
 
