@@ -557,6 +557,59 @@ The catalog covers 38 components across 11 Business Architecture component types
 | OAuth App Registration       | Client application registration with ClientId, ClientSecret, TenantId, scopes, and grant types        | Ancillary      | Developers, Partners         | Platform Team   | Partial | Integration          | AppRegistration entity   | Not detected            | src/IdentityProvider/Components/AppRegistration.cs:1-47                              |
 | Email Management             | Email change with confirmation token, verification resend, and address update with username sync      | Core           | End Users                    | Identity Team   | Active  | Privacy Compliance   | ASP.NET Identity, Email  | Profile, Login          | src/IdentityProvider/Components/Account/Pages/Manage/Email.razor:1-132               |
 
+#### 5.2.1 User Authentication
+
+| Attribute      | Value                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| Description    | Email/password credential verification issuing cookie-based sessions with configurable lockout |
+| Classification | Core                                                                                           |
+| Confidence     | 0.95                                                                                           |
+| Maturity       | 4 — Measured                                                                                   |
+| Owner          | Identity Team                                                                                  |
+| Status         | Active                                                                                         |
+| Alignment      | Security-by-Default                                                                            |
+
+**Process Steps:**
+
+1. User submits email and password via `Login.razor` form with `[SupplyParameterFromForm]` binding
+2. `SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false)` validates credentials
+3. Result branches: `Succeeded` → redirect to `ReturnUrl`; `RequiresTwoFactor` → redirect to `LoginWith2fa`; `IsLockedOut` → redirect to `Lockout`; else → display "Invalid login attempt" error
+4. Cookie authentication middleware issues encrypted session cookie with configurable expiry
+5. `AuthenticationStateProvider` cascades authentication context to all downstream Blazor components
+
+**Business Rules Applied:**
+
+- Security Stamp Revalidation: Authentication state revalidated every 30 minutes (IdentityRevalidatingAuthenticationStateProvider.cs:19)
+- Account lockout currently disabled (`lockoutOnFailure: false`) — see GAP-005
+- Requires confirmed email account (`RequireConfirmedAccount = true` in Program.cs:32)
+
+#### 5.2.2 Two-Factor Authentication
+
+| Attribute      | Value                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| Description    | TOTP authenticator app enrollment with shared key, QR URI, verification, and 10 recovery codes |
+| Classification | Core                                                                                           |
+| Confidence     | 0.92                                                                                           |
+| Maturity       | 3 — Defined                                                                                    |
+| Owner          | Security Team                                                                                  |
+| Status         | Active                                                                                         |
+| Alignment      | Progressive Security Enhancement                                                               |
+
+**Process Steps:**
+
+1. User navigates to 2FA Dashboard (`TwoFactorAuthentication.razor`) — displays current 2FA status
+2. `GetAuthenticatorKeyAsync` generates shared key; `FormatKey` presents as space-separated groups
+3. `GenerateQrCodeUri` produces `otpauth://totp/...` URI for authenticator app scanning
+4. User enters 6-digit TOTP code; `TwoFactorAuthenticatorSignInAsync` verifies against shared key
+5. On success, `SetTwoFactorEnabledAsync(user, true)` activates 2FA; `GenerateNewTwoFactorRecoveryCodes(user, 10)` creates recovery codes
+6. Recovery code threshold alerts trigger at ≤ 3 (warning), ≤ 1 (danger), or 0 (danger) remaining codes
+
+**Business Rules Applied:**
+
+- TOTP verification code must be stripped of spaces and hyphens before validation
+- 10 recovery codes generated on enrollment; each code is single-use
+- Disable 2FA requires explicit `SetTwoFactorEnabledAsync(user, false)` and resets authenticator key
+
 ### 5.3 Value Streams
 
 | Component          | Description                                                                          | Classification | Stakeholders             | Owner         | Status | Alignment            | Source Systems               | Consumers       | Source File                                                                              |
@@ -622,6 +675,63 @@ flowchart LR
 | 2FA Enrollment Process    | GetAuthenticatorKeyAsync → FormatKey → GenerateQrCodeUri → TwoFactorAuthenticatorSignInAsync | Core           | Security Users   | Security Team   | Active | Progressive Security | UserManager, Authenticator | Login, Recovery | src/IdentityProvider/Components/Account/Pages/Manage/EnableAuthenticator.razor:100-130 |
 | Account Deletion Process  | RequirePasswordConfirmation → DeleteAsync → SignOutAsync → NavigateTo redirect               | Compliance     | End Users, Legal | Compliance Team | Active | Privacy Compliance   | UserManager, SignInManager | GDPR Compliance | src/IdentityProvider/Components/Account/Pages/Manage/DeletePersonalData.razor:55-78    |
 
+#### 5.4.1 Authentication Process
+
+| Attribute      | Value                                                                                   |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Description    | PasswordSignInAsync → Check lockout → Check 2FA → Issue cookie → Redirect to return URL |
+| Classification | Core                                                                                    |
+| Confidence     | 0.92                                                                                    |
+| Maturity       | 4 — Measured                                                                            |
+| Owner          | Identity Team                                                                           |
+| Status         | Active                                                                                  |
+| Alignment      | Security-by-Default                                                                     |
+
+**Process Steps:**
+
+1. `Login.razor` captures `Input.Email` and `Input.Password` via `[SupplyParameterFromForm]` model binding
+2. `HttpContext.SignInAsync` clears any existing authentication context
+3. `SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false)` executes credential validation
+4. Result dispatches to four branches:
+   - `Succeeded` → `RedirectManager.RedirectTo(ReturnUrl)` with authenticated cookie
+   - `RequiresTwoFactor` → redirect to `LoginWith2fa?ReturnUrl={ReturnUrl}&RememberMe={RememberMe}`
+   - `IsLockedOut` → redirect to `Lockout` page (currently unreachable — lockout disabled)
+   - Failure → set `errorMessage = "Error: Invalid login attempt."`
+5. Post-login, `IdentityRevalidatingAuthenticationStateProvider` validates security stamps every 30 minutes
+
+**Business Rules Applied:**
+
+- Confirmed account required (`RequireConfirmedAccount = true`) — unconfirmed users cannot sign in
+- Lockout disabled (`lockoutOnFailure: false`) — GAP-005 identifies this as a security policy gap
+- Information non-disclosure: login error message does not reveal whether email exists
+
+#### 5.4.2 Account Deletion Process
+
+| Attribute      | Value                                                                                   |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Description    | GDPR right-to-erasure implementation with password confirmation and session termination |
+| Classification | Compliance                                                                              |
+| Confidence     | 0.88                                                                                    |
+| Maturity       | 3 — Defined                                                                             |
+| Owner          | Compliance Team                                                                         |
+| Status         | Active                                                                                  |
+| Alignment      | Privacy Compliance by Design                                                            |
+
+**Process Steps:**
+
+1. User navigates to `DeletePersonalData.razor` under `[Authorize]` Manage section
+2. `RequirePassword` check determines whether password confirmation is needed (external-login-only users bypass)
+3. User enters current password; `UserManager.CheckPasswordAsync` validates
+4. `UserManager.DeleteAsync(user)` permanently removes user record from ApplicationDbContext
+5. `SignInManager.SignOutAsync()` terminates the current session
+6. `NavigationManager.NavigateTo("/")` redirects to home page
+
+**Business Rules Applied:**
+
+- Password confirmation required unless user has no local password (external-login-only)
+- Deletion is permanent with no soft-delete or recovery period
+- Session is immediately terminated after account deletion
+
 ### 5.5 Business Services
 
 | Component                    | Description                                                                                            | Classification | Stakeholders            | Owner         | Status | Alignment           | Source Systems             | Consumers                    | Source File                                                                                     |
@@ -629,6 +739,35 @@ flowchart LR
 | Identity Service             | Core ASP.NET Identity registration: UserManager, SignInManager, TokenProviders, EntityFramework stores | Core           | All                     | Identity Team | Active | Security-by-Default | SQLite via EF Core         | All Identity pages           | src/IdentityProvider/Program.cs:14-37                                                           |
 | Email Notification Service   | IEmailSender implementation — no-op stub delivering zero emails in development mode                    | Support        | End Users (blocked)     | Identity Team | Stub   | Not detected        | Not detected               | Registration, Password Reset | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23                         |
 | Authentication State Service | RevalidatingServerAuthenticationStateProvider checking security stamps every 30 minutes                | Core           | All Authenticated Users | Identity Team | Active | Security-by-Default | UserManager, SecurityStamp | Blazor Components            | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:1-49 |
+
+#### 5.5.1 Identity Service
+
+| Attribute      | Value                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------- |
+| Description    | Core ASP.NET Identity registration providing UserManager, SignInManager, and EF stores |
+| Classification | Core                                                                                   |
+| Confidence     | 0.95                                                                                   |
+| Maturity       | 4 — Measured                                                                           |
+| Owner          | Identity Team                                                                          |
+| Status         | Active                                                                                 |
+| Alignment      | Security-by-Default                                                                    |
+
+**Service Registration (Program.cs:14-37):**
+
+1. `AddAuthentication` → configures `IdentityConstants.ApplicationScheme` as default
+2. `AddIdentityCookies()` → registers cookie authentication with external provider support
+3. `AddDatabaseDeveloperPageExceptionFilter()` → EF Core developer diagnostics
+4. `AddDbContext<ApplicationDbContext>` → SQLite connection string from `appsettings.json`
+5. `AddIdentityCore<ApplicationUser>` → registers `UserManager`, `SignInManager`, token providers
+6. `AddEntityFrameworkStores<ApplicationDbContext>` → binds Identity to EF Core persistence
+7. `AddSignInManager()` → registers `SignInManager<ApplicationUser>`
+8. `RequireConfirmedAccount = true` → enforces email confirmation before sign-in
+
+**Downstream Dependencies:**
+
+- All 5 business processes depend on `UserManager<ApplicationUser>` for identity operations
+- `ApplicationDbContext` (SQLite) provides the single persistence backend
+- `IEmailSender<ApplicationUser>` bound to `IdentityNoOpEmailSender` (no-op stub — GAP-001)
 
 ### 5.6 Business Functions
 
@@ -656,6 +795,49 @@ flowchart LR
 | Security Stamp Revalidation | RevalidationInterval = TimeSpan.FromMinutes(30) — forces re-auth on stamp change | Security       | Security              | Security Team | Active | Security-by-Default | IdentityOptions    | All Blazor circuits                     | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:19-19 |
 | Email Domain Whitelist      | validDomains = example.com, test.com — rejects all other domains                 | Business       | Registration          | Identity Team | Active | Security            | Application config | Email validation                        | src/IdentityProvider/Components/eMail.cs:14-14                                                   |
 | Information Non-Disclosure  | ForgotPassword and ResendEmailConfirmation do not reveal user existence          | Security       | Security, Compliance  | Security Team | Active | Privacy Compliance  | Account pages      | End Users, Attackers                    | src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:47-50                         |
+
+#### 5.8.1 Password Complexity Policy
+
+| Attribute      | Value                                                                 |
+| -------------- | --------------------------------------------------------------------- |
+| Description    | Minimum 6 characters, maximum 100 characters, with confirmation match |
+| Classification | Security                                                              |
+| Confidence     | 0.92                                                                  |
+| Maturity       | 3 — Defined                                                           |
+| Owner          | Security Team                                                         |
+| Status         | Active                                                                |
+| Alignment      | Security-by-Default                                                   |
+
+**Rule Implementation:**
+
+- `[StringLength(100, MinimumLength = 6)]` applied to `InputModel.Password` in Register, ResetPassword, and ChangePassword pages
+- `[Compare("Password")]` enforces `ConfirmPassword` match at model-binding level
+- `[DataType(DataType.Password)]` hints browser password masking
+- ASP.NET Identity defaults: requires digit, lowercase, uppercase, non-alphanumeric (unless overridden)
+
+**Enforcement Points:** Register.razor:126-140, ChangePassword.razor:80-94, ResetPassword.razor:58-68, SetPassword.razor:48-61
+
+#### 5.8.2 Email Confirmation Required
+
+| Attribute      | Value                                                               |
+| -------------- | ------------------------------------------------------------------- |
+| Description    | SignIn.RequireConfirmedAccount = true — blocks unconfirmed accounts |
+| Classification | Security                                                            |
+| Confidence     | 0.95                                                                |
+| Maturity       | 4 — Measured                                                        |
+| Owner          | Identity Team                                                       |
+| Status         | Active                                                              |
+| Alignment      | Privacy Compliance by Design                                        |
+
+**Rule Implementation:**
+
+- Configured in `Program.cs:32` as `options.SignIn.RequireConfirmedAccount = true`
+- Registration flow generates confirmation token via `UserManager.GenerateEmailConfirmationTokenAsync`
+- `RegisterConfirmation.razor` displays confirmation instructions and link (development mode shows direct link)
+- `ConfirmEmail.razor` validates token via `UserManager.ConfirmEmailAsync` and activates account
+- Unconfirmed users receive "Account not confirmed" redirect when attempting login
+
+**Dependency:** Requires functional `IEmailSender` for production use — currently blocked by GAP-001 (no-op stub)
 
 ### 5.9 Business Events
 
@@ -728,6 +910,37 @@ flowchart TD
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------- | ------- | ------------------- | ------------------- | ------------------ | ------------------------------------------------------- |
 | ApplicationUser | IdentityUser subclass — Id, UserName, Email, PasswordHash, SecurityStamp, TwoFactorEnabled, LockoutEnd, PhoneNumber             | Core Entity    | All          | Identity Team | Active  | Security-by-Default | ASP.NET Identity    | All Identity pages | src/IdentityProvider/Data/ApplicationUser.cs:1-10       |
 | AppRegistration | OAuth client entity — ClientId (PK), ClientSecret, TenantId, RedirectUri, Scopes, Authority, AppName, GrantTypes, ResponseTypes | Domain Entity  | Developers   | Platform Team | Partial | Integration         | AppRegistrationForm | Not detected       | src/IdentityProvider/Components/AppRegistration.cs:1-47 |
+
+#### 5.10.1 ApplicationUser
+
+| Attribute      | Value                                                                       |
+| -------------- | --------------------------------------------------------------------------- |
+| Description    | Core identity entity inheriting IdentityUser with extensible profile fields |
+| Classification | Core Entity                                                                 |
+| Confidence     | 0.95                                                                        |
+| Maturity       | 3 — Defined                                                                 |
+| Owner          | Identity Team                                                               |
+| Status         | Active                                                                      |
+| Alignment      | Security-by-Default                                                         |
+
+**Entity Attributes (inherited from IdentityUser):**
+
+| Field            | Type           | Purpose                                             |
+| ---------------- | -------------- | --------------------------------------------------- |
+| Id               | string (GUID)  | Primary key                                         |
+| UserName         | string         | Login identifier (synced with Email)                |
+| Email            | string         | Email address with confirmation tracking            |
+| EmailConfirmed   | bool           | Controls sign-in eligibility                        |
+| PasswordHash     | string         | PBKDF2-hashed password                              |
+| SecurityStamp    | string         | Invalidation token (rotated on security changes)    |
+| TwoFactorEnabled | bool           | 2FA enrollment status                               |
+| LockoutEnd       | DateTimeOffset | Lockout expiry timestamp                            |
+| PhoneNumber      | string         | Optional phone (not used in current implementation) |
+| AuthenticatorKey | string         | TOTP shared key for 2FA                             |
+
+**Persistence:** `ApplicationDbContext : IdentityDbContext<ApplicationUser>` mapped to SQLite via EF Core 9.0.13. Migrations in `Migrations/20250311003709_InitialCreate.cs`.
+
+**PersonalData Attributes:** Fields decorated with `[PersonalData]` are included in the GDPR data download JSON export via `DownloadPersonalData` endpoint.
 
 ### 5.11 KPIs & Metrics
 
