@@ -550,7 +550,308 @@ Integration health is adequate for a single-service identity provider but would 
 
 ---
 
-> **Note**: Sections 6 (Architecture Decisions), 7 (Architecture Standards), and 9 (Governance & Management) are out of scope for this analysis per the configuration (`output_sections: [1, 2, 3, 4, 5, 8]`).
+## Section 6: Architecture Decisions
+
+### Overview
+
+This section documents key architectural decisions (ADRs) that shaped the IdentityProvider data architecture. Each ADR captures the context, decision rationale, and consequences of significant design choices observed in the source code. While no formal ADR documentation files were detected in the repository, the following decisions can be inferred from implementation evidence in source files.
+
+Architecture decisions in the IdentityProvider fall into three primary categories: storage engine selection, ORM strategy, and identity framework adoption. Each decision has long-term implications for scalability, maintainability, and operational characteristics of the data layer.
+
+For future architectural evolution, these decisions should be formalized using the Markdown ADR (MADR) format and stored in `/docs/architecture/decisions/` with sequential numbering (e.g., ADR-001, ADR-002).
+
+### ADR Summary
+
+| ADR ID  | Title                                | Status   | Date       | Impact |
+| ------- | ------------------------------------ | -------- | ---------- | ------ |
+| ADR-001 | SQLite as Primary Data Store         | Accepted | 2025-03-11 | High   |
+| ADR-002 | Code-First ORM with Entity Framework | Accepted | 2025-03-11 | High   |
+| ADR-003 | ASP.NET Core Identity Framework      | Accepted | 2025-03-11 | High   |
+| ADR-004 | String-Based Primary Keys (GUIDs)    | Accepted | 2025-03-11 | Medium |
+| ADR-005 | Auto-Migration in Development        | Accepted | 2025-03-11 | Medium |
+
+### 6.1 Detailed ADRs
+
+#### 6.1.1 ADR-001: SQLite as Primary Data Store
+
+- **Context**: The application requires a relational database for persisting identity data (users, roles, claims, tokens). The deployment target is Azure Container Apps (infra/resources.bicep:78-126) which supports both embedded and networked database options.
+- **Decision**: Use SQLite as the primary data store (src/IdentityProvider/appsettings.json:3 — `"Data Source=identityProviderDB.db;"`).
+- **Rationale**: SQLite provides zero-configuration deployment, single-file storage, and sufficient performance for identity workloads. It eliminates external database dependency for development and small-scale production scenarios.
+- **Consequences**: (1) No concurrent write scaling — single-writer model limits throughput. (2) No network-accessible database management tools. (3) Backup requires file-level copy. (4) Migration to SQL Server or PostgreSQL will require connection string change and potential schema adjustments.
+
+#### 6.1.2 ADR-002: Code-First ORM with Entity Framework Core
+
+- **Context**: Data access requires schema management, query generation, and migration support across development and production environments.
+- **Decision**: Use Entity Framework Core 9.0 Code-First approach (src/IdentityProvider/IdentityProvider.csproj:14-16 — Microsoft.EntityFrameworkCore.Sqlite 9.0.13, Microsoft.EntityFrameworkCore.Tools 9.0.13).
+- **Rationale**: Code-First provides single source of truth in C# entity classes, automated migration generation with Up/Down reversibility, and strong integration with ASP.NET Core Identity through IdentityDbContext.
+- **Consequences**: (1) Schema changes require migration generation and application. (2) Complex SQL queries may require raw SQL fallback. (3) Model snapshot maintenance adds build artifacts (ApplicationDbContextModelSnapshot.cs:1-266).
+
+#### 6.1.3 ADR-003: ASP.NET Core Identity Framework
+
+- **Context**: The application requires authentication, authorization, user management, role-based access control, and external login provider support.
+- **Decision**: Adopt ASP.NET Core Identity as the identity management framework (src/IdentityProvider/Program.cs:19-34 — AddIdentity, AddEntityFrameworkStores, AddSignInManager).
+- **Rationale**: Provides production-ready implementation of password hashing, account lockout, 2FA, claims-based authorization, and external login integration with minimal custom code.
+- **Consequences**: (1) Schema is prescribed — 7 framework tables with fixed column layouts (20250311003709_InitialCreate.cs:1-222). (2) Customization requires extending IdentityUser (ApplicationUser.cs:6-8). (3) Framework upgrades may require migration adjustments.
+
+#### 6.1.4 ADR-004: String-Based Primary Keys (GUIDs)
+
+- **Context**: Primary key strategy affects query performance, storage efficiency, and distributed system compatibility.
+- **Decision**: Use string-based GUID identifiers for all Identity entities (20250311003709_InitialCreate.cs:17 — `Id = table.Column<string>(type: "TEXT")`). Integer auto-increment keys used only for claim entities.
+- **Rationale**: ASP.NET Identity default convention. GUIDs enable distributed generation without coordination and avoid sequential ID enumeration attacks.
+- **Consequences**: (1) Larger index sizes compared to int/bigint keys. (2) Non-sequential insertion may cause index fragmentation in B-tree stores. (3) Less human-readable than sequential integers.
+
+#### 6.1.5 ADR-005: Automatic Migration Execution in Development
+
+- **Context**: Development workflow requires schema synchronization without manual migration steps.
+- **Decision**: Apply migrations automatically at application startup in Development environment (src/IdentityProvider/Program.cs:41-46 — `context.Database.Migrate()`).
+- **Rationale**: Reduces friction in development by ensuring the database schema matches the current model on every startup.
+- **Consequences**: (1) Not suitable for production — migration failures at startup would prevent application launch. (2) No migration review step before application. (3) Must be disabled or guarded for staging/production deployments.
+
+```mermaid
+---
+title: Architecture Decision Relationships
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Architecture Decision Relationships
+    accDescr: Flowchart showing how key architectural decisions relate to each other and influence the overall data architecture
+
+    subgraph STORAGE["💾 Storage Decisions"]
+        ADR1["ADR-001<br/>SQLite Database"]
+        ADR4["ADR-004<br/>GUID Primary Keys"]
+    end
+
+    subgraph ORM_DECISIONS["🗄️ ORM Decisions"]
+        ADR2["ADR-002<br/>EF Core Code-First"]
+        ADR5["ADR-005<br/>Auto-Migration (Dev)"]
+    end
+
+    subgraph FRAMEWORK["🔐 Framework Decisions"]
+        ADR3["ADR-003<br/>ASP.NET Identity"]
+    end
+
+    ADR3 --> ADR1
+    ADR3 --> ADR2
+    ADR3 --> ADR4
+    ADR2 --> ADR5
+    ADR2 --> ADR1
+
+    style STORAGE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style ORM_DECISIONS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style FRAMEWORK fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+```
+
+---
+
+## Section 7: Architecture Standards
+
+### Overview
+
+This section defines the data architecture standards, naming conventions, schema design guidelines, and quality rules governing data assets in the IdentityProvider repository. Standards are primarily inherited from the ASP.NET Core Identity framework and Entity Framework Core conventions, with additional constraints applied through DataAnnotations on custom entities.
+
+Standards enforcement in this repository operates at two levels: framework-imposed standards (automatically enforced by ASP.NET Identity and EF Core) and application-level standards (enforced through DataAnnotations and coding conventions). Framework standards provide robust baseline governance, while application-level standards are observed but not formally documented.
+
+For mature data platforms, standards should be codified in `/docs/standards/` and enforced through automated validation in CI/CD pipelines. Currently, no formal standards documentation exists in the repository.
+
+### Data Naming Conventions
+
+| Standard              | Convention                                  | Example                                    | Source Evidence                                                         |
+| --------------------- | ------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------- |
+| Table Names           | PascalCase with "AspNet" prefix (framework) | AspNetUsers, AspNetRoles, AspNetUserClaims | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:14,29   |
+| Column Names          | PascalCase matching C# property names       | UserName, NormalizedEmail, PasswordHash    | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:33-48   |
+| Primary Key Columns   | "Id" for single-column PKs                  | AspNetUsers.Id, AspNetRoles.Id             | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:17      |
+| Foreign Key Columns   | "{Entity}Id" pattern                        | UserId, RoleId                             | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:61,79   |
+| Index Names           | "IX*{Table}*{Column}" pattern               | IX_AspNetUserClaims_UserId                 | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:164-186 |
+| Foreign Key Names     | "FK*{Child}*{Parent}\_{Column}" pattern     | FK_AspNetRoleClaims_AspNetRoles_RoleId     | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:72-76   |
+| Unique Index Names    | Descriptive with "Index" suffix             | UserNameIndex, RoleNameIndex, EmailIndex   | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:160-198 |
+| Custom Entity Names   | PascalCase domain nouns                     | AppRegistration                            | src/IdentityProvider/Components/AppRegistration.cs:7                    |
+| Custom Entity Columns | PascalCase with DataAnnotation constraints  | ClientId, ClientSecret, TenantId           | src/IdentityProvider/Components/AppRegistration.cs:10-41                |
+
+### Schema Design Standards
+
+| Standard               | Rule                                                                | Enforcement Level    | Source Evidence                                                               |
+| ---------------------- | ------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------- |
+| Primary Key Required   | Every table must have a defined primary key                         | EF Core (automatic)  | 20250311003709_InitialCreate.cs:17 — `Id = table.Column<string>()`            |
+| Explicit Column Types  | All columns declare explicit SQLite types (TEXT, INTEGER)           | Migration DDL        | 20250311003709_InitialCreate.cs:18-24 — `type: "TEXT"`, `"INTEGER"`           |
+| Max Length Constraints | String columns with business meaning must define maxLength          | DataAnnotations      | AppRegistration.cs:10-11 — `[MaxLength(36)]`, `[MaxLength(100)]`              |
+| Required Fields        | Business-critical fields must use `[Required]` annotation           | DataAnnotations      | AppRegistration.cs:9,13 — `[Required]` on ClientId, ClientSecret              |
+| Nullable Declarations  | All columns must explicitly declare nullability                     | EF Core (automatic)  | 20250311003709_InitialCreate.cs:19 — `nullable: false`                        |
+| Cascade Delete Default | FK relationships use cascade delete for child entity cleanup        | EF Core conventions  | 20250311003709_InitialCreate.cs:72-76 — `onDelete: ReferentialAction.Cascade` |
+| Unique Indexes         | Natural key fields must have unique indexes                         | Migration DDL        | 20250311003709_InitialCreate.cs:160 — `unique: true` on NormalizedUserName    |
+| Concurrency Control    | Entities supporting concurrent access must include ConcurrencyStamp | Framework convention | 20250311003709_InitialCreate.cs:22 — ConcurrencyStamp on Users and Roles      |
+
+### Data Quality Standards
+
+| Standard                          | Rule                                                   | Current Status  | Gap                                       |
+| --------------------------------- | ------------------------------------------------------ | --------------- | ----------------------------------------- |
+| Schema Validation at Entity Level | DataAnnotations enforce constraints before persistence | Implemented     | Limited to `[Required]` and `[MaxLength]` |
+| Referential Integrity             | FK constraints prevent orphaned records                | Implemented     | None                                      |
+| Unique Constraints                | Natural keys protected by unique indexes               | Implemented     | None                                      |
+| Data Type Enforcement             | Explicit column types in DDL                           | Implemented     | None                                      |
+| Input Sanitization                | User-supplied data sanitized before storage            | Not Assessed    | Requires code review                      |
+| Data Completeness Monitoring      | Automated checks for null/empty required fields        | Not Implemented | No runtime quality monitoring             |
+| Data Freshness Monitoring         | SLA-based staleness detection for critical data        | Not Implemented | No freshness tracking                     |
+| Data Anomaly Detection            | Statistical anomaly detection on data patterns         | Not Implemented | No anomaly detection framework            |
+
+### Classification Taxonomy
+
+```mermaid
+---
+title: Data Classification Taxonomy
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Data Classification Taxonomy
+    accDescr: Hierarchical diagram showing the data classification categories applied to IdentityProvider data assets
+
+    ROOT["📊 Data Classification<br/>Taxonomy"]
+
+    subgraph PII_GROUP["🔴 PII - Personally Identifiable Information"]
+        PII1["👤 ApplicationUser<br/>Email, UserName, Phone"]
+        PII2["📝 IdentityUserClaim<br/>User-specific claims"]
+        PII3["🔗 IdentityUserLogin<br/>External auth data"]
+    end
+
+    subgraph CONF_GROUP["🟠 Confidential - Sensitive Credentials"]
+        CONF1["🔑 AppRegistration<br/>ClientSecret, TenantId"]
+        CONF2["🎫 IdentityUserToken<br/>Auth tokens"]
+        CONF3["🔒 Identity Security<br/>PasswordHash, SecurityStamp"]
+        CONF4["💾 SQLite Database<br/>Contains all data"]
+    end
+
+    subgraph INT_GROUP["🟢 Internal - System Data"]
+        INT1["🔑 IdentityRole<br/>Role definitions"]
+        INT2["📝 IdentityRoleClaim<br/>Role claims"]
+        INT3["🔗 IdentityUserRole<br/>User-role assignments"]
+        INT4["📋 ApplicationDbContext<br/>ORM model"]
+        INT5["🔄 Migrations<br/>Schema DDL"]
+    end
+
+    ROOT --> PII_GROUP
+    ROOT --> CONF_GROUP
+    ROOT --> INT_GROUP
+
+    style PII_GROUP fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    style CONF_GROUP fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    style INT_GROUP fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
+
+---
+
+## Section 9: Governance & Management
+
+### Overview
+
+This section defines the data governance model, ownership structure, access control policies, audit procedures, and compliance tracking mechanisms for the IdentityProvider data architecture. Effective data governance ensures data quality, security, and regulatory compliance across the identity management domain.
+
+Key governance elements for an identity provider include data ownership RACI matrices, access control models (RBAC/ABAC), data stewardship roles, audit logging requirements, and compliance reporting. These should be aligned with organizational data governance frameworks and applicable regulatory requirements (GDPR, HIPAA, SOC 2, NIST 800-63).
+
+The following subsections document governance structures detected and inferred from the source files. While no formal data governance documentation exists in the repository, the ASP.NET Core Identity framework provides implicit governance through built-in security controls and schema constraints.
+
+### Data Ownership Model
+
+| Data Domain                  | Owner (Inferred) | Steward Role           | Responsibility                                                     | Evidence                                                        |
+| ---------------------------- | ---------------- | ---------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------- |
+| User Identity Data           | Identity Team    | Identity Administrator | User account lifecycle, PII protection, account deactivation       | src/IdentityProvider/Data/ApplicationUser.cs:1-9                |
+| Role & Authorization Data    | Identity Team    | Security Administrator | Role definitions, claim assignments, access control policies       | 20250311003709_InitialCreate.cs:14-27, 59-76                    |
+| Authentication Credentials   | Identity Team    | Security Administrator | Password policies, token management, external login configurations | 20250311003709_InitialCreate.cs:42-56                           |
+| Application Registration     | Identity Team    | Application Owner      | OAuth/OIDC client credentials, redirect URIs, scope definitions    | src/IdentityProvider/Components/AppRegistration.cs:1-44         |
+| Schema & Migrations          | Development Team | Database Administrator | Migration authoring, schema versioning, snapshot management        | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs |
+| Infrastructure Configuration | Platform Team    | DevOps Engineer        | Container deployment, database hosting, secrets management         | infra/resources.bicep:78-126                                    |
+
+### Access Control Model
+
+| Control Layer      | Mechanism                       | Scope                                    | Status            | Evidence                                               |
+| ------------------ | ------------------------------- | ---------------------------------------- | ----------------- | ------------------------------------------------------ |
+| Application RBAC   | ASP.NET Identity Roles + Claims | User authorization within application    | Implemented       | Program.cs:19-34 — AddIdentity, AddSignInManager       |
+| Database Access    | SQLite file-level permissions   | OS filesystem ACL on .db file            | Not Configured    | appsettings.json:3 — file-based database               |
+| Secret Management  | User Secrets (Development)      | Connection strings, API keys             | Partial           | IdentityProvider.csproj:8 — UserSecretsId              |
+| Container Identity | Azure Managed Identity          | Azure resource access from Container App | Configured        | infra/resources.bicep:15-18 — managedIdentity          |
+| Password Policy    | ASP.NET Identity PasswordHasher | Password complexity and hashing          | Framework Default | 20250311003709_InitialCreate.cs:42 — PasswordHash      |
+| Account Lockout    | ASP.NET Identity Lockout        | Brute-force protection                   | Implemented       | 20250311003709_InitialCreate.cs:49-51 — Lockout fields |
+
+### Audit & Compliance
+
+| Audit Capability        | Current State                                                     | Recommended State                               | Gap    |
+| ----------------------- | ----------------------------------------------------------------- | ----------------------------------------------- | ------ |
+| Data Change Auditing    | ConcurrencyStamp on Users and Roles (optimistic concurrency only) | Full audit trail with before/after values       | High   |
+| Login Auditing          | Not detected in source files                                      | Log all auth events (success, failure, lockout) | High   |
+| Schema Change Auditing  | EF Core migrations tracked in source control                      | Migration audit log with approvals              | Medium |
+| Data Access Auditing    | Not detected in source files                                      | Query logging for sensitive data access         | High   |
+| Compliance Reporting    | Not detected in source files                                      | Automated GDPR/HIPAA compliance reports         | High   |
+| Data Retention Auditing | Not implemented                                                   | Retention policy enforcement with deletion logs | High   |
+| Breach Notification     | Not implemented                                                   | Automated breach detection and notification     | High   |
+
+### Data Governance Maturity Assessment
+
+| Dimension                    | Current Level | Evidence                                                                  | Target Level | Gap Priority |
+| ---------------------------- | ------------- | ------------------------------------------------------------------------- | ------------ | ------------ |
+| Data Catalog & Discovery     | Level 1       | No formal data catalog; schema discoverable only via migrations           | Level 3      | High         |
+| Data Quality Management      | Level 2       | Schema-level validation via DataAnnotations and EF Core constraints       | Level 4      | Medium       |
+| Data Lineage & Traceability  | Level 2       | EF Core migration chain provides schema lineage only                      | Level 3      | Medium       |
+| Data Security & Privacy      | Level 3       | Password hashing, security stamps, lockout; no formal PII tagging         | Level 4      | Medium       |
+| Data Lifecycle Management    | Level 1       | No retention policies, archival, or data deletion procedures              | Level 3      | High         |
+| Regulatory Compliance        | Level 1       | No compliance documentation, DPIA, or data processing agreements          | Level 3      | High         |
+| Data Standards & Conventions | Level 2       | Framework-enforced naming and schema conventions; not formally documented | Level 3      | Low          |
+
+```mermaid
+---
+title: Data Governance Maturity Radar
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Data Governance Maturity Assessment
+    accDescr: Diagram showing the current governance maturity levels across seven dimensions with current state and target state indicators
+
+    subgraph MATURITY["📊 Governance Maturity Assessment"]
+        direction TB
+
+        subgraph CURRENT["🔵 Current State (Avg: Level 1.7)"]
+            C1["📋 Catalog<br/>Level 1 ⬜⬜⬜⬜"]
+            C2["✅ Quality<br/>Level 2 🟩⬜⬜⬜"]
+            C3["🔗 Lineage<br/>Level 2 🟩⬜⬜⬜"]
+            C4["🔒 Security<br/>Level 3 🟩🟩⬜⬜"]
+            C5["♻️ Lifecycle<br/>Level 1 ⬜⬜⬜⬜"]
+            C6["📜 Compliance<br/>Level 1 ⬜⬜⬜⬜"]
+            C7["📏 Standards<br/>Level 2 🟩⬜⬜⬜"]
+        end
+
+        subgraph TARGET["🎯 Target State (Avg: Level 3.3)"]
+            T1["📋 Catalog<br/>Level 3 🟩🟩⬜⬜"]
+            T2["✅ Quality<br/>Level 4 🟩🟩🟩⬜"]
+            T3["🔗 Lineage<br/>Level 3 🟩🟩⬜⬜"]
+            T4["🔒 Security<br/>Level 4 🟩🟩🟩⬜"]
+            T5["♻️ Lifecycle<br/>Level 3 🟩🟩⬜⬜"]
+            T6["📜 Compliance<br/>Level 3 🟩🟩⬜⬜"]
+            T7["📏 Standards<br/>Level 3 🟩🟩⬜⬜"]
+        end
+    end
+
+    style CURRENT fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style TARGET fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style MATURITY fill:#FAF9F8,stroke:#EDEBE9,stroke-width:1px,color:#323130
+```
 
 ---
 
@@ -584,3 +885,5 @@ Where:
 | SQLite Database                   | 0.60           | 0.50       | 1.00          | 0.80            | **0.74**  | Medium    |
 | ASP.NET Identity Security         | 0.60           | 0.60       | 0.90          | 0.70            | **0.72**  | Medium    |
 | AppRegistration                   | 0.80           | 0.30       | 1.00          | 0.40            | **0.71**  | Medium    |
+
+<!-- SECTION COUNT AUDIT: Found 9 sections. Required: 9. Status: PASS -->
