@@ -122,6 +122,119 @@ Not detected in source files.
 | ------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------- | ---------- | -------------- |
 | ASP.NET Identity Security | Password hashing, security stamps, lockout, and 2FA fields | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:29-56 | 0.72       | Confidential   |
 
+### Data Domain Map
+
+```mermaid
+---
+title: IdentityProvider - Data Domain Map
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: IdentityProvider Data Domain Map
+    accDescr: Diagram showing the two primary data domains (Identity and Application Registration) with their constituent entities and relationships to the shared data store
+
+    subgraph IDENTITY_DOMAIN["🔐 Identity Domain"]
+        direction TB
+        AU["👤 ApplicationUser\nPII | 0.83"]
+        IR["🔑 IdentityRole\nInternal | 0.80"]
+        IUR["🔗 IdentityUserRole\nInternal | 0.78"]
+        IUC["📝 IdentityUserClaim\nPII | 0.78"]
+        IRC["📝 IdentityRoleClaim\nInternal | 0.78"]
+        IUL["🔗 IdentityUserLogin\nPII | 0.78"]
+        IUT["🎫 IdentityUserToken\nConfidential | 0.78"]
+    end
+
+    subgraph APPREG_DOMAIN["📱 Application Registration Domain"]
+        AR["🔑 AppRegistration\nConfidential | 0.71"]
+    end
+
+    subgraph DATA_STORE["💾 Shared Data Store"]
+        SQLITE["🗃️ SQLite Database\nidentityProviderDB.db"]
+    end
+
+    subgraph SCHEMA_MGMT["🔄 Schema Management"]
+        MIG["📦 InitialCreate Migration\n0.89"]
+        SNAP["📸 ModelSnapshot\n0.91"]
+        CTX["📋 ApplicationDbContext\n0.96"]
+    end
+
+    AU --> IUR
+    IR --> IUR
+    AU --> IUC
+    IR --> IRC
+    AU --> IUL
+    AU --> IUT
+    IDENTITY_DOMAIN --> SQLITE
+    APPREG_DOMAIN --> SQLITE
+    CTX --> MIG
+    CTX --> SNAP
+    MIG --> SQLITE
+
+    style IDENTITY_DOMAIN fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style APPREG_DOMAIN fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
+    style DATA_STORE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style SCHEMA_MGMT fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
+
+### Storage Tier Diagram
+
+```mermaid
+---
+title: IdentityProvider - Storage Tier Architecture
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: IdentityProvider Storage Tier Architecture
+    accDescr: Diagram showing the three storage tiers in the application - application configuration, ORM metadata, and persistent database storage with data classification
+
+    subgraph TIER1["⚙️ Configuration Tier"]
+        AS["📄 appsettings.json\nConnection strings"]
+        US["🔒 User Secrets\nDev-time secrets"]
+        ENV["🌐 Environment Variables\nRuntime config"]
+    end
+
+    subgraph TIER2["📋 ORM Metadata Tier"]
+        CTX2["📋 ApplicationDbContext\nSchema definition"]
+        MIG2["🔄 Migrations\nSchema evolution"]
+        SNAP2["📸 ModelSnapshot\nSchema state"]
+    end
+
+    subgraph TIER3["💾 Persistent Storage Tier"]
+        DB["🗃️ SQLite Database\nidentityProviderDB.db"]
+        subgraph TABLES["📊 Tables (8)"]
+            T1["AspNetUsers"]
+            T2["AspNetRoles"]
+            T3["AspNetUserRoles"]
+            T4["AspNetUserClaims"]
+            T5["AspNetRoleClaims"]
+            T6["AspNetUserLogins"]
+            T7["AspNetUserTokens"]
+        end
+    end
+
+    TIER1 --> TIER2
+    TIER2 --> TIER3
+
+    style TIER1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style TIER2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style TIER3 fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style TABLES fill:#FFF8E1,stroke:#C19C00,stroke-width:1px,color:#323130
+```
+
 ### Summary
 
 The Architecture Landscape reveals a focused identity management data architecture with 13 components distributed across 5 of 11 TOGAF data component types. Entity coverage is comprehensive with 8 entities mapping to 8 database tables in the ASP.NET Identity schema plus a custom AppRegistration entity. The single data model (ApplicationDbContext) acts as the ORM boundary, and schema evolution is managed through 2 transformation artifacts (migration and snapshot).
@@ -166,6 +279,55 @@ No formal data classification taxonomy is defined in the source files. The follo
 | PII            | Personally Identifiable Information      | ApplicationUser, IdentityUserClaim, IdentityUserLogin                               |
 | Confidential   | Sensitive credentials and tokens         | AppRegistration (ClientSecret), IdentityUserToken, SQLite Database                  |
 | Internal       | Internal system data without sensitivity | IdentityRole, IdentityRoleClaim, IdentityUserRole, ApplicationDbContext, Migrations |
+
+### Data Principle Hierarchy
+
+```mermaid
+---
+title: Data Architecture Principle Hierarchy
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Data Architecture Principle Hierarchy
+    accDescr: Hierarchical diagram showing how data architecture principles cascade from strategic principles through design principles to implementation practices
+
+    subgraph STRATEGIC["🎯 Strategic Principles"]
+        SP1["🔒 Security By Default\nAll credential data protected\nvia framework-provided hashing"]
+        SP2["📦 Code-First Schema\nC# entities as single\nsource of truth"]
+    end
+
+    subgraph DESIGN["📐 Design Principles"]
+        DP1["🔄 Migration-Based Evolution\nVersioned, reversible\nschema changes"]
+        DP2["⚙️ Convention Over Configuration\nEF Core conventions reduce\nboilerplate"]
+        DP3["🔗 Referential Integrity\nFK constraints with cascade\ndelete on all relationships"]
+    end
+
+    subgraph IMPLEMENTATION["🛠️ Implementation Practices"]
+        IP1["📊 Index-Optimized Access\nUnique indexes on\nkey query paths"]
+        IP2["📏 Explicit Column Types\nTEXT/INTEGER declarations\nin all DDL"]
+        IP3["🔑 GUID Primary Keys\nString-based IDs for\ndistributed compatibility"]
+    end
+
+    SP1 --> DP1
+    SP1 --> DP3
+    SP2 --> DP1
+    SP2 --> DP2
+    DP1 --> IP1
+    DP2 --> IP2
+    DP3 --> IP1
+    DP2 --> IP3
+
+    style STRATEGIC fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style DESIGN fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style IMPLEMENTATION fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+```
 
 ---
 
@@ -275,6 +437,100 @@ flowchart TB
 | Email Confirmation      | Schema Ready    | EmailConfirmed column (20250311003709_InitialCreate.cs:39)                                    |
 | Connection Security     | Not Assessed    | SQLite file-based — no network connection encryption                                          |
 | Data Encryption at Rest | Not Implemented | SQLite does not encrypt by default                                                            |
+
+### Quality Heatmap
+
+```mermaid
+---
+title: Data Quality Heatmap - Current vs Target
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Data Quality Heatmap
+    accDescr: Heatmap diagram comparing current data quality scores against target scores across five quality dimensions for the IdentityProvider data architecture
+
+    subgraph QUALITY["📊 Data Quality Dimensions"]
+        direction TB
+        subgraph COMPLETENESS["Schema Completeness"]
+            SC_C["Current: 4/5 🟩"]
+            SC_T["Target: 5/5 🎯"]
+        end
+        subgraph INTEGRITY["Data Integrity"]
+            DI_C["Current: 4/5 🟩"]
+            DI_T["Target: 5/5 🎯"]
+        end
+        subgraph CLASSIFICATION["Data Classification"]
+            DC_C["Current: 2/5 🟧"]
+            DC_T["Target: 4/5 🎯"]
+        end
+        subgraph GOVERNANCE["Governance Coverage"]
+            GC_C["Current: 2/5 🟧"]
+            GC_T["Target: 4/5 🎯"]
+        end
+        subgraph SECURITY["Security Posture"]
+            SP_C["Current: 4/5 🟩"]
+            SP_T["Target: 5/5 🎯"]
+        end
+    end
+
+    style COMPLETENESS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style INTEGRITY fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style CLASSIFICATION fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    style GOVERNANCE fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    style SECURITY fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style QUALITY fill:#FAF9F8,stroke:#EDEBE9,stroke-width:1px,color:#323130
+```
+
+### Governance Maturity Matrix
+
+```mermaid
+---
+title: Governance Maturity Progress Matrix
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: Governance Maturity Progress Matrix
+    accDescr: Matrix showing the progression from current Level 2 governance maturity through intermediate improvements to the target Level 4 state
+
+    subgraph L1["Level 1: Ad-hoc"]
+        L1D["❌ No catalog\n❌ Manual ETL\n❌ No versioning"]
+    end
+
+    subgraph L2["Level 2: Managed ← CURRENT"]
+        L2D["✅ EF Core migrations\n✅ Schema tracked in VCS\n✅ Role-based access\n⚠️ No formal catalog"]
+    end
+
+    subgraph L3["Level 3: Defined"]
+        L3D["🎯 Data catalog\n🎯 Automated quality checks\n🎯 Classification taxonomy\n🎯 Lineage tracking"]
+    end
+
+    subgraph L4["Level 4: Measured ← TARGET"]
+        L4D["🎯 Quality SLAs\n🎯 Anomaly detection\n🎯 Contract testing\n🎯 Compliance dashboards"]
+    end
+
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+
+    style L1 fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    style L2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style L3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    style L4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
 
 ### Summary
 
@@ -439,6 +695,56 @@ Not detected in source files. No master data management components, reference da
 | InitialCreate Migration           | EF Core migration with Up/Down methods creating 7 Identity tables + indexes | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | ApplicationDbContext     | EF Core Migration Runner | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:1-222      |
 | ApplicationDbContextModelSnapshot | EF Core model snapshot capturing current schema state for diff computation  | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | Entity Model Definitions | EF Core Migration Engine | src/IdentityProvider/Migrations/ApplicationDbContextModelSnapshot.cs:1-266 |
 
+### Schema Evolution Timeline
+
+```mermaid
+---
+title: Schema Evolution Timeline
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: Schema Evolution Timeline
+    accDescr: Timeline diagram showing the schema evolution history from initial entity definition through migration generation to current deployed schema state
+
+    subgraph PHASE1["📝 Phase 1: Entity Definition"]
+        E1["ApplicationUser.cs\nextends IdentityUser"]
+        E2["AppRegistration.cs\nOAuth/OIDC entity"]
+        E3["ApplicationDbContext.cs\nIdentityDbContext"]
+    end
+
+    subgraph PHASE2["🔄 Phase 2: Migration Generation"]
+        M1["20250311003709\nInitialCreate"]
+        M1_UP["Up(): 7 tables\n+ indexes + FKs"]
+        M1_DOWN["Down(): Full\nrollback DDL"]
+    end
+
+    subgraph PHASE3["📸 Phase 3: Schema State"]
+        S1["ModelSnapshot\n266 lines\nCurrent schema"]
+    end
+
+    subgraph PHASE4["💾 Phase 4: Deployed Schema"]
+        D1["SQLite Database\n7 Identity tables\n+ indexes"]
+    end
+
+    PHASE1 --> PHASE2
+    M1 --> M1_UP
+    M1 --> M1_DOWN
+    PHASE2 --> PHASE3
+    PHASE3 --> PHASE4
+
+    style PHASE1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style PHASE2 fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
+    style PHASE3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style PHASE4 fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+```
+
 ### 5.10 Data Contracts
 
 Not detected in source files. No formal API data contracts (OpenAPI schemas, Protobuf definitions, Avro schemas, or JSON Schema contracts) were identified. The AppRegistration entity's DataAnnotations serve as implicit schema constraints but are not externalized as data contracts.
@@ -541,6 +847,72 @@ flowchart LR
 | Connection String Binding    | Configuration | Data         | Runtime      | src/IdentityProvider/appsettings.json:2-4 — DefaultConnection        |
 | Migration Execution          | Data          | Data (Store) | Startup      | src/IdentityProvider/Program.cs:41-46 — Database.Migrate()           |
 | Container Deployment         | Technology    | Data         | Deploy-time  | infra/resources.bicep:78-126 — Container App hosting the application |
+
+### Data Lineage Diagram
+
+```mermaid
+---
+title: IdentityProvider - Data Lineage Graph
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: IdentityProvider Data Lineage Graph
+    accDescr: Data lineage diagram tracing the full path from source systems through transformations to persistent storage and downstream consumers for all identity data flows
+
+    subgraph SOURCES["📥 Data Sources"]
+        SRC1["📝 User Registration Form\nEmail, UserName, Password"]
+        SRC2["🔗 External OAuth Provider\nLoginProvider, ProviderKey"]
+        SRC3["🔧 Admin Configuration\nRoles, Claims, AppRegistrations"]
+        SRC4["⚙️ appsettings.json\nConnection strings"]
+    end
+
+    subgraph TRANSFORMS["🔄 Transformations"]
+        T1["🔒 Password Hasher\nPlaintext → Hash"]
+        T2["📧 Email Normalizer\nEmail → NormalizedEmail"]
+        T3["👤 UserName Normalizer\nUserName → NormalizedUserName"]
+        T4["📦 EF Core Migration\nModel → DDL"]
+    end
+
+    subgraph STORAGE["💾 Persistent Storage"]
+        DB1["🗃️ AspNetUsers\n+ AspNetUserClaims\n+ AspNetUserLogins\n+ AspNetUserTokens"]
+        DB2["🔑 AspNetRoles\n+ AspNetRoleClaims\n+ AspNetUserRoles"]
+    end
+
+    subgraph CONSUMERS["📤 Data Consumers"]
+        CON1["🔐 SignInManager\nAuthentication"]
+        CON2["🛡️ Authorization Middleware\nClaims/Role checks"]
+        CON3["🎫 Token Service\nJWT/Cookie issuance"]
+        CON4["👤 UserManager\nProfile operations"]
+    end
+
+    SRC1 --> T1
+    SRC1 --> T2
+    SRC1 --> T3
+    SRC2 --> DB1
+    SRC3 --> DB2
+    SRC4 --> T4
+    T1 --> DB1
+    T2 --> DB1
+    T3 --> DB1
+    T4 --> DB1
+    T4 --> DB2
+    DB1 --> CON1
+    DB1 --> CON4
+    DB2 --> CON2
+    DB1 --> CON3
+
+    style SOURCES fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style TRANSFORMS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
+    style STORAGE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style CONSUMERS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
 
 ### Summary
 
