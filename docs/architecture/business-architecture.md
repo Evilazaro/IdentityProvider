@@ -10,22 +10,6 @@ This assessment applies the TOGAF 10 Business Architecture framework to map sour
 
 Strategic alignment is strong in identity management and GDPR compliance domains. The primary gaps are the absence of a production email sender (currently a no-op stub), incomplete OAuth App Registration persistence, and no formal business-process orchestration engine. The platform targets Azure Container Apps deployment with Azure Monitor observability, demonstrating a clear cloud-native operational strategy.
 
-### Key Findings
-
-| Metric                            | Value             |
-| --------------------------------- | ----------------- |
-| Total Business Components         | 38                |
-| Component Types Detected          | 11 of 11          |
-| Average Confidence Score          | 0.84              |
-| Business Capabilities             | 8                 |
-| Business Processes                | 5                 |
-| Business Services                 | 3                 |
-| Business Rules                    | 5                 |
-| Business Events                   | 5                 |
-| Business Objects/Entities         | 2                 |
-| Maturity Level (Authentication)   | Level 3 — Defined |
-| Maturity Level (App Registration) | Level 2 — Managed |
-
 ---
 
 ## Section 2: Architecture Landscape
@@ -624,64 +608,3 @@ flowchart LR
 The dependency analysis reveals a hub-and-spoke integration pattern centered on ASP.NET Core Identity's `UserManager` and `SignInManager` services. All 5 business processes depend on these core services for identity operations, with `ApplicationDbContext` (SQLite) as the single persistence backend and `AuthenticationStateProvider` cascading authentication context across the Blazor component tree.
 
 Integration health is strong for the in-process authentication domain but has two notable gaps: (1) the `IEmailSender` interface is bound to `IdentityNoOpEmailSender`, creating a broken integration point for all email-dependent processes (registration confirmation, password reset, email change), and (2) the `AppRegistration` entity has no persistence integration — the form submits but data is discarded. External integration with Azure Container Apps and Azure Monitor is fully configured through Infrastructure as Code. Recommended next steps: bind a production SMTP or SendGrid email sender to `IEmailSender`, implement `ApplicationDbContext` entity mapping for `AppRegistration`, and add health check endpoints for runtime dependency monitoring.
-
----
-
-## Omitted Sections
-
-> **Note**: The following sections from the canonical 9-section schema are **out of scope for this analysis**:
->
-> - **Section 6: Architecture Decisions** — Out of scope for this analysis. No formal ADR records were requested.
-> - **Section 7: Architecture Standards** — Out of scope for this analysis. Standards documentation was not included in the target sections.
-> - **Section 9: Governance & Management** — Out of scope for this analysis. Governance model documentation was not included in the target sections.
-
----
-
-## Validation Report
-
-### Schema Compliance
-
-```yaml
-schema_application:
-  step1_target_layer: "Business"
-  step2_sections_present: true # Sections 1, 2, 3, 4, 5, 8 present; 6, 7, 9 explicitly omitted
-  step2_sections_ordered: true # Canonical order maintained (1 → 2 → 3 → 4 → 5 → 8)
-  step3_section2_vs_5_separated: true # Section 2 = Inventory, Section 5 = Specifications
-  step4_constraints_satisfied: true
-  step5_validation_gates_passed: true
-  step6_proceed: true
-```
-
-### Gate Results
-
-| Gate  | Description                                             | Status |
-| ----- | ------------------------------------------------------- | ------ |
-| E-014 | Section titles match canonical schema                   | PASS   |
-| E-015 | All included sections have Overview (2-3 paragraphs)    | PASS   |
-| E-016 | Sections 2, 4, 5, 8 have Summary (2 paragraphs)         | PASS   |
-| E-023 | Summary paragraphs = exactly 2 per section              | PASS   |
-| E-024 | No headings before first numbered subsection in Sec 2/5 | PASS   |
-| E-017 | Section 2 has 11 subsections (2.1-2.11)                 | PASS   |
-| E-017 | Section 5 has 11 subsections (5.1-5.11)                 | PASS   |
-| E-019 | Source traceability uses plain text format              | PASS   |
-| E-020 | Section 2 subsections numbered 2.1-2.11                 | PASS   |
-| E-021 | Section 5 subsections numbered 5.1-5.11                 | PASS   |
-| E-022 | No empty cells use dashes or blanks                     | PASS   |
-
-### Mermaid Diagram Validation
-
-| Diagram                      | accTitle | accDescr | Style Directives | No class on Subgraphs | Syntax Valid | Score  |
-| ---------------------------- | -------- | -------- | ---------------- | --------------------- | ------------ | ------ |
-| Business Capability Map      | PASS     | PASS     | PASS (12 styles) | PASS                  | PASS         | 98/100 |
-| User Registration Flow       | PASS     | PASS     | PASS (11 styles) | PASS                  | PASS         | 97/100 |
-| Authentication Decision Flow | PASS     | PASS     | PASS (10 styles) | PASS                  | PASS         | 97/100 |
-| Integration Data Flow        | PASS     | PASS     | PASS (13 styles) | PASS                  | PASS         | 96/100 |
-
-### Component Evidence Summary
-
-- **Total components**: 38
-- **Components with source evidence**: 38 (100%)
-- **Fabricated components**: 0
-- **Below confidence threshold**: 0
-- **Confidence range**: 0.75 – 0.95
-- **Average confidence**: 0.84
