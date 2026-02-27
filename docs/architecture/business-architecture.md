@@ -1222,16 +1222,30 @@ External integration points include OAuth/OIDC external identity providers (conf
 
 ```mermaid
 ---
+title: IdentityProvider Integration Data Flow
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart LR
     accTitle: IdentityProvider Integration Data Flow
     accDescr: Shows data flow between user interactions, business services, persistence layer, and external systems
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["IdentityProvider Integration Architecture"]
         subgraph userLayer["User Interaction Layer"]
@@ -1266,20 +1280,23 @@ flowchart LR
     S1 -->|Deployed on| E2
     E2 -->|Telemetry| E3
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class U1,U2 core
+    class S1,S3 success
+    class S2,E1,E2,E3 warning
+    class D1 data
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style userLayer fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style businessLayer fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style dataLayer fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style externalLayer fill:#E1DFDD,stroke:#C19C00,stroke-width:2px,color:#323130
-    style U1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style U2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style S1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style S2 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style S3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style D1 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style E1 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style E2 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style E3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style userLayer fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style businessLayer fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style dataLayer fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
+    style externalLayer fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ### Cross-Domain Dependencies
