@@ -934,16 +934,30 @@ flowchart LR
 
 ```mermaid
 ---
+title: Business Event Lifecycle
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TD
     accTitle: Business Event Lifecycle — Contoso IdentityProvider
     accDescr: Shows the 5 business events with their triggers, processing, and outcomes across the identity lifecycle
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Business Event Lifecycle"]
         subgraph lifecycle["Identity Lifecycle Events"]
@@ -972,17 +986,23 @@ flowchart TD
     E4 -->|Links to| AUTH
     E5 -->|Terminates| AUTH
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+
+    class E1,E2 core
+    class E3,AUTH success
+    class E4 warning
+    class E5 danger
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style lifecycle fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style security fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style integration fill:#E1DFDD,stroke:#C19C00,stroke-width:2px,color:#323130
-    style compliance fill:#E1DFDD,stroke:#D13438,stroke-width:2px,color:#323130
-    style E1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style E2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style E3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style E4 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style E5 fill:#FED9CC,stroke:#D13438,stroke-width:2px,color:#A4262C
-    style AUTH fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style lifecycle fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style security fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style integration fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
+    style compliance fill:#F3F2F1,stroke:#E81123,stroke-width:2px,color:#323130
 ```
 
 ### 5.10 Business Objects/Entities
