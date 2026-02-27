@@ -18,7 +18,7 @@ The IdentityProvider repository implements a full-featured ASP.NET Core 9.0 Blaz
 
 The application architecture follows a monolithic Blazor Server pattern with clear separation between identity services (authentication, authorization, account management), UI components (Razor pages and layouts), and data access (Entity Framework Core with ASP.NET Identity). The codebase demonstrates mature identity management patterns including two-factor authentication (TOTP), external login providers, personal data management (GDPR compliance), and cookie-based authentication with revalidation.
 
-The overall application maturity is assessed at **Level 3 — Defined**. The identity and authentication subsystem is well-structured with comprehensive account lifecycle management (registration, login, password reset, email confirmation, 2FA, account deletion). Primary gaps include: (1) the `AppRegistration` entity lacks persistence integration (no DbSet registration), (2) the `IdentityNoOpEmailSender` is a placeholder with no real email delivery, and (3) the `eMail` validator uses hardcoded domain whitelists. These represent areas requiring architectural attention before production readiness.
+The overall application maturity is assessed at **Level 3 — Defined**. The identity and authentication subsystem is well-structured with comprehensive account lifecycle management (registration, login, password reset, email confirmation, 2FA, account deletion). Primary gaps include: (1) the `AppRegistration` entity lacks persistence integration (no DbSet registration), (2) the `IdentityNoOpEmailSender` is a stub implementation with no real email delivery, and (3) the `eMail` validator uses hardcoded domain whitelists. These represent areas requiring architectural attention before production readiness.
 
 ### Key Findings
 
@@ -53,7 +53,7 @@ The following subsections catalog all 11 Application component types discovered 
 | IdentityRevalidatingAuthenticationStateProvider | Server-side auth state provider with 30-minute revalidation interval | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:1-43 | 0.95       | Scoped Service    |
 | IdentityUserAccessor                            | Retrieves authenticated user from HttpContext via UserManager        | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:1-15                            | 0.90       | Scoped Service    |
 | IdentityRedirectManager                         | Manages post-authentication redirects with status cookie             | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:1-47                         | 0.90       | Scoped Service    |
-| IdentityNoOpEmailSender                         | No-op email sender placeholder implementing IEmailSender             | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-15                         | 0.85       | Singleton Service |
+| IdentityNoOpEmailSender                         | No-op email sender stub implementing IEmailSender                    | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-15                         | 0.85       | Singleton Service |
 | eMail                                           | Email format and domain validation utility                           | src/IdentityProvider/Components/eMail.cs:1-18                                                   | 0.72       | Utility Service   |
 
 ### 2.2 Application Components
@@ -125,7 +125,7 @@ Not detected in source files. No OpenAPI specifications, AsyncAPI definitions, o
 
 The Architecture Landscape reveals a well-structured ASP.NET Core Blazor Server identity provider with 22 components across 5 of 11 TOGAF Application component types. The strongest coverage is in Application Services (5 components), Application Components (6 UI components), and Application Dependencies (7 NuGet packages). The application follows a monolithic pattern with all identity, UI, and data access co-located in a single deployable unit.
 
-Six component types are not detected: Application Collaborations, Application Interactions, Application Events, Integration Patterns, and Service Contracts — which is consistent with a standalone identity provider that does not orchestrate external services. The absence of formal API contracts (no OpenAPI specification) and the placeholder email sender represent the primary architectural gaps.
+Six component types are not detected: Application Collaborations, Application Interactions, Application Events, Integration Patterns, and Service Contracts — which is consistent with a standalone identity provider that does not orchestrate external services. The absence of formal API contracts (no OpenAPI specification) and the stub email sender represent the primary architectural gaps.
 
 ---
 
@@ -323,7 +323,7 @@ The catalog documents 22 components with detailed specifications for services, c
 | **Source**         | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-15 |
 | **Confidence**     | 0.85                                                                    |
 
-**Behavior**: Placeholder implementation of `IEmailSender<ApplicationUser>`. Methods `SendConfirmationLinkAsync`, `SendPasswordResetLinkAsync`, and `SendPasswordResetCodeAsync` delegate to the underlying `IEmailSender.SendEmailAsync` which performs no operation. Registered as singleton in `Program.cs:32`.
+**Behavior**: Stub (no-op) implementation of `IEmailSender<ApplicationUser>`. Methods `SendConfirmationLinkAsync`, `SendPasswordResetLinkAsync`, and `SendPasswordResetCodeAsync` delegate to the underlying `IEmailSender.SendEmailAsync` which performs no operation. Registered as singleton in `Program.cs:32`.
 
 **Dependencies**:
 
@@ -554,7 +554,7 @@ See Section 2.7. No additional specifications detected in source files.
 
 **Behavior**: Entity model decorated with `[Table("AppRegistrations")]` containing OAuth client registration fields: ClientId (Key), ClientSecret, TenantId, RedirectUri, Scopes (comma-separated), Authority, AppName, AppDescription, GrantTypes (comma-separated), ResponseTypes (comma-separated). All properties use `[Required]` and `[MaxLength]` data annotations.
 
-**Gap**: Not registered as a `DbSet` in `ApplicationDbContext` — the AppRegistrations table does not exist in migrations. The `AppRegistrationForm.razor` page has a TODO in the submit handler with no persistence logic.
+**Gap**: Not registered as a `DbSet` in `ApplicationDbContext` — the AppRegistrations table does not exist in migrations. The `AppRegistrationForm.razor` page has an incomplete submit handler with no persistence logic.
 
 ### 5.9 Integration Patterns
 
