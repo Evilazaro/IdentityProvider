@@ -539,10 +539,10 @@ The catalog covers 38 components across 11 Business Architecture component types
 
 ### 5.1 Business Strategy
 
-| Component                      | Description                                                                            | Classification | Stakeholders                   | Owner         | Status | Alignment              | Source Systems        | Consumers               | Source File                                           |
-| ------------------------------ | -------------------------------------------------------------------------------------- | -------------- | ------------------------------ | ------------- | ------ | ---------------------- | --------------------- | ----------------------- | ----------------------------------------------------- |
-| Cloud-Native Identity Platform | Azure Container Apps deployment strategy with managed identity, ACR, and observability | Strategic      | Platform Engineering, Security | Platform Team | Active | Cloud-First            | Azure DevOps, azd CLI | All Consumers           | azure.yaml:1-14                                       |
-| Digital Identity Enablement    | Enterprise SSO and MFA vision with compliance-ready identity services                  | Strategic      | Business Leadership, Security  | Product Owner | Active | Digital Transformation | Product Roadmap       | End Users, Applications | src/IdentityProvider/Components/Pages/Home.razor:1-70 |
+| Component                      | Description                                                                            | Classification | Stakeholders                   | Owner         | Status | Alignment              | Source Systems        | Consumers               |
+| ------------------------------ | -------------------------------------------------------------------------------------- | -------------- | ------------------------------ | ------------- | ------ | ---------------------- | --------------------- | ----------------------- |
+| Cloud-Native Identity Platform | Azure Container Apps deployment strategy with managed identity, ACR, and observability | Strategic      | Platform Engineering, Security | Platform Team | Active | Cloud-First            | Azure DevOps, azd CLI | All Consumers           |
+| Digital Identity Enablement    | Enterprise SSO and MFA vision with compliance-ready identity services                  | Strategic      | Business Leadership, Security  | Product Owner | Active | Digital Transformation | Product Roadmap       | End Users, Applications |
 
 ### 5.2 Business Capabilities
 
@@ -612,11 +612,11 @@ The catalog covers 38 components across 11 Business Architecture component types
 
 ### 5.3 Value Streams
 
-| Component          | Description                                                                          | Classification | Stakeholders             | Owner         | Status | Alignment            | Source Systems               | Consumers       | Source File                                                                              |
-| ------------------ | ------------------------------------------------------------------------------------ | -------------- | ------------------------ | ------------- | ------ | -------------------- | ---------------------------- | --------------- | ---------------------------------------------------------------------------------------- |
-| User Onboarding    | Register → Confirm Email → Login → Manage Profile end-to-end value delivery          | Primary        | End Users, Business      | Product Owner | Active | Digital Identity     | Registration, Email, Login   | End Users       | src/IdentityProvider/Components/Account/Pages/Register.razor:70-101                      |
-| Password Recovery  | Forgot Password → Email Reset Link → Reset Password → Confirmation self-service flow | Primary        | End Users, Support       | Identity Team | Active | Security-by-Default  | ForgotPassword, Email, Reset | End Users       | src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:1-67                  |
-| Security Hardening | Basic Auth → Enable 2FA → Generate Recovery Codes → Manage Trusted Browsers          | Secondary      | Security-conscious Users | Security Team | Active | Progressive Security | 2FA Dashboard, Authenticator | Users, Security | src/IdentityProvider/Components/Account/Pages/Manage/TwoFactorAuthentication.razor:1-102 |
+| Component          | Description                                                                          | Classification | Stakeholders             | Owner         | Status | Alignment            | Source Systems               | Consumers       |
+| ------------------ | ------------------------------------------------------------------------------------ | -------------- | ------------------------ | ------------- | ------ | -------------------- | ---------------------------- | --------------- |
+| User Onboarding    | Register → Confirm Email → Login → Manage Profile end-to-end value delivery          | Primary        | End Users, Business      | Product Owner | Active | Digital Identity     | Registration, Email, Login   | End Users       |
+| Password Recovery  | Forgot Password → Email Reset Link → Reset Password → Confirmation self-service flow | Primary        | End Users, Support       | Identity Team | Active | Security-by-Default  | ForgotPassword, Email, Reset | End Users       |
+| Security Hardening | Basic Auth → Enable 2FA → Generate Recovery Codes → Manage Trusted Browsers          | Secondary      | Security-conscious Users | Security Team | Active | Progressive Security | 2FA Dashboard, Authenticator | Users, Security |
 
 **Value Stream Map:**
 
