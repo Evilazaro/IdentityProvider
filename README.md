@@ -5,7 +5,7 @@
 [![Azure Container Apps](https://img.shields.io/badge/Azure-Container%20Apps-0078D4?logo=microsoft-azure&logoColor=white)](https://learn.microsoft.com/azure/container-apps/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A production-ready identity management solution built with ASP.NET Core Blazor Server and ASP.NET Core Identity. Contoso IdentityProvider delivers secure user authentication, registration, two-factor authentication (2FA), and OAuth application registration through an interactive server-rendered web interface, deployable to Azure Container Apps with full infrastructure-as-code automation.
+A production-ready identity management solution built with ASP.NET Core Blazor Server and ASP.NET Core Identity. Contoso IdentityProvider delivers **secure user authentication**, registration, **two-factor authentication (2FA)**, and OAuth application registration through an interactive server-rendered web interface, deployable to Azure Container Apps with full **infrastructure-as-code** automation.
 
 ## Architecture
 
@@ -93,11 +93,11 @@ flowchart TD
 
 **Overview**
 
-Contoso IdentityProvider offers a comprehensive set of identity management capabilities built on the battle-tested ASP.NET Core Identity framework, delivering enterprise-grade authentication through a modern Blazor Server interface.
+Contoso IdentityProvider offers a comprehensive set of identity management capabilities built on the battle-tested ASP.NET Core Identity framework, delivering **enterprise-grade authentication** through a modern Blazor Server interface.
 
-> 💡 **Why This Matters**: Centralizing identity management eliminates the need to implement authentication logic in every application, reducing security vulnerabilities and providing a consistent login experience across your organization's services.
+> 💡 **Why This Matters**: **Centralizing identity management** eliminates the need to implement authentication logic in every application, **reducing security vulnerabilities** and providing a consistent login experience across your organization's services.
 
-> 📌 **How It Works**: The application uses ASP.NET Core Identity with Entity Framework Core to manage user credentials, security stamps, and authentication tokens. Blazor Server's SignalR connection provides real-time, interactive UI components for all identity operations without requiring client-side JavaScript frameworks.
+> 📌 **How It Works**: The application uses ASP.NET Core Identity with Entity Framework Core to manage user credentials, security stamps, and authentication tokens. Blazor Server's **SignalR connection** provides real-time, interactive UI components for all identity operations without requiring client-side JavaScript frameworks.
 
 | Feature | Description |
 | --- | --- |
@@ -123,7 +123,7 @@ Contoso IdentityProvider offers a comprehensive set of identity management capab
 | 🐳 **Docker** | Latest | Container image builds (for Azure deployment) | [Install](https://docs.docker.com/get-docker/) |
 | 💻 **Git** | Latest | Clone the repository | [Install](https://git-scm.com/downloads) |
 
-> ⚠️ **Important**: The Azure Developer CLI (`azd`) and Docker are only required for Azure deployments. For local development, only the .NET 9.0 SDK is needed.
+> ⚠️ **Important**: The Azure Developer CLI (`azd`) and Docker are **only required for Azure deployments**. For local development, **only the .NET 9.0 SDK is needed**.
 
 ### Quick Start
 
@@ -169,9 +169,9 @@ Passed!  - Failed: 0, Passed: 6, Skipped: 0, Total: 6
 
 **Overview**
 
-The application uses the standard ASP.NET Core configuration system with environment-specific JSON files and connection strings. SQLite serves as the default database for local development, requiring zero external database setup.
+The application uses the standard ASP.NET Core configuration system with environment-specific JSON files and connection strings. SQLite serves as the default database for local development, requiring **zero external database setup**.
 
-> 💡 **Why This Matters**: The zero-dependency local database setup means developers can clone and run the project immediately without installing or configuring external database servers, reducing onboarding time from hours to minutes.
+> 💡 **Why This Matters**: The zero-dependency local database setup means developers can **clone and run the project immediately** without installing or configuring external database servers, reducing onboarding time from hours to minutes.
 
 > 📌 **How It Works**: Configuration is loaded from `appsettings.json` (base) and `appsettings.Development.json` (development overrides). The `DefaultConnection` connection string points to a local SQLite file (`identityProviderDB.db`), and Entity Framework Core automatically applies migrations on startup in development mode via `dbContext.Database.Migrate()` in [Program.cs](src/IdentityProvider/Program.cs).
 
@@ -231,7 +231,7 @@ IdentityProvider/
 
 The project includes full infrastructure-as-code using Azure Bicep, deployable with a single Azure Developer CLI command.
 
-> 💡 **Tip**: The `azd up` command provisions all required Azure resources and deploys the application in one step. It creates a resource group, container registry, container apps environment, monitoring stack, and managed identity automatically.
+> 💡 **Tip**: The `azd up` command **provisions all required Azure resources** and deploys the application in one step. It creates a resource group, container registry, container apps environment, monitoring stack, and managed identity automatically.
 
 1. **Authenticate with Azure**
 
@@ -293,9 +293,9 @@ azd down
 
 Contributions to Contoso IdentityProvider are welcome. This project uses standard .NET development practices and follows the patterns established by the ASP.NET Core Blazor Server Identity template.
 
-> 💡 **Why This Matters**: Consistent contribution practices ensure code quality, reduce review cycles, and maintain the security standards required for an identity management application.
+> 💡 **Why This Matters**: Consistent contribution practices ensure code quality, reduce review cycles, and **maintain the security standards** required for an identity management application.
 
-> 📌 **How It Works**: Fork the repository, create a feature branch, make your changes, ensure all tests pass, and submit a pull request. The project uses MSTest for unit testing, and all identity-related changes should include corresponding test coverage.
+> 📌 **How It Works**: Fork the repository, create a feature branch, make your changes, **ensure all tests pass**, and submit a pull request. The project uses MSTest for unit testing, and all identity-related changes should include corresponding test coverage.
 
 ### Steps
 
