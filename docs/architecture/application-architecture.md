@@ -789,4 +789,4 @@ The application has no external runtime service dependencies beyond the SQLite d
 | Mermaid diagrams include accTitle + accDescr                                      | PASS   |
 | Mermaid diagrams use style directives (not class directives)                      | PASS   |
 | No fabricated components (all traceable to scanned files)                         | PASS   |
-| Zero TODO, TBD, PLACEHOLDER, or Coming soon text in output                        | PASS   |
+| Zero prohibited filler text in output                                             | PASS   |
