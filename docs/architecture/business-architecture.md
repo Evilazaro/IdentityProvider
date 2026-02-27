@@ -6,7 +6,7 @@
 
 The Contoso IdentityProvider repository implements a full-featured identity and access management (IAM) platform built on ASP.NET Core Identity with Blazor Server interactive rendering. The application exposes 14 distinct business capabilities spanning user authentication, multi-factor authentication, password lifecycle management, external identity federation (OAuth/OIDC), GDPR data rights compliance, and OAuth client application registration. Analysis of 55 source files produced 38 business components across all 11 TOGAF Business Architecture component types.
 
-This assessment applies the TOGAF 10 Business Architecture framework to map source code artifacts to formal business capabilities, processes, services, rules, events, and entities. Confidence scoring follows the base-layer-config formula (30% filename + 25% path + 35% content + 10% cross-reference), with an average confidence of 0.84 across all identified components. The architecture demonstrates Level 3 (Defined) maturity for core authentication capabilities, with Level 2 (Managed) maturity for ancillary features such as OAuth client registration and email validation.
+This assessment applies the TOGAF 10 Business Architecture framework to map source code artifacts to formal business capabilities, processes, services, rules, events, and entities. The architecture covers core authentication capabilities comprehensively, with well-defined patterns for ancillary features such as OAuth client registration and email validation.
 
 Strategic alignment is strong in identity management and GDPR compliance domains. The primary gaps are the absence of a production email sender (currently a no-op stub), incomplete OAuth App Registration persistence, and no formal business-process orchestration engine. The platform targets Azure Container Apps deployment with Azure Monitor observability, demonstrating a clear cloud-native operational strategy.
 
@@ -75,7 +75,7 @@ The Architecture Landscape organizes business components into three primary doma
 
 Each domain maintains clear separation of concerns through the Blazor Server component model, with dedicated Razor pages for each user-facing process, shared services for cross-cutting infrastructure (redirect management, authentication state), and data-annotation-validated entity models for persistence. The ASP.NET Core Identity framework provides the foundational capability surface, while custom components extend it with domain-specific business rules and workflows.
 
-The following subsections catalog all 11 Business component types discovered through source file analysis, with confidence scores, maturity ratings, and source traceability for each component.
+The following subsections catalog all 11 Business component types discovered through source file analysis.
 
 ### 2.1 Business Strategy
 
@@ -309,7 +309,7 @@ flowchart LR
 
 ### Summary
 
-The Architecture Landscape identifies 38 business components across all 11 TOGAF Business Architecture component types. The strongest coverage is in Business Capabilities (8 components at 0.90 average confidence), Business Processes (5 at 0.90), Business Rules (5 at 0.91), and Business Events (5 at 0.87). All components have direct source file evidence with line-range citations.
+The Architecture Landscape identifies 38 business components across all 11 TOGAF Business Architecture component types. The strongest coverage is in Business Capabilities (8 components), Business Processes (5), Business Rules (5), and Business Events (5).
 
 Primary gaps include: (1) the Email Notification Service is a development-only no-op stub with no production implementation, (2) OAuth App Registration lacks persistence logic (TODO noted in source), and (3) KPI tracking relies solely on infrastructure-level Application Insights without application-level business metrics. Recommended next steps: implement a production email sender, complete AppRegistration CRUD persistence, and add business-level telemetry events for capability usage tracking.
 
@@ -424,9 +424,9 @@ All five principles have direct source code evidence with line-range citations. 
 
 ### Overview
 
-The Current State Baseline captures the as-is architecture of the IdentityProvider's business layer, assessing capability coverage, process maturity, and gap analysis against enterprise IAM requirements. The assessment is based on static analysis of 55 source files across application code, infrastructure definitions, tests, and documentation.
+The Current State Baseline captures the as-is architecture of the IdentityProvider's business layer, assessing capability coverage and gap analysis against enterprise IAM requirements. The assessment is based on analysis of 55 source files across application code, infrastructure definitions, tests, and documentation.
 
-The IdentityProvider delivers a functionally complete authentication platform with 8 business capabilities operational at Level 3+ maturity. Core authentication and registration processes are mature (Level 4 — Measured) with well-defined data flows and validation rules. Ancillary capabilities such as OAuth App Registration and email domain validation operate at Level 2 (Managed) with known gaps.
+The IdentityProvider delivers a functionally complete authentication platform with 8 business capabilities. Core authentication and registration processes are well-defined with clear data flows and validation rules. Ancillary capabilities such as OAuth App Registration and email domain validation have known gaps.
 
 The following analysis establishes the baseline for gap identification and improvement planning across the three business domains.
 
@@ -521,7 +521,7 @@ flowchart TB
 
 ### Summary
 
-The Current State Baseline reveals a mature, framework-driven identity platform with 38 components across all 11 TOGAF Business Architecture types. Authentication core capabilities (login, registration, password management) operate at Level 4 maturity with well-tested patterns inherited from ASP.NET Core Identity. The three business domains (Authentication, Identity Management, Integration) demonstrate clear separation of concerns with direct source-to-capability traceability.
+The Current State Baseline reveals a well-structured, framework-driven identity platform with 38 components across all 11 TOGAF Business Architecture types. Authentication core capabilities (login, registration, password management) demonstrate well-tested patterns inherited from ASP.NET Core Identity. The three business domains (Authentication, Identity Management, Integration) demonstrate clear separation of concerns.
 
 Six gaps require attention: the no-op email sender (GAP-001) is the highest-impact issue blocking production readiness, followed by the incomplete App Registration persistence (GAP-002) and hardcoded email domain whitelist (GAP-003). Security-related gaps (disabled lockout GAP-005, 2FA bypass for external login GAP-006) represent policy decisions that should be reviewed against enterprise security requirements. Recommended next steps: prioritize GAP-001 with a production email provider, address GAP-005/GAP-006 security policy alignment, and implement business-level telemetry (GAP-004).
 
@@ -533,9 +533,9 @@ Six gaps require attention: the no-op email sender (GAP-001) is the highest-impa
 
 The Component Catalog provides detailed specifications for each business component identified in the Architecture Landscape (Section 2). Where Section 2 inventories what exists, this section documents how each component works, its dependencies, ownership, and operational characteristics.
 
-Each subsection uses the Business layer 10-column table schema with attributes specific to organizational alignment. Components below the 0.7 confidence threshold are excluded. For component types with no detected instances, the subsection is marked "Not detected in source files."
+Each subsection uses the Business layer table schema with attributes specific to organizational alignment. For component types with no detected instances, the subsection is marked "Not detected in source files."
 
-The catalog covers 38 components across 11 Business Architecture component types with an average confidence of 0.84 and full source traceability.
+The catalog covers 38 components across 11 Business Architecture component types.
 
 ### 5.1 Business Strategy
 
@@ -1039,7 +1039,7 @@ flowchart TD
 
 ### Summary
 
-The Component Catalog documents 38 components across all 11 Business Architecture component types. The strongest coverage is in Business Capabilities (8 components), Business Processes (5), Business Rules (5), and Business Events (5), reflecting a mature identity management platform with well-defined business logic. All components have source file evidence with line-range citations and confidence scores above the 0.7 threshold.
+The Component Catalog documents 38 components across all 11 Business Architecture component types. The strongest coverage is in Business Capabilities (8 components), Business Processes (5), Business Rules (5), and Business Events (5), reflecting a mature identity management platform with well-defined business logic.
 
 Gaps in the catalog include: the Email Notification Service operating as a no-op stub (no production email delivery), the AppRegistration entity lacking CRUD persistence endpoints, and KPI tracking limited to infrastructure-level Azure Monitor without business-event-specific telemetry. Future enhancements should prioritize production email integration, AppRegistration persistence completion, and custom business telemetry events for registration rates, authentication success/failure ratios, and 2FA adoption metrics.
 
