@@ -363,6 +363,61 @@ Each principle is stated with its rationale (why it exists) and implications (wh
 
 **Implications**: Environment promotion (dev → staging → production) requires only parameter changes, not code changes. Infrastructure changes are version-controlled and auditable.
 
+**Architecture Principle Hierarchy:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TB
+    accTitle: Architecture Principle Hierarchy — Contoso IdentityProvider
+    accDescr: Shows the 5 architecture principles organized by Foundation, Structural, and Evolution layers with dependency relationships
+
+    subgraph main["Architecture Principles — Dependency Hierarchy"]
+        subgraph foundation["Foundation Principles"]
+            P1["🔐 P1: Security-by-Default<br/>Framework-level controls, opt-out only"]
+            P2["🛡️ P2: Privacy Compliance by Design<br/>GDPR rights as first-class capabilities"]
+        end
+
+        subgraph structural["Structural Principles"]
+            P3["🧩 P3: Separation of Auth Concerns<br/>Distinct service registrations"]
+            P5["⚙️ P5: Configuration-Driven Infra<br/>IaC + azd externalized config"]
+        end
+
+        subgraph evolution["Evolution Principles"]
+            P4["📈 P4: Progressive Security Enhancement<br/>Additive, user-controlled upgrades"]
+        end
+    end
+
+    P1 -->|Enables| P4
+    P3 -->|Enables| P1
+    P3 -->|Enables| P2
+    P5 -->|Supports| P1
+    P5 -->|Supports| P3
+    P4 -->|Extends| P2
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style foundation fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
+    style structural fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
+    style evolution fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
+    style P1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style P2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style P3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style P4 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style P5 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+```
+
+### Summary
+
+The five architecture principles form a layered governance framework. Foundation principles (Security-by-Default, Privacy Compliance by Design) establish non-negotiable requirements inherited from ASP.NET Core Identity. Structural principles (Separation of Authentication Concerns, Configuration-Driven Infrastructure) enable the foundation through modular service registrations and externalized deployment configuration. The evolution principle (Progressive Security Enhancement) builds upon both layers to support additive security improvements — such as 2FA enrollment and recovery code generation — without disrupting existing authentication flows.
+
+All five principles have direct source code evidence with line-range citations. Future architecture decisions should be evaluated against these principles, particularly when extending the platform with new identity capabilities or integrating additional external providers.
+
 ---
 
 ## Section 4: Current State Baseline
@@ -409,6 +464,60 @@ The following analysis establishes the baseline for gap identification and impro
 | Business Events           | 5     | 0.87           | 3              | Stable |
 | Business Objects/Entities | 2     | 0.93           | 2-3            | Stable |
 | KPIs & Metrics            | 2     | 0.78           | 2-3            | Gap    |
+
+**Capability Maturity Visualization:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TB
+    accTitle: Capability Maturity Heatmap — Contoso IdentityProvider
+    accDescr: Visual heatmap showing maturity levels 2 through 4 across key business capabilities with color-coded gap identification
+
+    subgraph main["Capability Maturity Assessment"]
+        subgraph level4["Level 4 — Measured"]
+            M4A["🔐 User Authentication<br/>Confidence: 0.95"]
+            M4B["📝 User Registration<br/>Confidence: 0.95"]
+            M4C["🏗️ Identity Service<br/>Confidence: 0.95"]
+        end
+
+        subgraph level3["Level 3 — Defined"]
+            M3A["🔑 Two-Factor Authentication<br/>Confidence: 0.92"]
+            M3B["🔄 Password Lifecycle<br/>Confidence: 0.90"]
+            M3C["🌐 External Federation<br/>Confidence: 0.88"]
+            M3D["🛡️ GDPR Data Rights<br/>Confidence: 0.90"]
+            M3E["📧 Email Management<br/>Confidence: 0.88"]
+        end
+
+        subgraph level2["Level 2 — Managed ⚠️"]
+            M2A["📋 OAuth App Registration<br/>Confidence: 0.78"]
+            M2B["📧 Email Service (Stub)<br/>Confidence: 0.80"]
+            M2C["🔍 Email Domain Validation<br/>Confidence: 0.85"]
+        end
+    end
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style level4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style level3 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style level2 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style M4A fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style M4B fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style M4C fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style M3A fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style M3B fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style M3C fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style M3D fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style M3E fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style M2A fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style M2B fill:#FED9CC,stroke:#D13438,stroke-width:2px,color:#A4262C
+    style M2C fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+```
 
 ### Summary
 
