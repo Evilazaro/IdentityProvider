@@ -14,16 +14,30 @@ Strategic alignment is strong in identity management and GDPR compliance domains
 
 ```mermaid
 ---
+title: Strategic Alignment Map
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: Strategic Alignment Map — Contoso IdentityProvider
     accDescr: Maps strategic objectives to the three business domains showing alignment with Digital Identity Enablement vision
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Contoso IdentityProvider — Strategic Alignment"]
         subgraph vision["Digital Identity Enablement Vision"]
@@ -37,9 +51,9 @@ flowchart TB
         end
 
         subgraph domains["Business Domains"]
-            D1["Authentication Domain<br/>Login · 2FA · Password Mgmt"]
-            D2["Identity Management Domain<br/>Registration · GDPR · Email"]
-            D3["Integration Domain<br/>OAuth Federation · App Registration"]
+            D1["🔐 Authentication Domain<br/>Login · 2FA · Password Mgmt"]
+            D2["📝 Identity Management Domain<br/>Registration · GDPR · Email"]
+            D3["🌐 Integration Domain<br/>OAuth Federation · App Registration"]
         end
     end
 
@@ -52,17 +66,22 @@ flowchart TB
     D1 <-->|Confirmed Account Required| D2
     D1 <-->|External Login Challenge| D3
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class V1,D1 core
+    class SO1,SO2,SO3 success
+    class D2 data
+    class D3 warning
+
+    %% Subgraph styling (style directive required for subgraphs)
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style vision fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style strategies fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style domains fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style V1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style SO1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style SO2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style SO3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style D1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style D2 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style D3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style vision fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style strategies fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style domains fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 ---
@@ -178,16 +197,30 @@ The following subsections catalog all 11 Business component types discovered thr
 
 ```mermaid
 ---
+title: Business Capability Map
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: Business Capability Map — Contoso IdentityProvider
     accDescr: Hierarchical view of 8 business capabilities organized by Authentication, Identity Management, and Integration domains
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Contoso IdentityProvider — Business Capabilities"]
         subgraph authDomain["Authentication Domain"]
@@ -214,18 +247,22 @@ flowchart TB
     cap5 --> cap1
     cap8 --> cap2
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class cap1,cap3,cap4 core
+    class cap2,cap6,cap8 success
+    class cap5 data
+    class cap7 warning
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style authDomain fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style idmDomain fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style intDomain fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style cap1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style cap2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style cap3 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style cap4 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style cap5 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style cap6 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style cap7 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style cap8 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style authDomain fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style idmDomain fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style intDomain fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 **Business Ecosystem Map:**
