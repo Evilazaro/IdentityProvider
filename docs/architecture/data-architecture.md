@@ -1,14 +1,5 @@
 # Data Architecture - IdentityProvider
 
-**Generated**: 2026-02-27T00:00:00Z
-**Session ID**: 00000000-0000-0000-0000-000000000000
-**Quality Level**: comprehensive
-**Data Assets Found**: 13
-**Target Layer**: Data
-**Analysis Scope**: ["."]
-
----
-
 ## Section 1: Executive Summary
 
 ### Overview
@@ -18,31 +9,6 @@ The IdentityProvider repository implements an ASP.NET Core Identity-based authen
 The data architecture follows a Code-First ORM paradigm using Entity Framework Core 9.0 with migration-based schema management. The primary data domain is Identity and Access Management (IAM), encompassing user accounts, roles, claims, external logins, and OAuth/OIDC application registrations. All schema definitions are traceable to C# entity classes and EF Core migration files, providing full data lineage from code to database.
 
 Strategic alignment demonstrates a Level 2-3 governance maturity with framework-enforced schema validation through DataAnnotations, automatic migration application in development, and secrets management via User Secrets. The absence of explicit data governance policies, formal data contracts, and data quality monitoring frameworks represents the primary gaps requiring architectural attention.
-
-### Key Findings
-
-| Metric                   | Value                                                                            |
-| ------------------------ | -------------------------------------------------------------------------------- |
-| Total Data Components    | 13                                                                               |
-| Data Entities            | 8                                                                                |
-| Data Models              | 1                                                                                |
-| Data Stores              | 1                                                                                |
-| Data Transformations     | 2                                                                                |
-| Data Security Components | 1                                                                                |
-| Average Confidence       | 0.82                                                                             |
-| Database Engine          | SQLite (EF Core 9.0)                                                             |
-| Schema Management        | Code-First with EF Core Migrations                                               |
-| Identity Framework       | ASP.NET Core Identity (Microsoft.AspNetCore.Identity.EntityFrameworkCore 9.0.13) |
-
-### Data Quality Scorecard
-
-| Dimension           | Score | Assessment                                                                       |
-| ------------------- | ----- | -------------------------------------------------------------------------------- |
-| Schema Completeness | 4/5   | All Identity tables defined with columns, types, and constraints                 |
-| Data Integrity      | 4/5   | Foreign keys with cascade delete; unique indexes on key fields                   |
-| Data Classification | 2/5   | No explicit data classification taxonomy; PII fields not annotated beyond schema |
-| Governance Coverage | 2/5   | Framework-enforced validation only; no formal governance policies                |
-| Security Posture    | 4/5   | Password hashing, security stamps, lockout, 2FA support                          |
 
 ### Coverage Summary
 
@@ -58,32 +24,32 @@ The Architecture Landscape organizes data components into two primary domains al
 
 The data topology follows a single-database, multi-table relational model managed through Entity Framework Core's Code-First approach. Schema evolution is handled through timestamped migrations that provide both forward (Up) and rollback (Down) capabilities. The EF Core model snapshot maintains a point-in-time record of the current schema state for migration diff calculations.
 
-The following subsections catalog all 11 Data component types discovered through source file analysis, with confidence scores, data classification, and source traceability for each component.
+The following subsections catalog all 11 Data component types discovered through source file analysis.
 
 ### 2.1 Data Entities
 
-| Name              | Description                                                        | Source                                                                  | Confidence | Classification |
-| ----------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------- | ---------- | -------------- |
-| ApplicationUser   | Core user identity entity extending ASP.NET IdentityUser           | src/IdentityProvider/Data/ApplicationUser.cs:1-9                        | 0.83       | PII            |
-| AppRegistration   | OAuth/OIDC application registration entity with client credentials | src/IdentityProvider/Components/AppRegistration.cs:1-44                 | 0.71       | Confidential   |
-| IdentityRole      | Role entity for role-based access control                          | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:14-27   | 0.80       | Internal       |
-| IdentityRoleClaim | Claims associated with roles for authorization                     | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:59-76   | 0.78       | Internal       |
-| IdentityUserClaim | Claims associated with individual users                            | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:78-95   | 0.78       | PII            |
-| IdentityUserLogin | External login provider associations for users                     | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:97-114  | 0.78       | PII            |
-| IdentityUserRole  | User-to-role assignment junction entity                            | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:116-136 | 0.78       | Internal       |
-| IdentityUserToken | Authentication tokens for user sessions                            | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:138-157 | 0.78       | Confidential   |
+| Name              | Description                                                        | Classification |
+| ----------------- | ------------------------------------------------------------------ | -------------- |
+| ApplicationUser   | Core user identity entity extending ASP.NET IdentityUser           | PII            |
+| AppRegistration   | OAuth/OIDC application registration entity with client credentials | Confidential   |
+| IdentityRole      | Role entity for role-based access control                          | Internal       |
+| IdentityRoleClaim | Claims associated with roles for authorization                     | Internal       |
+| IdentityUserClaim | Claims associated with individual users                            | PII            |
+| IdentityUserLogin | External login provider associations for users                     | PII            |
+| IdentityUserRole  | User-to-role assignment junction entity                            | Internal       |
+| IdentityUserToken | Authentication tokens for user sessions                            | Confidential   |
 
 ### 2.2 Data Models
 
-| Name                 | Description                                        | Source                                                | Confidence | Classification |
-| -------------------- | -------------------------------------------------- | ----------------------------------------------------- | ---------- | -------------- |
-| ApplicationDbContext | EF Core DbContext defining the identity data model | src/IdentityProvider/Data/ApplicationDbContext.cs:1-8 | 0.96       | Internal       |
+| Name                 | Description                                        | Classification |
+| -------------------- | -------------------------------------------------- | -------------- |
+| ApplicationDbContext | EF Core DbContext defining the identity data model | Internal       |
 
 ### 2.3 Data Stores
 
-| Name            | Description                                                   | Source                                    | Confidence | Classification |
-| --------------- | ------------------------------------------------------------- | ----------------------------------------- | ---------- | -------------- |
-| SQLite Database | SQLite file-based relational database (identityProviderDB.db) | src/IdentityProvider/appsettings.json:2-4 | 0.74       | Confidential   |
+| Name            | Description                                                   | Classification |
+| --------------- | ------------------------------------------------------------- | -------------- |
+| SQLite Database | SQLite file-based relational database (identityProviderDB.db) | Confidential   |
 
 ### 2.4 Data Flows
 
@@ -99,7 +65,7 @@ Not detected in source files.
 
 ### 2.7 Data Quality Rules
 
-Not detected in source files. Data validation is embedded in entity definitions via DataAnnotations (`[Required]`, `[MaxLength]`) but no standalone data quality rule components were found above the confidence threshold (0.7).
+Not detected in source files. Data validation is embedded in entity definitions via DataAnnotations (`[Required]`, `[MaxLength]`) but no standalone data quality rule components were found.
 
 ### 2.8 Master Data
 
@@ -107,10 +73,10 @@ Not detected in source files.
 
 ### 2.9 Data Transformations
 
-| Name                              | Description                                            | Source                                                                     | Confidence | Classification |
-| --------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------- | ---------- | -------------- |
-| InitialCreate Migration           | EF Core migration creating the ASP.NET Identity schema | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:1-222      | 0.89       | Internal       |
-| ApplicationDbContextModelSnapshot | EF Core model snapshot for migration diff computation  | src/IdentityProvider/Migrations/ApplicationDbContextModelSnapshot.cs:1-266 | 0.91       | Internal       |
+| Name                              | Description                                            | Classification |
+| --------------------------------- | ------------------------------------------------------ | -------------- |
+| InitialCreate Migration           | EF Core migration creating the ASP.NET Identity schema | Internal       |
+| ApplicationDbContextModelSnapshot | EF Core model snapshot for migration diff computation  | Internal       |
 
 ### 2.10 Data Contracts
 
@@ -118,9 +84,9 @@ Not detected in source files.
 
 ### 2.11 Data Security
 
-| Name                      | Description                                                | Source                                                                | Confidence | Classification |
-| ------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------- | ---------- | -------------- |
-| ASP.NET Identity Security | Password hashing, security stamps, lockout, and 2FA fields | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:29-56 | 0.72       | Confidential   |
+| Name                      | Description                                                | Classification |
+| ------------------------- | ---------------------------------------------------------- | -------------- |
+| ASP.NET Identity Security | Password hashing, security stamps, lockout, and 2FA fields | Confidential   |
 
 ### Data Domain Map
 
@@ -253,14 +219,14 @@ The design philosophy follows a Code-First ORM approach where C# entity classes 
 
 ### Core Data Principles
 
-| Principle                     | Description                                                          | Implementation Evidence                                                                                         |
-| ----------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Code-First Schema Definition  | Data schema is defined through C# entity classes, not raw SQL        | ApplicationUser.cs:6-8, AppRegistration.cs:7-44 — classes with DataAnnotations define table schemas             |
-| Migration-Based Evolution     | Schema changes are captured as versioned, reversible migrations      | 20250311003709_InitialCreate.cs:1-222 — Up() and Down() methods provide forward and rollback DDL                |
-| Convention Over Configuration | EF Core conventions reduce boilerplate for standard patterns         | ApplicationDbContext.cs:6-8 — minimal DbContext inheriting IdentityDbContext provides full Identity schema      |
-| Security By Default           | Sensitive data fields use framework-provided hashing and protection  | 20250311003709_InitialCreate.cs:42-43 — PasswordHash and SecurityStamp columns; no plaintext credentials stored |
-| Referential Integrity         | Foreign key constraints with cascade delete protect data consistency | 20250311003709_InitialCreate.cs:72-76 — FK_AspNetRoleClaims_AspNetRoles_RoleId with CASCADE                     |
-| Index-Optimized Access        | Key query paths are indexed for performance                          | 20250311003709_InitialCreate.cs:159-198 — EmailIndex, UserNameIndex (unique), RoleNameIndex (unique)            |
+| Principle                     | Description                                                          |
+| ----------------------------- | -------------------------------------------------------------------- |
+| Code-First Schema Definition  | Data schema is defined through C# entity classes, not raw SQL        |
+| Migration-Based Evolution     | Schema changes are captured as versioned, reversible migrations      |
+| Convention Over Configuration | EF Core conventions reduce boilerplate for standard patterns         |
+| Security By Default           | Sensitive data fields use framework-provided hashing and protection  |
+| Referential Integrity         | Foreign key constraints with cascade delete protect data consistency |
+| Index-Optimized Access        | Key query paths are indexed for performance                          |
 
 ### Data Schema Design Standards
 
@@ -400,11 +366,11 @@ flowchart TB
 
 ### Storage Distribution
 
-| Storage Tier         | Technology          | Data Domains                         | Size Estimate | Source                                         |
-| -------------------- | ------------------- | ------------------------------------ | ------------- | ---------------------------------------------- |
-| Application Database | SQLite (file-based) | Users, Roles, Claims, Logins, Tokens | Variable      | src/IdentityProvider/appsettings.json:2-4      |
-| Configuration Files  | JSON                | Connection strings, logging config   | < 1 KB        | src/IdentityProvider/appsettings.json:1-12     |
-| User Secrets         | Encrypted store     | Development-time sensitive config    | Variable      | src/IdentityProvider/IdentityProvider.csproj:8 |
+| Storage Tier         | Technology          | Data Domains                         | Size Estimate |
+| -------------------- | ------------------- | ------------------------------------ | ------------- |
+| Application Database | SQLite (file-based) | Users, Roles, Claims, Logins, Tokens | Variable      |
+| Configuration Files  | JSON                | Connection strings, logging config   | < 1 KB        |
+| User Secrets         | Encrypted store     | Development-time sensitive config    | Variable      |
 
 ### Quality Baseline
 
@@ -429,14 +395,14 @@ flowchart TB
 
 ### Compliance Posture
 
-| Control                 | Status          | Evidence                                                                                      |
-| ----------------------- | --------------- | --------------------------------------------------------------------------------------------- |
-| Password Hashing        | Implemented     | PasswordHash column in AspNetUsers (20250311003709_InitialCreate.cs:42)                       |
-| Account Lockout         | Implemented     | LockoutEnd, LockoutEnabled, AccessFailedCount columns (20250311003709_InitialCreate.cs:49-51) |
-| Two-Factor Auth         | Schema Ready    | TwoFactorEnabled column (20250311003709_InitialCreate.cs:48)                                  |
-| Email Confirmation      | Schema Ready    | EmailConfirmed column (20250311003709_InitialCreate.cs:39)                                    |
-| Connection Security     | Not Assessed    | SQLite file-based — no network connection encryption                                          |
-| Data Encryption at Rest | Not Implemented | SQLite does not encrypt by default                                                            |
+| Control                 | Status          |
+| ----------------------- | --------------- |
+| Password Hashing        | Implemented     |
+| Account Lockout         | Implemented     |
+| Two-Factor Auth         | Schema Ready    |
+| Email Confirmation      | Schema Ready    |
+| Connection Security     | Not Assessed    |
+| Data Encryption at Rest | Not Implemented |
 
 ### Quality Heatmap
 
@@ -552,16 +518,16 @@ The catalog covers 13 components across 5 component types, with the heaviest con
 
 ### 5.1 Data Entities
 
-| Component         | Description                                          | Classification | Storage | Owner         | Retention             | Freshness SLA | Source Systems          | Consumers                   | Source File                                                             |
-| ----------------- | ---------------------------------------------------- | -------------- | ------- | ------------- | --------------------- | ------------- | ----------------------- | --------------------------- | ----------------------------------------------------------------------- |
-| ApplicationUser   | Core user identity entity extending IdentityUser     | PII            | SQLite  | Identity Team | Account lifetime      | Real-time     | User Registration       | Auth, Claims, Tokens        | src/IdentityProvider/Data/ApplicationUser.cs:1-9                        |
-| AppRegistration   | OAuth/OIDC app registration with client credentials  | Confidential   | SQLite  | Identity Team | Registration lifetime | Real-time     | Admin Portal            | OAuth Flows                 | src/IdentityProvider/Components/AppRegistration.cs:1-44                 |
-| IdentityRole      | RBAC role definition entity                          | Internal       | SQLite  | Identity Team | Indefinite            | Batch         | Admin Portal            | Authorization Middleware    | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:14-27   |
-| IdentityRoleClaim | Claims associated with roles for fine-grained auth   | Internal       | SQLite  | Identity Team | Role lifetime         | Batch         | Admin Portal            | Authorization Middleware    | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:59-76   |
-| IdentityUserClaim | Per-user claims for attribute-based access control   | PII            | SQLite  | Identity Team | Account lifetime      | Real-time     | User Profile, Admin     | Authorization Middleware    | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:78-95   |
-| IdentityUserLogin | External login provider associations (OAuth, social) | PII            | SQLite  | Identity Team | Account lifetime      | Real-time     | External Auth Providers | Sign-In Manager             | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:97-114  |
-| IdentityUserRole  | User-to-role assignment junction table               | Internal       | SQLite  | Identity Team | Assignment lifetime   | Batch         | Admin Portal            | Authorization Middleware    | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:116-136 |
-| IdentityUserToken | Authentication tokens for sessions and refresh       | Confidential   | SQLite  | Identity Team | Token expiry          | Real-time     | Sign-In Manager         | Token Validation Middleware | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:138-157 |
+| Component         | Description                                          | Classification | Storage | Owner         | Retention             | Freshness SLA | Source Systems          | Consumers                   |
+| ----------------- | ---------------------------------------------------- | -------------- | ------- | ------------- | --------------------- | ------------- | ----------------------- | --------------------------- |
+| ApplicationUser   | Core user identity entity extending IdentityUser     | PII            | SQLite  | Identity Team | Account lifetime      | Real-time     | User Registration       | Auth, Claims, Tokens        |
+| AppRegistration   | OAuth/OIDC app registration with client credentials  | Confidential   | SQLite  | Identity Team | Registration lifetime | Real-time     | Admin Portal            | OAuth Flows                 |
+| IdentityRole      | RBAC role definition entity                          | Internal       | SQLite  | Identity Team | Indefinite            | Batch         | Admin Portal            | Authorization Middleware    |
+| IdentityRoleClaim | Claims associated with roles for fine-grained auth   | Internal       | SQLite  | Identity Team | Role lifetime         | Batch         | Admin Portal            | Authorization Middleware    |
+| IdentityUserClaim | Per-user claims for attribute-based access control   | PII            | SQLite  | Identity Team | Account lifetime      | Real-time     | User Profile, Admin     | Authorization Middleware    |
+| IdentityUserLogin | External login provider associations (OAuth, social) | PII            | SQLite  | Identity Team | Account lifetime      | Real-time     | External Auth Providers | Sign-In Manager             |
+| IdentityUserRole  | User-to-role assignment junction table               | Internal       | SQLite  | Identity Team | Assignment lifetime   | Batch         | Admin Portal            | Authorization Middleware    |
+| IdentityUserToken | Authentication tokens for sessions and refresh       | Confidential   | SQLite  | Identity Team | Token expiry          | Real-time     | Sign-In Manager         | Token Validation Middleware |
 
 ```mermaid
 ---
@@ -658,15 +624,15 @@ erDiagram
 
 ### 5.2 Data Models
 
-| Component            | Description                                                        | Classification | Storage   | Owner         | Retention  | Freshness SLA | Source Systems     | Consumers                   | Source File                                           |
-| -------------------- | ------------------------------------------------------------------ | -------------- | --------- | ------------- | ---------- | ------------- | ------------------ | --------------------------- | ----------------------------------------------------- |
-| ApplicationDbContext | EF Core DbContext inheriting IdentityDbContext for Identity schema | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | Entity Definitions | EF Core Runtime, Migrations | src/IdentityProvider/Data/ApplicationDbContext.cs:1-8 |
+| Component            | Description                                                        | Classification | Storage   | Owner         | Retention  | Freshness SLA | Source Systems     | Consumers                   |
+| -------------------- | ------------------------------------------------------------------ | -------------- | --------- | ------------- | ---------- | ------------- | ------------------ | --------------------------- |
+| ApplicationDbContext | EF Core DbContext inheriting IdentityDbContext for Identity schema | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | Entity Definitions | EF Core Runtime, Migrations |
 
 ### 5.3 Data Stores
 
-| Component       | Description                                                                  | Classification | Storage             | Owner         | Retention  | Freshness SLA | Source Systems       | Consumers             | Source File                               |
-| --------------- | ---------------------------------------------------------------------------- | -------------- | ------------------- | ------------- | ---------- | ------------- | -------------------- | --------------------- | ----------------------------------------- |
-| SQLite Database | File-based relational database (identityProviderDB.db) for all Identity data | Confidential   | SQLite file on disk | Identity Team | Indefinite | Real-time     | ApplicationDbContext | All Identity Services | src/IdentityProvider/appsettings.json:2-4 |
+| Component       | Description                                                                  | Classification | Storage             | Owner         | Retention  | Freshness SLA | Source Systems       | Consumers             |
+| --------------- | ---------------------------------------------------------------------------- | -------------- | ------------------- | ------------- | ---------- | ------------- | -------------------- | --------------------- |
+| SQLite Database | File-based relational database (identityProviderDB.db) for all Identity data | Confidential   | SQLite file on disk | Identity Team | Indefinite | Real-time     | ApplicationDbContext | All Identity Services |
 
 ### 5.4 Data Flows
 
@@ -682,7 +648,7 @@ Not detected in source files. No formal data governance policies, data stewardsh
 
 ### 5.7 Data Quality Rules
 
-Not detected in source files. Data validation is embedded within entity definitions using DataAnnotations (`[Required]`, `[MaxLength]` in AppRegistration.cs:10-41) and EF Core schema constraints (nullable columns, max lengths in migration files), but no standalone data quality rule components were identified above the confidence threshold.
+Not detected in source files. Data validation is embedded within entity definitions using DataAnnotations (`[Required]`, `[MaxLength]` in AppRegistration.cs:10-41) and EF Core schema constraints (nullable columns, max lengths in migration files), but no standalone data quality rule components were identified.
 
 ### 5.8 Master Data
 
@@ -690,10 +656,10 @@ Not detected in source files. No master data management components, reference da
 
 ### 5.9 Data Transformations
 
-| Component                         | Description                                                                 | Classification | Storage   | Owner         | Retention  | Freshness SLA | Source Systems           | Consumers                | Source File                                                                |
-| --------------------------------- | --------------------------------------------------------------------------- | -------------- | --------- | ------------- | ---------- | ------------- | ------------------------ | ------------------------ | -------------------------------------------------------------------------- |
-| InitialCreate Migration           | EF Core migration with Up/Down methods creating 7 Identity tables + indexes | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | ApplicationDbContext     | EF Core Migration Runner | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:1-222      |
-| ApplicationDbContextModelSnapshot | EF Core model snapshot capturing current schema state for diff computation  | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | Entity Model Definitions | EF Core Migration Engine | src/IdentityProvider/Migrations/ApplicationDbContextModelSnapshot.cs:1-266 |
+| Component                         | Description                                                                 | Classification | Storage   | Owner         | Retention  | Freshness SLA | Source Systems           | Consumers                |
+| --------------------------------- | --------------------------------------------------------------------------- | -------------- | --------- | ------------- | ---------- | ------------- | ------------------------ | ------------------------ |
+| InitialCreate Migration           | EF Core migration with Up/Down methods creating 7 Identity tables + indexes | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | ApplicationDbContext     | EF Core Migration Runner |
+| ApplicationDbContextModelSnapshot | EF Core model snapshot capturing current schema state for diff computation  | Internal       | Code (C#) | Identity Team | Indefinite | N/A           | Entity Model Definitions | EF Core Migration Engine |
 
 ### Schema Evolution Timeline
 
@@ -751,9 +717,9 @@ Not detected in source files. No formal API data contracts (OpenAPI schemas, Pro
 
 ### 5.11 Data Security
 
-| Component                 | Description                                                                                                                                                                         | Classification | Storage | Owner         | Retention        | Freshness SLA | Source Systems    | Consumers                      | Source File                                                           |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------- | ------------- | ---------------- | ------------- | ----------------- | ------------------------------ | --------------------------------------------------------------------- |
-| ASP.NET Identity Security | Password hashing (PasswordHash), security stamps (SecurityStamp), account lockout (LockoutEnd, LockoutEnabled, AccessFailedCount), and two-factor authentication (TwoFactorEnabled) | Confidential   | SQLite  | Identity Team | Account lifetime | Real-time     | User Registration | Auth Middleware, SignInManager | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:29-56 |
+| Component                 | Description                                                                                                                                                                         | Classification | Storage | Owner         | Retention        | Freshness SLA | Source Systems    | Consumers                      |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------- | ------------- | ---------------- | ------------- | ----------------- | ------------------------------ |
+| ASP.NET Identity Security | Password hashing (PasswordHash), security stamps (SecurityStamp), account lockout (LockoutEnd, LockoutEnabled, AccessFailedCount), and two-factor authentication (TwoFactorEnabled) | Confidential   | SQLite  | Identity Team | Account lifetime | Real-time     | User Registration | Auth Middleware, SignInManager |
 
 ### Summary
 
@@ -875,30 +841,30 @@ For mature data platforms, standards should be codified in `/docs/standards/` an
 
 ### Data Naming Conventions
 
-| Standard              | Convention                                  | Example                                    | Source Evidence                                                         |
-| --------------------- | ------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------- |
-| Table Names           | PascalCase with "AspNet" prefix (framework) | AspNetUsers, AspNetRoles, AspNetUserClaims | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:14,29   |
-| Column Names          | PascalCase matching C# property names       | UserName, NormalizedEmail, PasswordHash    | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:33-48   |
-| Primary Key Columns   | "Id" for single-column PKs                  | AspNetUsers.Id, AspNetRoles.Id             | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:17      |
-| Foreign Key Columns   | "{Entity}Id" pattern                        | UserId, RoleId                             | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:61,79   |
-| Index Names           | "IX*{Table}*{Column}" pattern               | IX_AspNetUserClaims_UserId                 | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:164-186 |
-| Foreign Key Names     | "FK*{Child}*{Parent}\_{Column}" pattern     | FK_AspNetRoleClaims_AspNetRoles_RoleId     | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:72-76   |
-| Unique Index Names    | Descriptive with "Index" suffix             | UserNameIndex, RoleNameIndex, EmailIndex   | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs:160-198 |
-| Custom Entity Names   | PascalCase domain nouns                     | AppRegistration                            | src/IdentityProvider/Components/AppRegistration.cs:7                    |
-| Custom Entity Columns | PascalCase with DataAnnotation constraints  | ClientId, ClientSecret, TenantId           | src/IdentityProvider/Components/AppRegistration.cs:10-41                |
+| Standard              | Convention                                  | Example                                    |
+| --------------------- | ------------------------------------------- | ------------------------------------------ |
+| Table Names           | PascalCase with "AspNet" prefix (framework) | AspNetUsers, AspNetRoles, AspNetUserClaims |
+| Column Names          | PascalCase matching C# property names       | UserName, NormalizedEmail, PasswordHash    |
+| Primary Key Columns   | "Id" for single-column PKs                  | AspNetUsers.Id, AspNetRoles.Id             |
+| Foreign Key Columns   | "{Entity}Id" pattern                        | UserId, RoleId                             |
+| Index Names           | "IX*{Table}*{Column}" pattern               | IX_AspNetUserClaims_UserId                 |
+| Foreign Key Names     | "FK*{Child}*{Parent}\_{Column}" pattern     | FK_AspNetRoleClaims_AspNetRoles_RoleId     |
+| Unique Index Names    | Descriptive with "Index" suffix             | UserNameIndex, RoleNameIndex, EmailIndex   |
+| Custom Entity Names   | PascalCase domain nouns                     | AppRegistration                            |
+| Custom Entity Columns | PascalCase with DataAnnotation constraints  | ClientId, ClientSecret, TenantId           |
 
 ### Schema Design Standards
 
-| Standard               | Rule                                                                | Enforcement Level    | Source Evidence                                                               |
-| ---------------------- | ------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------- |
-| Primary Key Required   | Every table must have a defined primary key                         | EF Core (automatic)  | 20250311003709_InitialCreate.cs:17 — `Id = table.Column<string>()`            |
-| Explicit Column Types  | All columns declare explicit SQLite types (TEXT, INTEGER)           | Migration DDL        | 20250311003709_InitialCreate.cs:18-24 — `type: "TEXT"`, `"INTEGER"`           |
-| Max Length Constraints | String columns with business meaning must define maxLength          | DataAnnotations      | AppRegistration.cs:10-11 — `[MaxLength(36)]`, `[MaxLength(100)]`              |
-| Required Fields        | Business-critical fields must use `[Required]` annotation           | DataAnnotations      | AppRegistration.cs:9,13 — `[Required]` on ClientId, ClientSecret              |
-| Nullable Declarations  | All columns must explicitly declare nullability                     | EF Core (automatic)  | 20250311003709_InitialCreate.cs:19 — `nullable: false`                        |
-| Cascade Delete Default | FK relationships use cascade delete for child entity cleanup        | EF Core conventions  | 20250311003709_InitialCreate.cs:72-76 — `onDelete: ReferentialAction.Cascade` |
-| Unique Indexes         | Natural key fields must have unique indexes                         | Migration DDL        | 20250311003709_InitialCreate.cs:160 — `unique: true` on NormalizedUserName    |
-| Concurrency Control    | Entities supporting concurrent access must include ConcurrencyStamp | Framework convention | 20250311003709_InitialCreate.cs:22 — ConcurrencyStamp on Users and Roles      |
+| Standard               | Rule                                                                | Enforcement Level    |
+| ---------------------- | ------------------------------------------------------------------- | -------------------- |
+| Primary Key Required   | Every table must have a defined primary key                         | EF Core (automatic)  |
+| Explicit Column Types  | All columns declare explicit SQLite types (TEXT, INTEGER)           | Migration DDL        |
+| Max Length Constraints | String columns with business meaning must define maxLength          | DataAnnotations      |
+| Required Fields        | Business-critical fields must use `[Required]` annotation           | DataAnnotations      |
+| Nullable Declarations  | All columns must explicitly declare nullability                     | EF Core (automatic)  |
+| Cascade Delete Default | FK relationships use cascade delete for child entity cleanup        | EF Core conventions  |
+| Unique Indexes         | Natural key fields must have unique indexes                         | Migration DDL        |
+| Concurrency Control    | Entities supporting concurrent access must include ConcurrencyStamp | Framework convention |
 
 ### Data Quality Standards
 
@@ -975,13 +941,13 @@ The application follows a monolithic integration pattern where the ASP.NET Core 
 
 ### Data Flow Patterns
 
-| Flow Pattern       | Type            | Producer                 | Consumer             | Contract                | Source Evidence                                                      |
-| ------------------ | --------------- | ------------------------ | -------------------- | ----------------------- | -------------------------------------------------------------------- |
-| User Registration  | Synchronous     | Registration UI          | ApplicationDbContext | ApplicationUser entity  | src/IdentityProvider/Program.cs:31-34                                |
-| Authentication     | Synchronous     | SignInManager            | ApplicationDbContext | AspNetUsers table       | src/IdentityProvider/Program.cs:19-24                                |
-| User Lookup        | Synchronous     | IdentityUserAccessor     | UserManager          | ApplicationUser entity  | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:7-19 |
-| Schema Migration   | Batch (startup) | EF Core Migration Runner | SQLite Database      | InitialCreate migration | src/IdentityProvider/Program.cs:41-46                                |
-| Configuration Load | Startup         | appsettings.json         | DbContext Options    | Connection string       | src/IdentityProvider/appsettings.json:2-4                            |
+| Flow Pattern       | Type            | Producer                 | Consumer             | Contract                |
+| ------------------ | --------------- | ------------------------ | -------------------- | ----------------------- |
+| User Registration  | Synchronous     | Registration UI          | ApplicationDbContext | ApplicationUser entity  |
+| Authentication     | Synchronous     | SignInManager            | ApplicationDbContext | AspNetUsers table       |
+| User Lookup        | Synchronous     | IdentityUserAccessor     | UserManager          | ApplicationUser entity  |
+| Schema Migration   | Batch (startup) | EF Core Migration Runner | SQLite Database      | InitialCreate migration |
+| Configuration Load | Startup         | appsettings.json         | DbContext Options    | Connection string       |
 
 ### Producer-Consumer Relationships
 
@@ -1042,13 +1008,13 @@ flowchart LR
 
 ### Cross-Layer Dependencies
 
-| Dependency                   | From (Layer)  | To (Layer)   | Type         | Evidence                                                             |
-| ---------------------------- | ------------- | ------------ | ------------ | -------------------------------------------------------------------- |
-| DbContext Registration       | Application   | Data         | Compile-time | src/IdentityProvider/Program.cs:27-28 — AddDbContext registration    |
-| Identity Store Configuration | Application   | Data         | Compile-time | src/IdentityProvider/Program.cs:31-32 — AddEntityFrameworkStores     |
-| Connection String Binding    | Configuration | Data         | Runtime      | src/IdentityProvider/appsettings.json:2-4 — DefaultConnection        |
-| Migration Execution          | Data          | Data (Store) | Startup      | src/IdentityProvider/Program.cs:41-46 — Database.Migrate()           |
-| Container Deployment         | Technology    | Data         | Deploy-time  | infra/resources.bicep:78-126 — Container App hosting the application |
+| Dependency                   | From (Layer)  | To (Layer)   | Type         |
+| ---------------------------- | ------------- | ------------ | ------------ |
+| DbContext Registration       | Application   | Data         | Compile-time |
+| Identity Store Configuration | Application   | Data         | Compile-time |
+| Connection String Binding    | Configuration | Data         | Runtime      |
+| Migration Execution          | Data          | Data (Store) | Startup      |
+| Container Deployment         | Technology    | Data         | Deploy-time  |
 
 ### Data Lineage Diagram
 
@@ -1136,25 +1102,25 @@ The following subsections document governance structures detected and inferred f
 
 ### Data Ownership Model
 
-| Data Domain                  | Owner (Inferred) | Steward Role           | Responsibility                                                     | Evidence                                                        |
-| ---------------------------- | ---------------- | ---------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------- |
-| User Identity Data           | Identity Team    | Identity Administrator | User account lifecycle, PII protection, account deactivation       | src/IdentityProvider/Data/ApplicationUser.cs:1-9                |
-| Role & Authorization Data    | Identity Team    | Security Administrator | Role definitions, claim assignments, access control policies       | 20250311003709_InitialCreate.cs:14-27, 59-76                    |
-| Authentication Credentials   | Identity Team    | Security Administrator | Password policies, token management, external login configurations | 20250311003709_InitialCreate.cs:42-56                           |
-| Application Registration     | Identity Team    | Application Owner      | OAuth/OIDC client credentials, redirect URIs, scope definitions    | src/IdentityProvider/Components/AppRegistration.cs:1-44         |
-| Schema & Migrations          | Development Team | Database Administrator | Migration authoring, schema versioning, snapshot management        | src/IdentityProvider/Migrations/20250311003709_InitialCreate.cs |
-| Infrastructure Configuration | Platform Team    | DevOps Engineer        | Container deployment, database hosting, secrets management         | infra/resources.bicep:78-126                                    |
+| Data Domain                  | Owner (Inferred) | Steward Role           | Responsibility                                                     |
+| ---------------------------- | ---------------- | ---------------------- | ------------------------------------------------------------------ |
+| User Identity Data           | Identity Team    | Identity Administrator | User account lifecycle, PII protection, account deactivation       |
+| Role & Authorization Data    | Identity Team    | Security Administrator | Role definitions, claim assignments, access control policies       |
+| Authentication Credentials   | Identity Team    | Security Administrator | Password policies, token management, external login configurations |
+| Application Registration     | Identity Team    | Application Owner      | OAuth/OIDC client credentials, redirect URIs, scope definitions    |
+| Schema & Migrations          | Development Team | Database Administrator | Migration authoring, schema versioning, snapshot management        |
+| Infrastructure Configuration | Platform Team    | DevOps Engineer        | Container deployment, database hosting, secrets management         |
 
 ### Access Control Model
 
-| Control Layer      | Mechanism                       | Scope                                    | Status            | Evidence                                               |
-| ------------------ | ------------------------------- | ---------------------------------------- | ----------------- | ------------------------------------------------------ |
-| Application RBAC   | ASP.NET Identity Roles + Claims | User authorization within application    | Implemented       | Program.cs:19-34 — AddIdentity, AddSignInManager       |
-| Database Access    | SQLite file-level permissions   | OS filesystem ACL on .db file            | Not Configured    | appsettings.json:3 — file-based database               |
-| Secret Management  | User Secrets (Development)      | Connection strings, API keys             | Partial           | IdentityProvider.csproj:8 — UserSecretsId              |
-| Container Identity | Azure Managed Identity          | Azure resource access from Container App | Configured        | infra/resources.bicep:15-18 — managedIdentity          |
-| Password Policy    | ASP.NET Identity PasswordHasher | Password complexity and hashing          | Framework Default | 20250311003709_InitialCreate.cs:42 — PasswordHash      |
-| Account Lockout    | ASP.NET Identity Lockout        | Brute-force protection                   | Implemented       | 20250311003709_InitialCreate.cs:49-51 — Lockout fields |
+| Control Layer      | Mechanism                       | Scope                                    | Status            |
+| ------------------ | ------------------------------- | ---------------------------------------- | ----------------- |
+| Application RBAC   | ASP.NET Identity Roles + Claims | User authorization within application    | Implemented       |
+| Database Access    | SQLite file-level permissions   | OS filesystem ACL on .db file            | Not Configured    |
+| Secret Management  | User Secrets (Development)      | Connection strings, API keys             | Partial           |
+| Container Identity | Azure Managed Identity          | Azure resource access from Container App | Configured        |
+| Password Policy    | ASP.NET Identity PasswordHasher | Password complexity and hashing          | Framework Default |
+| Account Lockout    | ASP.NET Identity Lockout        | Brute-force protection                   | Implemented       |
 
 ### Audit & Compliance
 
@@ -1170,15 +1136,15 @@ The following subsections document governance structures detected and inferred f
 
 ### Data Governance Maturity Assessment
 
-| Dimension                    | Current Level | Evidence                                                                  | Target Level | Gap Priority |
-| ---------------------------- | ------------- | ------------------------------------------------------------------------- | ------------ | ------------ |
-| Data Catalog & Discovery     | Level 1       | No formal data catalog; schema discoverable only via migrations           | Level 3      | High         |
-| Data Quality Management      | Level 2       | Schema-level validation via DataAnnotations and EF Core constraints       | Level 4      | Medium       |
-| Data Lineage & Traceability  | Level 2       | EF Core migration chain provides schema lineage only                      | Level 3      | Medium       |
-| Data Security & Privacy      | Level 3       | Password hashing, security stamps, lockout; no formal PII tagging         | Level 4      | Medium       |
-| Data Lifecycle Management    | Level 1       | No retention policies, archival, or data deletion procedures              | Level 3      | High         |
-| Regulatory Compliance        | Level 1       | No compliance documentation, DPIA, or data processing agreements          | Level 3      | High         |
-| Data Standards & Conventions | Level 2       | Framework-enforced naming and schema conventions; not formally documented | Level 3      | Low          |
+| Dimension                    | Current Level | Target Level | Gap Priority |
+| ---------------------------- | ------------- | ------------ | ------------ |
+| Data Catalog & Discovery     | Level 1       | Level 3      | High         |
+| Data Quality Management      | Level 2       | Level 4      | Medium       |
+| Data Lineage & Traceability  | Level 2       | Level 3      | Medium       |
+| Data Security & Privacy      | Level 3       | Level 4      | Medium       |
+| Data Lifecycle Management    | Level 1       | Level 3      | High         |
+| Regulatory Compliance        | Level 1       | Level 3      | High         |
+| Data Standards & Conventions | Level 2       | Level 3      | Low          |
 
 ```mermaid
 ---
@@ -1224,38 +1190,3 @@ flowchart TB
     style TARGET fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     style MATURITY fill:#FAF9F8,stroke:#EDEBE9,stroke-width:1px,color:#323130
 ```
-
----
-
-## Appendix: Confidence Scoring Methodology
-
-All components were scored using the base-layer-config formula:
-
-$$\text{Confidence} = (F \times 0.30) + (P \times 0.25) + (C \times 0.35) + (X \times 0.10)$$
-
-Where:
-
-- $F$ = Filename match score (0.0–1.0)
-- $P$ = Path context score (0.0–1.0)
-- $C$ = Content analysis score (0.0–1.0)
-- $X$ = Cross-reference score (0.0–1.0)
-
-**Threshold**: Components with confidence $\geq 0.7$ are included. Components below threshold are excluded with notation in the relevant subsection.
-
-| Component                         | Filename ($F$) | Path ($P$) | Content ($C$) | Cross-Ref ($X$) | **Score** | Threshold |
-| --------------------------------- | -------------- | ---------- | ------------- | --------------- | --------- | --------- |
-| ApplicationDbContext              | 0.90           | 1.00       | 1.00          | 0.90            | **0.96**  | High      |
-| ApplicationDbContextModelSnapshot | 0.80           | 1.00       | 1.00          | 0.70            | **0.91**  | High      |
-| InitialCreate Migration           | 0.70           | 1.00       | 1.00          | 0.80            | **0.89**  | Medium    |
-| ApplicationUser                   | 0.60           | 1.00       | 0.90          | 0.80            | **0.83**  | Medium    |
-| IdentityRole                      | 0.60           | 0.70       | 1.00          | 0.90            | **0.80**  | Medium    |
-| IdentityRoleClaim                 | 0.60           | 0.70       | 1.00          | 0.80            | **0.78**  | Medium    |
-| IdentityUserClaim                 | 0.60           | 0.70       | 1.00          | 0.80            | **0.78**  | Medium    |
-| IdentityUserLogin                 | 0.60           | 0.70       | 1.00          | 0.80            | **0.78**  | Medium    |
-| IdentityUserRole                  | 0.60           | 0.70       | 1.00          | 0.80            | **0.78**  | Medium    |
-| IdentityUserToken                 | 0.60           | 0.70       | 1.00          | 0.80            | **0.78**  | Medium    |
-| SQLite Database                   | 0.60           | 0.50       | 1.00          | 0.80            | **0.74**  | Medium    |
-| ASP.NET Identity Security         | 0.60           | 0.60       | 0.90          | 0.70            | **0.72**  | Medium    |
-| AppRegistration                   | 0.80           | 0.30       | 1.00          | 0.40            | **0.71**  | Medium    |
-
-<!-- SECTION COUNT AUDIT: Found 9 sections. Required: 9. Status: PASS -->
