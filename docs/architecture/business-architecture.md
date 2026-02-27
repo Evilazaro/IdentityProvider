@@ -24,100 +24,100 @@ The following subsections catalog all 11 Business component types discovered thr
 
 ### 2.1 Business Strategy
 
-| Name                           | Description                                                                             | Source                                                | Confidence | Maturity    |
-| ------------------------------ | --------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------- | ----------- |
-| Cloud-Native Identity Platform | Strategic initiative to deliver IAM as a containerized Azure service with observability | azure.yaml:1-14                                       | 0.80       | 3 - Defined |
-| Digital Identity Enablement    | Platform vision for enterprise SSO, MFA, and compliance-ready identity services         | src/IdentityProvider/Components/Pages/Home.razor:1-70 | 0.75       | 3 - Defined |
+| Name                           | Description                                                                             | Confidence | Maturity    |
+| ------------------------------ | --------------------------------------------------------------------------------------- | ---------- | ----------- |
+| Cloud-Native Identity Platform | Strategic initiative to deliver IAM as a containerized Azure service with observability | 0.80       | 3 - Defined |
+| Digital Identity Enablement    | Platform vision for enterprise SSO, MFA, and compliance-ready identity services         | 0.75       | 3 - Defined |
 
 ### 2.2 Business Capabilities
 
-| Name                          | Description                                                                  | Source                                                                               | Confidence | Maturity     |
-| ----------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ---------- | ------------ |
-| User Authentication           | Email/password credential verification with cookie-based session management  | src/IdentityProvider/Components/Account/Pages/Login.razor:1-118                      | 0.95       | 4 - Measured |
-| User Registration             | Self-service account creation with email confirmation workflow               | src/IdentityProvider/Components/Account/Pages/Register.razor:1-145                   | 0.95       | 4 - Measured |
-| Two-Factor Authentication     | TOTP-based authenticator app enrollment, verification, and recovery codes    | src/IdentityProvider/Components/Account/Pages/Manage/EnableAuthenticator.razor:1-180 | 0.92       | 3 - Defined  |
-| Password Lifecycle Management | Password change, reset, and initial set for external-login-only users        | src/IdentityProvider/Components/Account/Pages/Manage/ChangePassword.razor:1-107      | 0.90       | 3 - Defined  |
-| External Identity Federation  | OAuth/OIDC external provider login, account linking, and provider management | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:1-185              | 0.88       | 3 - Defined  |
-| GDPR Data Rights              | Personal data download (JSON export) and permanent account deletion          | src/IdentityProvider/Components/Account/Pages/Manage/PersonalData.razor:1-33         | 0.90       | 3 - Defined  |
-| OAuth App Registration        | OAuth client application registration with credential and scope management   | src/IdentityProvider/Components/AppRegistration.cs:1-47                              | 0.78       | 2 - Managed  |
-| Email Management              | Email address change, verification, and confirmation resend workflows        | src/IdentityProvider/Components/Account/Pages/Manage/Email.razor:1-132               | 0.88       | 3 - Defined  |
+| Name                          | Description                                                                  | Confidence | Maturity     |
+| ----------------------------- | ---------------------------------------------------------------------------- | ---------- | ------------ |
+| User Authentication           | Email/password credential verification with cookie-based session management  | 0.95       | 4 - Measured |
+| User Registration             | Self-service account creation with email confirmation workflow               | 0.95       | 4 - Measured |
+| Two-Factor Authentication     | TOTP-based authenticator app enrollment, verification, and recovery codes    | 0.92       | 3 - Defined  |
+| Password Lifecycle Management | Password change, reset, and initial set for external-login-only users        | 0.90       | 3 - Defined  |
+| External Identity Federation  | OAuth/OIDC external provider login, account linking, and provider management | 0.88       | 3 - Defined  |
+| GDPR Data Rights              | Personal data download (JSON export) and permanent account deletion          | 0.90       | 3 - Defined  |
+| OAuth App Registration        | OAuth client application registration with credential and scope management   | 0.78       | 2 - Managed  |
+| Email Management              | Email address change, verification, and confirmation resend workflows        | 0.88       | 3 - Defined  |
 
 ### 2.3 Value Streams
 
-| Name               | Description                                                                     | Source                                                                                   | Confidence | Maturity    |
-| ------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------- | ----------- |
-| User Onboarding    | End-to-end flow: Register → Confirm Email → Login → Manage Profile              | src/IdentityProvider/Components/Account/Pages/Register.razor:70-101                      | 0.85       | 3 - Defined |
-| Password Recovery  | Self-service flow: Forgot Password → Email Link → Reset Password → Confirmation | src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:1-67                  | 0.85       | 3 - Defined |
-| Security Hardening | User journey from basic authentication to 2FA enrollment with recovery codes    | src/IdentityProvider/Components/Account/Pages/Manage/TwoFactorAuthentication.razor:1-102 | 0.80       | 3 - Defined |
+| Name               | Description                                                                     | Confidence | Maturity    |
+| ------------------ | ------------------------------------------------------------------------------- | ---------- | ----------- |
+| User Onboarding    | End-to-end flow: Register → Confirm Email → Login → Manage Profile              | 0.85       | 3 - Defined |
+| Password Recovery  | Self-service flow: Forgot Password → Email Link → Reset Password → Confirmation | 0.85       | 3 - Defined |
+| Security Hardening | User journey from basic authentication to 2FA enrollment with recovery codes    | 0.80       | 3 - Defined |
 
 ### 2.4 Business Processes
 
-| Name                      | Description                                                                 | Source                                                                                 | Confidence | Maturity     |
-| ------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------- | ------------ |
-| User Registration Process | Create account, generate confirmation token, send email, await confirmation | src/IdentityProvider/Components/Account/Pages/Register.razor:70-101                    | 0.92       | 4 - Measured |
-| Authentication Process    | Validate credentials, check lockout, handle 2FA requirement, issue cookie   | src/IdentityProvider/Components/Account/Pages/Login.razor:88-109                       | 0.92       | 4 - Measured |
-| Password Reset Process    | Accept email, generate reset token, verify token, update password           | src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:39-62               | 0.90       | 3 - Defined  |
-| 2FA Enrollment Process    | Generate shared key, display QR URI, verify TOTP code, enable 2FA           | src/IdentityProvider/Components/Account/Pages/Manage/EnableAuthenticator.razor:100-130 | 0.88       | 3 - Defined  |
-| Account Deletion Process  | Confirm password, delete user record, sign out, redirect                    | src/IdentityProvider/Components/Account/Pages/Manage/DeletePersonalData.razor:55-78    | 0.88       | 3 - Defined  |
+| Name                      | Description                                                                 | Confidence | Maturity     |
+| ------------------------- | --------------------------------------------------------------------------- | ---------- | ------------ |
+| User Registration Process | Create account, generate confirmation token, send email, await confirmation | 0.92       | 4 - Measured |
+| Authentication Process    | Validate credentials, check lockout, handle 2FA requirement, issue cookie   | 0.92       | 4 - Measured |
+| Password Reset Process    | Accept email, generate reset token, verify token, update password           | 0.90       | 3 - Defined  |
+| 2FA Enrollment Process    | Generate shared key, display QR URI, verify TOTP code, enable 2FA           | 0.88       | 3 - Defined  |
+| Account Deletion Process  | Confirm password, delete user record, sign out, redirect                    | 0.88       | 3 - Defined  |
 
 ### 2.5 Business Services
 
-| Name                         | Description                                                                                  | Source                                                                                          | Confidence | Maturity     |
-| ---------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------- | ------------ |
-| Identity Service             | Core ASP.NET Identity framework providing authentication, authorization, and user management | src/IdentityProvider/Program.cs:14-37                                                           | 0.95       | 4 - Measured |
-| Email Notification Service   | Placeholder email sender for confirmation links, password resets, and code delivery          | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23                         | 0.80       | 2 - Managed  |
-| Authentication State Service | Server-side authentication state revalidation with 30-minute security stamp checks           | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:1-49 | 0.88       | 3 - Defined  |
+| Name                         | Description                                                                                  | Confidence | Maturity     |
+| ---------------------------- | -------------------------------------------------------------------------------------------- | ---------- | ------------ |
+| Identity Service             | Core ASP.NET Identity framework providing authentication, authorization, and user management | 0.95       | 4 - Measured |
+| Email Notification Service   | Placeholder email sender for confirmation links, password resets, and code delivery          | 0.80       | 2 - Managed  |
+| Authentication State Service | Server-side authentication state revalidation with 30-minute security stamp checks           | 0.88       | 3 - Defined  |
 
 ### 2.6 Business Functions
 
-| Name                      | Description                                                                                     | Source                                                                                            | Confidence | Maturity    |
-| ------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------- | ----------- |
-| Email Domain Validation   | Validates email addresses against a whitelist of approved domains                               | src/IdentityProvider/Components/eMail.cs:1-18                                                     | 0.85       | 2 - Managed |
-| Redirect Management       | Centralized redirect handling with status message cookie transport and open-redirect prevention | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:1-60                           | 0.82       | 3 - Defined |
-| User Access Resolution    | Retrieves current authenticated user or redirects to InvalidUser error page                     | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:1-21                              | 0.80       | 3 - Defined |
-| Identity Endpoint Routing | Maps non-Razor Identity HTTP endpoints for external login, logout, link, and data download      | src/IdentityProvider/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs:1-113 | 0.85       | 3 - Defined |
+| Name                      | Description                                                                                     | Confidence | Maturity    |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | ---------- | ----------- |
+| Email Domain Validation   | Validates email addresses against a whitelist of approved domains                               | 0.85       | 2 - Managed |
+| Redirect Management       | Centralized redirect handling with status message cookie transport and open-redirect prevention | 0.82       | 3 - Defined |
+| User Access Resolution    | Retrieves current authenticated user or redirects to InvalidUser error page                     | 0.80       | 3 - Defined |
+| Identity Endpoint Routing | Maps non-Razor Identity HTTP endpoints for external login, logout, link, and data download      | 0.85       | 3 - Defined |
 
 ### 2.7 Business Roles & Actors
 
-| Name                       | Description                                                                     | Source                                                                        | Confidence | Maturity    |
-| -------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------- | ----------- |
-| Anonymous User             | Unauthenticated visitor who can register, login, or reset password              | src/IdentityProvider/Components/Layout/NavMenu.razor:60-75                    | 0.85       | 3 - Defined |
-| Authenticated User         | Signed-in user with access to profile, 2FA, email, and personal data management | src/IdentityProvider/Components/Account/Pages/Manage/\_Imports.razor:1-2      | 0.88       | 3 - Defined |
-| External Identity Provider | Third-party OAuth/OIDC provider that issues identity claims for federated login | src/IdentityProvider/Components/Account/Shared/ExternalLoginPicker.razor:1-43 | 0.78       | 3 - Defined |
+| Name                       | Description                                                                     | Confidence | Maturity    |
+| -------------------------- | ------------------------------------------------------------------------------- | ---------- | ----------- |
+| Anonymous User             | Unauthenticated visitor who can register, login, or reset password              | 0.85       | 3 - Defined |
+| Authenticated User         | Signed-in user with access to profile, 2FA, email, and personal data management | 0.88       | 3 - Defined |
+| External Identity Provider | Third-party OAuth/OIDC provider that issues identity claims for federated login | 0.78       | 3 - Defined |
 
 ### 2.8 Business Rules
 
-| Name                        | Description                                                                       | Source                                                                                           | Confidence | Maturity     |
-| --------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ---------- | ------------ |
-| Password Complexity Policy  | Minimum 6 characters, maximum 100 characters, with confirmation match             | src/IdentityProvider/Components/Account/Pages/Register.razor:126-140                             | 0.92       | 3 - Defined  |
-| Email Confirmation Required | Account sign-in requires confirmed email address (RequireConfirmedAccount = true) | src/IdentityProvider/Program.cs:32-32                                                            | 0.95       | 4 - Measured |
-| Security Stamp Revalidation | Authentication state revalidated every 30 minutes against current security stamp  | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:19-19 | 0.90       | 3 - Defined  |
-| Email Domain Whitelist      | Only emails from example.com and test.com domains are accepted                    | src/IdentityProvider/Components/eMail.cs:14-14                                                   | 0.88       | 2 - Managed  |
-| Information Non-Disclosure  | Password reset and email resend do not reveal whether user exists                 | src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:47-50                         | 0.90       | 3 - Defined  |
+| Name                        | Description                                                                       | Confidence | Maturity     |
+| --------------------------- | --------------------------------------------------------------------------------- | ---------- | ------------ |
+| Password Complexity Policy  | Minimum 6 characters, maximum 100 characters, with confirmation match             | 0.92       | 3 - Defined  |
+| Email Confirmation Required | Account sign-in requires confirmed email address (RequireConfirmedAccount = true) | 0.95       | 4 - Measured |
+| Security Stamp Revalidation | Authentication state revalidated every 30 minutes against current security stamp  | 0.90       | 3 - Defined  |
+| Email Domain Whitelist      | Only emails from example.com and test.com domains are accepted                    | 0.88       | 2 - Managed  |
+| Information Non-Disclosure  | Password reset and email resend do not reveal whether user exists                 | 0.90       | 3 - Defined  |
 
 ### 2.9 Business Events
 
-| Name                      | Description                                                                    | Source                                                                              | Confidence | Maturity    |
-| ------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- | ---------- | ----------- |
-| User Registered           | Triggered when a new user account is successfully created                      | src/IdentityProvider/Components/Account/Pages/Register.razor:73-76                  | 0.90       | 3 - Defined |
-| Email Confirmed           | Triggered when user clicks confirmation link and email is verified             | src/IdentityProvider/Components/Account/Pages/ConfirmEmail.razor:1-47               | 0.88       | 3 - Defined |
-| Password Reset Completed  | Triggered when user successfully resets password via token                     | src/IdentityProvider/Components/Account/Pages/ResetPassword.razor:70-85             | 0.85       | 3 - Defined |
-| External Login Associated | Triggered when external OAuth provider is linked to an existing or new account | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:129-153           | 0.82       | 3 - Defined |
-| Account Deleted           | Triggered when user permanently deletes their account (GDPR right to erasure)  | src/IdentityProvider/Components/Account/Pages/Manage/DeletePersonalData.razor:66-74 | 0.88       | 3 - Defined |
+| Name                      | Description                                                                    | Confidence | Maturity    |
+| ------------------------- | ------------------------------------------------------------------------------ | ---------- | ----------- |
+| User Registered           | Triggered when a new user account is successfully created                      | 0.90       | 3 - Defined |
+| Email Confirmed           | Triggered when user clicks confirmation link and email is verified             | 0.88       | 3 - Defined |
+| Password Reset Completed  | Triggered when user successfully resets password via token                     | 0.85       | 3 - Defined |
+| External Login Associated | Triggered when external OAuth provider is linked to an existing or new account | 0.82       | 3 - Defined |
+| Account Deleted           | Triggered when user permanently deletes their account (GDPR right to erasure)  | 0.88       | 3 - Defined |
 
 ### 2.10 Business Objects/Entities
 
-| Name            | Description                                                                     | Source                                                  | Confidence | Maturity    |
-| --------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------- | ----------- |
-| ApplicationUser | Identity user entity inheriting IdentityUser with extensible profile fields     | src/IdentityProvider/Data/ApplicationUser.cs:1-10       | 0.95       | 3 - Defined |
-| AppRegistration | OAuth/OIDC client registration entity with credentials, scopes, and grant types | src/IdentityProvider/Components/AppRegistration.cs:1-47 | 0.90       | 2 - Managed |
+| Name            | Description                                                                     | Confidence | Maturity    |
+| --------------- | ------------------------------------------------------------------------------- | ---------- | ----------- |
+| ApplicationUser | Identity user entity inheriting IdentityUser with extensible profile fields     | 0.95       | 3 - Defined |
+| AppRegistration | OAuth/OIDC client registration entity with credentials, scopes, and grant types | 0.90       | 2 - Managed |
 
 ### 2.11 KPIs & Metrics
 
-| Name                               | Description                                                                         | Source                                                                                   | Confidence | Maturity    |
-| ---------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------- | ----------- |
-| Application Performance Monitoring | Azure Application Insights integration for request telemetry and failure tracking   | infra/resources.bicep:20-29                                                              | 0.80       | 3 - Defined |
-| Recovery Code Threshold Alerts     | UI-level alerting when 2FA recovery codes fall below safety thresholds (0, 1, or 3) | src/IdentityProvider/Components/Account/Pages/Manage/TwoFactorAuthentication.razor:22-40 | 0.75       | 2 - Managed |
+| Name                               | Description                                                                         | Confidence | Maturity    |
+| ---------------------------------- | ----------------------------------------------------------------------------------- | ---------- | ----------- |
+| Application Performance Monitoring | Azure Application Insights integration for request telemetry and failure tracking   | 0.80       | 3 - Defined |
+| Recovery Code Threshold Alerts     | UI-level alerting when 2FA recovery codes fall below safety thresholds (0, 1, or 3) | 0.75       | 2 - Managed |
 
 **Business Capability Map:**
 
