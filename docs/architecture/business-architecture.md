@@ -1412,7 +1412,7 @@ flowchart TD
         end
     end
 
-    AUTH <-->|“Confirmed Account Required”<br/>2FA Enrollment| IDM
+    AUTH <-->|"Confirmed Account Required<br/>2FA Enrollment"| IDM
     AUTH -->|OAuth Challenge/Callback| INT
     IDM -->|Registration → Login Redirect| AUTH
     AUTH --> PERSIST
