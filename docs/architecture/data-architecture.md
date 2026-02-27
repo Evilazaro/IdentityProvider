@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Section 1: Executive Summary](#section-1-executive-summary)
-  - [Overview](#overview)
+  - [Executive Overview](#executive-overview)
   - [Coverage Summary](#coverage-summary)
 - [Section 2: Architecture Landscape](#section-2-architecture-landscape)
   - [Data Entities](#21-data-entities)
@@ -47,7 +47,7 @@
 
 ## Section 1: Executive Summary
 
-### Overview
+### Executive Overview
 
 The IdentityProvider repository implements an ASP.NET Core Identity-based authentication and authorization system using Entity Framework Core with SQLite as the backing data store. This analysis examines the Data layer architecture, identifying **13 data components** across entities, models, stores, transformations, and security structures spanning the ASP.NET Identity schema and custom application registration entities.
 
@@ -65,7 +65,7 @@ The data architecture is well-structured for its core IAM domain with **8 entity
 
 ## Section 2: Architecture Landscape
 
-### Overview
+### Landscape Overview
 
 The Architecture Landscape organizes data components into two primary domains aligned with the Identity Provider's purpose: the Identity Domain (user accounts, roles, claims, tokens, and logins) and the Application Registration Domain (OAuth/OIDC client registrations). Both domains share a **single SQLite database** as the backing store.
 
@@ -614,7 +614,7 @@ flowchart LR
     style L4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
-### Summary
+### Baseline Summary
 
 The Current State Baseline reveals a functional Code-First data architecture with EF Core migration-based schema management operating at Level 2 governance maturity (Managed). Schema integrity is well-maintained through foreign key constraints, unique indexes, and DataAnnotation validations. Security fundamentals are strong with password hashing, lockout, and 2FA schema support.
 
@@ -628,7 +628,7 @@ Primary gaps include: (1) **absence of formal data classification** and governan
 
 ## Section 5: Component Catalog
 
-### Overview
+### Catalog Overview
 
 The Component Catalog provides detailed specifications for each data component identified in the IdentityProvider repository. Each component is documented with its classification, storage mechanism, ownership, retention policy, freshness SLA, source systems, consumers, and source file reference.
 
@@ -851,7 +851,7 @@ Not detected in source files. No formal API data contracts (OpenAPI schemas, Pro
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------- | ------------- | ---------------- | ------------- | ----------------- | ------------------------------ |
 | ASP.NET Identity Security | Password hashing (PasswordHash), security stamps (SecurityStamp), account lockout (LockoutEnd, LockoutEnabled, AccessFailedCount), and two-factor authentication (TwoFactorEnabled) | Confidential   | SQLite  | Identity Team | Account lifetime | Real-time     | User Registration | Auth Middleware, SignInManager |
 
-### Summary
+### Catalog Summary
 
 The Component Catalog documents 13 components across 5 of 11 Data component types. Data Entities dominate with 8 components (62%) reflecting the ASP.NET Identity schema's normalized relational design. The single Data Model (ApplicationDbContext) serves as the unified ORM boundary, while 2 Data Transformation artifacts (migration + snapshot) manage schema evolution. One Data Store (SQLite) and one Data Security component (ASP.NET Identity security model) complete the inventory.
 
@@ -863,7 +863,7 @@ Six component types remain undetected: Data Flows, Data Services, Data Governanc
 
 ## Section 6: Architecture Decisions
 
-### Overview
+### Decisions Overview
 
 This section documents key architectural decisions (ADRs) that shaped the IdentityProvider data architecture. Each ADR captures the context, decision rationale, and consequences of significant design choices observed in the source code. While no formal ADR documentation files were detected in the repository, the following decisions can be inferred from implementation evidence in source files.
 
@@ -977,7 +977,7 @@ flowchart TB
 
 ## Section 7: Architecture Standards
 
-### Overview
+### Standards Overview
 
 This section defines the data architecture standards, naming conventions, schema design guidelines, and quality rules governing data assets in the IdentityProvider repository. Standards are primarily inherited from the ASP.NET Core Identity framework and Entity Framework Core conventions, with additional constraints applied through DataAnnotations on custom entities.
 
@@ -1096,7 +1096,7 @@ flowchart TB
 
 ## Section 8: Dependencies & Integration
 
-### Overview
+### Integration Overview
 
 The Dependencies & Integration analysis examines cross-component data relationships, producer-consumer patterns, and integration points within the IdentityProvider data architecture. The primary integration pattern is a tightly-coupled ORM-mediated data access model where all data operations flow through the ApplicationDbContext.
 
@@ -1265,7 +1265,7 @@ flowchart LR
     style CONSUMERS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
-### Summary
+### Integration Summary
 
 The Dependencies & Integration analysis reveals a **tightly-coupled monolithic data access pattern** centered on the ApplicationDbContext as the single data gateway. All 5 identified data flow patterns are synchronous ORM-mediated operations with no asynchronous messaging or event-driven integration points. Cross-layer dependencies are compile-time bindings through dependency injection, providing type safety but limiting runtime flexibility.
 
@@ -1279,7 +1279,7 @@ Integration health is adequate for a single-service identity provider but would 
 
 ## Section 9: Governance & Management
 
-### Overview
+### Governance Overview
 
 This section defines the data governance model, ownership structure, access control policies, audit procedures, and compliance tracking mechanisms for the IdentityProvider data architecture. Effective data governance ensures data quality, security, and regulatory compliance across the identity management domain.
 
