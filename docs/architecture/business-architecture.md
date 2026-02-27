@@ -1124,16 +1124,30 @@ flowchart LR
 
 ```mermaid
 ---
+title: Authentication Business Process Decision Flow
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TD
     accTitle: Authentication Business Process Decision Flow
     accDescr: Shows the login decision tree including credential validation, lockout check, 2FA requirement, and session establishment
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Authentication Process"]
         A["🔐 User Submits<br/>Email & Password"]
@@ -1156,16 +1170,19 @@ flowchart TD
     C --> I
     F -->|Yes| G
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+
+    class A,E core
+    class C,I success
+    class B,D,F warning
+    class G,H danger
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style A fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style B fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style C fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style D fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style E fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style F fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style G fill:#FED9CC,stroke:#D13438,stroke-width:2px,color:#A4262C
-    style H fill:#FED9CC,stroke:#D13438,stroke-width:2px,color:#A4262C
-    style I fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
 ```
 
 ### Summary
