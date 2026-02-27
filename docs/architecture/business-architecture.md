@@ -841,13 +841,13 @@ flowchart LR
 
 ### 5.9 Business Events
 
-| Component                 | Description                                                                            | Classification | Stakeholders         | Owner           | Status | Alignment           | Source Systems    | Consumers      | Source File                                                                         |
-| ------------------------- | -------------------------------------------------------------------------------------- | -------------- | -------------------- | --------------- | ------ | ------------------- | ----------------- | -------------- | ----------------------------------------------------------------------------------- |
-| User Registered           | CreateAsync succeeds → confirmation email triggered → redirect to RegisterConfirmation | Lifecycle      | End Users, Analytics | Identity Team   | Active | Privacy Compliance  | UserManager       | Email, Login   | src/IdentityProvider/Components/Account/Pages/Register.razor:73-76                  |
-| Email Confirmed           | ConfirmEmailAsync succeeds → account becomes active for sign-in                        | Lifecycle      | End Users            | Identity Team   | Active | Privacy Compliance  | UserManager       | Login          | src/IdentityProvider/Components/Account/Pages/ConfirmEmail.razor:1-47               |
-| Password Reset Completed  | ResetPasswordAsync succeeds → redirect to ResetPasswordConfirmation                    | Security       | End Users            | Identity Team   | Active | Security-by-Default | UserManager       | Login          | src/IdentityProvider/Components/Account/Pages/ResetPassword.razor:70-85             |
-| External Login Associated | AddLoginAsync succeeds → external provider linked to account                           | Integration    | End Users, Partners  | Identity Team   | Active | Integration         | ExternalLoginInfo | Profile, Login | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:129-153           |
-| Account Deleted           | DeleteAsync succeeds → SignOutAsync → user session terminated                          | Compliance     | End Users, Legal     | Compliance Team | Active | Privacy Compliance  | UserManager       | GDPR Audit     | src/IdentityProvider/Components/Account/Pages/Manage/DeletePersonalData.razor:66-74 |
+| Component                 | Description                                                                            | Classification | Stakeholders         | Owner           | Status | Alignment           | Source Systems    | Consumers      |
+| ------------------------- | -------------------------------------------------------------------------------------- | -------------- | -------------------- | --------------- | ------ | ------------------- | ----------------- | -------------- |
+| User Registered           | CreateAsync succeeds → confirmation email triggered → redirect to RegisterConfirmation | Lifecycle      | End Users, Analytics | Identity Team   | Active | Privacy Compliance  | UserManager       | Email, Login   |
+| Email Confirmed           | ConfirmEmailAsync succeeds → account becomes active for sign-in                        | Lifecycle      | End Users            | Identity Team   | Active | Privacy Compliance  | UserManager       | Login          |
+| Password Reset Completed  | ResetPasswordAsync succeeds → redirect to ResetPasswordConfirmation                    | Security       | End Users            | Identity Team   | Active | Security-by-Default | UserManager       | Login          |
+| External Login Associated | AddLoginAsync succeeds → external provider linked to account                           | Integration    | End Users, Partners  | Identity Team   | Active | Integration         | ExternalLoginInfo | Profile, Login |
+| Account Deleted           | DeleteAsync succeeds → SignOutAsync → user session terminated                          | Compliance     | End Users, Legal     | Compliance Team | Active | Privacy Compliance  | UserManager       | GDPR Audit     |
 
 **Business Event Lifecycle:**
 
@@ -906,10 +906,10 @@ flowchart TD
 
 ### 5.10 Business Objects/Entities
 
-| Component       | Description                                                                                                                     | Classification | Stakeholders | Owner         | Status  | Alignment           | Source Systems      | Consumers          | Source File                                             |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------- | ------- | ------------------- | ------------------- | ------------------ | ------------------------------------------------------- |
-| ApplicationUser | IdentityUser subclass — Id, UserName, Email, PasswordHash, SecurityStamp, TwoFactorEnabled, LockoutEnd, PhoneNumber             | Core Entity    | All          | Identity Team | Active  | Security-by-Default | ASP.NET Identity    | All Identity pages | src/IdentityProvider/Data/ApplicationUser.cs:1-10       |
-| AppRegistration | OAuth client entity — ClientId (PK), ClientSecret, TenantId, RedirectUri, Scopes, Authority, AppName, GrantTypes, ResponseTypes | Domain Entity  | Developers   | Platform Team | Partial | Integration         | AppRegistrationForm | Not detected       | src/IdentityProvider/Components/AppRegistration.cs:1-47 |
+| Component       | Description                                                                                                                     | Classification | Stakeholders | Owner         | Status  | Alignment           | Source Systems      | Consumers          |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------- | ------- | ------------------- | ------------------- | ------------------ |
+| ApplicationUser | IdentityUser subclass — Id, UserName, Email, PasswordHash, SecurityStamp, TwoFactorEnabled, LockoutEnd, PhoneNumber             | Core Entity    | All          | Identity Team | Active  | Security-by-Default | ASP.NET Identity    | All Identity pages |
+| AppRegistration | OAuth client entity — ClientId (PK), ClientSecret, TenantId, RedirectUri, Scopes, Authority, AppName, GrantTypes, ResponseTypes | Domain Entity  | Developers   | Platform Team | Partial | Integration         | AppRegistrationForm | Not detected       |
 
 #### 5.10.1 ApplicationUser
 
@@ -944,10 +944,10 @@ flowchart TD
 
 ### 5.11 KPIs & Metrics
 
-| Component                          | Description                                                                                       | Classification | Stakeholders              | Owner         | Status | Alignment            | Source Systems               | Consumers              | Source File                                                                              |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------- | -------------- | ------------------------- | ------------- | ------ | -------------------- | ---------------------------- | ---------------------- | ---------------------------------------------------------------------------------------- |
-| Application Performance Monitoring | Azure Application Insights + Log Analytics Workspace for request/failure telemetry and dashboards | Operational    | Platform Engineering, SRE | Platform Team | Active | Cloud-Native         | Azure Monitor SDK            | Operations, Dashboards | infra/resources.bicep:20-29                                                              |
-| Recovery Code Threshold Alerts     | Blazor UI alerts when 2FA recovery codes ≤ 0 (danger), 1 (danger), or ≤ 3 (warning)               | Security       | End Users, Security       | Security Team | Active | Progressive Security | TwoFactorAuthentication page | End Users              | src/IdentityProvider/Components/Account/Pages/Manage/TwoFactorAuthentication.razor:22-40 |
+| Component                          | Description                                                                                       | Classification | Stakeholders              | Owner         | Status | Alignment            | Source Systems               | Consumers              |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------- | -------------- | ------------------------- | ------------- | ------ | -------------------- | ---------------------------- | ---------------------- |
+| Application Performance Monitoring | Azure Application Insights + Log Analytics Workspace for request/failure telemetry and dashboards | Operational    | Platform Engineering, SRE | Platform Team | Active | Cloud-Native         | Azure Monitor SDK            | Operations, Dashboards |
+| Recovery Code Threshold Alerts     | Blazor UI alerts when 2FA recovery codes ≤ 0 (danger), 1 (danger), or ≤ 3 (warning)               | Security       | End Users, Security       | Security Team | Active | Progressive Security | TwoFactorAuthentication page | End Users              |
 
 **Business Process Flow — User Registration:**
 
