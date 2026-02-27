@@ -1314,16 +1314,30 @@ flowchart LR
 
 ```mermaid
 ---
+title: Cross-Domain Dependency Graph
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: Cross-Domain Dependency Graph — Contoso IdentityProvider
     accDescr: Shows bidirectional dependencies between Authentication, Identity Management, Integration, Persistence, and Infrastructure domains
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Cross-Domain Dependencies"]
         subgraph businessDomains["Business Domains"]
