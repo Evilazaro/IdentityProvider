@@ -1346,14 +1346,20 @@ flowchart TB
     INT --> PERSIST
     PERSIST --> INFRA
 
-    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style businessDomains fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style foundationLayers fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style AUTH fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style IDM fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style INT fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style PERSIST fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style INFRA fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class AUTH core
+    class IDM success
+    class INT warning
+    class PERSIST,INFRA data
+
+    %% Subgraph styling fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style businessDomains fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style foundationLayers fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 ### Summary
