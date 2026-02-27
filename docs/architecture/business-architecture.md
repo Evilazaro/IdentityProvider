@@ -565,6 +565,53 @@ The catalog covers 38 components across 11 Business Architecture component types
 | Password Recovery  | Forgot Password → Email Reset Link → Reset Password → Confirmation self-service flow | Primary        | End Users, Support       | Identity Team | Active | Security-by-Default  | ForgotPassword, Email, Reset | End Users       | src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor:1-67                  |
 | Security Hardening | Basic Auth → Enable 2FA → Generate Recovery Codes → Manage Trusted Browsers          | Secondary      | Security-conscious Users | Security Team | Active | Progressive Security | 2FA Dashboard, Authenticator | Users, Security | src/IdentityProvider/Components/Account/Pages/Manage/TwoFactorAuthentication.razor:1-102 |
 
+**Value Stream Map:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart LR
+    accTitle: Value Stream Map — Contoso IdentityProvider
+    accDescr: Shows the three value streams with their sequential stages from trigger to outcome
+
+    subgraph main["IdentityProvider Value Streams"]
+        subgraph vs1["User Onboarding (Primary)"]
+            VS1A["📝 Register"] --> VS1B["📧 Confirm Email"] --> VS1C["🔐 Login"] --> VS1D["👤 Manage Profile"]
+        end
+
+        subgraph vs2["Password Recovery (Primary)"]
+            VS2A["❓ Forgot Password"] --> VS2B["📧 Email Reset Link"] --> VS2C["🔄 Reset Password"] --> VS2D["✅ Confirmation"]
+        end
+
+        subgraph vs3["Security Hardening (Secondary)"]
+            VS3A["🔐 Basic Auth"] --> VS3B["📱 Enable 2FA"] --> VS3C["🔑 Recovery Codes"] --> VS3D["🔒 Manage Browsers"]
+        end
+    end
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style vs1 fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
+    style vs2 fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
+    style vs3 fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
+    style VS1A fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style VS1B fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style VS1C fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style VS1D fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style VS2A fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style VS2B fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style VS2C fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style VS2D fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style VS3A fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style VS3B fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style VS3C fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style VS3D fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+```
+
 ### 5.4 Business Processes
 
 | Component                 | Description                                                                                  | Classification | Stakeholders     | Owner           | Status | Alignment            | Source Systems             | Consumers       | Source File                                                                            |
@@ -619,6 +666,61 @@ The catalog covers 38 components across 11 Business Architecture component types
 | Password Reset Completed  | ResetPasswordAsync succeeds → redirect to ResetPasswordConfirmation                    | Security       | End Users            | Identity Team   | Active | Security-by-Default | UserManager       | Login          | src/IdentityProvider/Components/Account/Pages/ResetPassword.razor:70-85             |
 | External Login Associated | AddLoginAsync succeeds → external provider linked to account                           | Integration    | End Users, Partners  | Identity Team   | Active | Integration         | ExternalLoginInfo | Profile, Login | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:129-153           |
 | Account Deleted           | DeleteAsync succeeds → SignOutAsync → user session terminated                          | Compliance     | End Users, Legal     | Compliance Team | Active | Privacy Compliance  | UserManager       | GDPR Audit     | src/IdentityProvider/Components/Account/Pages/Manage/DeletePersonalData.razor:66-74 |
+
+**Business Event Lifecycle:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TD
+    accTitle: Business Event Lifecycle — Contoso IdentityProvider
+    accDescr: Shows the 5 business events with their triggers, processing, and outcomes across the identity lifecycle
+
+    subgraph main["Business Event Lifecycle"]
+        subgraph lifecycle["Identity Lifecycle Events"]
+            E1["📝 User Registered<br/>CreateAsync → Confirmation Email"]
+            E2["📧 Email Confirmed<br/>ConfirmEmailAsync → Account Active"]
+        end
+
+        subgraph security["Security Events"]
+            E3["🔄 Password Reset Completed<br/>ResetPasswordAsync → Login Ready"]
+        end
+
+        subgraph integration["Integration Events"]
+            E4["🌐 External Login Associated<br/>AddLoginAsync → Provider Linked"]
+        end
+
+        subgraph compliance["Compliance Events"]
+            E5["🗑️ Account Deleted<br/>DeleteAsync → Session Terminated"]
+        end
+
+        AUTH["🔐 Active Authentication<br/>Authenticated User Session"]
+    end
+
+    E1 -->|Triggers| E2
+    E2 -->|Enables| AUTH
+    E3 -->|Restores| AUTH
+    E4 -->|Links to| AUTH
+    E5 -->|Terminates| AUTH
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style lifecycle fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
+    style security fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
+    style integration fill:#E1DFDD,stroke:#C19C00,stroke-width:2px,color:#323130
+    style compliance fill:#E1DFDD,stroke:#D13438,stroke-width:2px,color:#323130
+    style E1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style E2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style E3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style E4 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style E5 fill:#FED9CC,stroke:#D13438,stroke-width:2px,color:#A4262C
+    style AUTH fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+```
 
 ### 5.10 Business Objects/Entities
 
@@ -845,6 +947,52 @@ flowchart LR
 | Authentication      | Integration         | External Login uses OAuth challenge/callback          | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:1-185 |
 | All Domains         | Persistence         | All processes depend on ApplicationDbContext (SQLite) | src/IdentityProvider/Data/ApplicationDbContext.cs:1-9                   |
 | All Domains         | Infrastructure      | Azure Container Apps hosts all services               | infra/resources.bicep:71-108                                            |
+
+**Cross-Domain Dependency Graph:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TB
+    accTitle: Cross-Domain Dependency Graph — Contoso IdentityProvider
+    accDescr: Shows bidirectional dependencies between Authentication, Identity Management, Integration, Persistence, and Infrastructure domains
+
+    subgraph main["Cross-Domain Dependencies"]
+        subgraph businessDomains["Business Domains"]
+            AUTH["🔐 Authentication Domain<br/>Login · 2FA · Password"]
+            IDM["📝 Identity Management Domain<br/>Registration · GDPR · Email"]
+            INT["🌐 Integration Domain<br/>External Login · App Registration"]
+        end
+
+        subgraph foundationLayers["Foundation Layers"]
+            PERSIST["🗄️ Persistence Layer<br/>ApplicationDbContext (SQLite)"]
+            INFRA["☁️ Infrastructure Layer<br/>Azure Container Apps · Monitor"]
+        end
+    end
+
+    AUTH <-->|“Confirmed Account Required”<br/>2FA Enrollment| IDM
+    AUTH -->|OAuth Challenge/Callback| INT
+    IDM -->|Registration → Login Redirect| AUTH
+    AUTH --> PERSIST
+    IDM --> PERSIST
+    INT --> PERSIST
+    PERSIST --> INFRA
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style businessDomains fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
+    style foundationLayers fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
+    style AUTH fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style IDM fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style INT fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style PERSIST fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style INFRA fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+```
 
 ### Summary
 
