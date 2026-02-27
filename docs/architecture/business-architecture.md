@@ -191,20 +191,20 @@ flowchart TB
 
     subgraph main["Contoso IdentityProvider — Business Capabilities"]
         subgraph authDomain["Authentication Domain"]
-            cap1["🔐 User Authentication<br/>Maturity: 4 — Measured"]
-            cap3["🔑 Two-Factor Authentication<br/>Maturity: 3 — Defined"]
-            cap4["🔄 Password Lifecycle Mgmt<br/>Maturity: 3 — Defined"]
+            cap1["🔐 User Authentication"]
+            cap3["🔑 Two-Factor Authentication"]
+            cap4["🔄 Password Lifecycle Mgmt"]
         end
 
         subgraph idmDomain["Identity Management Domain"]
-            cap2["📝 User Registration<br/>Maturity: 4 — Measured"]
-            cap6["🛡️ GDPR Data Rights<br/>Maturity: 3 — Defined"]
-            cap8["📧 Email Management<br/>Maturity: 3 — Defined"]
+            cap2["📝 User Registration"]
+            cap6["🛡️ GDPR Data Rights"]
+            cap8["📧 Email Management"]
         end
 
         subgraph intDomain["Integration Domain"]
-            cap5["🌐 External Identity Federation<br/>Maturity: 3 — Defined"]
-            cap7["📋 OAuth App Registration<br/>Maturity: 2 — Managed"]
+            cap5["🌐 External Identity Federation"]
+            cap7["📋 OAuth App Registration"]
         end
     end
 
@@ -449,7 +449,7 @@ The following analysis establishes the baseline for gap identification and impro
 | GAP-005 | Account lockout disabled in Login flow (lockoutOnFailure: false)                  | Medium — brute-force protection not enforced                                |
 | GAP-006 | External login bypasses 2FA (bypassTwoFactor: true)                               | Medium — security policy inconsistency for federated users                  |
 
-### Maturity Heatmap
+### Component Status Overview
 
 | Component Type            | Count | Status |
 | ------------------------- | ----- | ------ |
@@ -465,7 +465,7 @@ The following analysis establishes the baseline for gap identification and impro
 | Business Objects/Entities | 2     | Stable |
 | KPIs & Metrics            | 2     | Gap    |
 
-**Capability Maturity Visualization:**
+**Capability Assessment Visualization:**
 
 ```mermaid
 ---
@@ -477,28 +477,28 @@ config:
     fontSize: '16px'
 ---
 flowchart TB
-    accTitle: Capability Maturity Heatmap — Contoso IdentityProvider
-    accDescr: Visual heatmap showing maturity levels 2 through 4 across key business capabilities with color-coded gap identification
+    accTitle: Capability Assessment Heatmap — Contoso IdentityProvider
+    accDescr: Visual heatmap showing capability status across key business capabilities with color-coded gap identification
 
-    subgraph main["Capability Maturity Assessment"]
-        subgraph level4["Level 4 — Measured"]
-            M4A["🔐 User Authentication<br/>Confidence: 0.95"]
-            M4B["📝 User Registration<br/>Confidence: 0.95"]
-            M4C["🏗️ Identity Service<br/>Confidence: 0.95"]
+    subgraph main["Capability Assessment"]
+        subgraph level4["Fully Operational"]
+            M4A["🔐 User Authentication"]
+            M4B["📝 User Registration"]
+            M4C["🏗️ Identity Service"]
         end
 
-        subgraph level3["Level 3 — Defined"]
-            M3A["🔑 Two-Factor Authentication<br/>Confidence: 0.92"]
-            M3B["🔄 Password Lifecycle<br/>Confidence: 0.90"]
-            M3C["🌐 External Federation<br/>Confidence: 0.88"]
-            M3D["🛡️ GDPR Data Rights<br/>Confidence: 0.90"]
-            M3E["📧 Email Management<br/>Confidence: 0.88"]
+        subgraph level3["Well-Defined"]
+            M3A["🔑 Two-Factor Authentication"]
+            M3B["🔄 Password Lifecycle"]
+            M3C["🌐 External Federation"]
+            M3D["🛡️ GDPR Data Rights"]
+            M3E["📧 Email Management"]
         end
 
-        subgraph level2["Level 2 — Managed ⚠️"]
-            M2A["📋 OAuth App Registration<br/>Confidence: 0.78"]
-            M2B["📧 Email Service (Stub)<br/>Confidence: 0.80"]
-            M2C["🔍 Email Domain Validation<br/>Confidence: 0.85"]
+        subgraph level2["Gaps Identified ⚠️"]
+            M2A["📋 OAuth App Registration"]
+            M2B["📧 Email Service (Stub)"]
+            M2C["🔍 Email Domain Validation"]
         end
     end
 
