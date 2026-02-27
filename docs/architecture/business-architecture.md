@@ -1371,7 +1371,8 @@ flowchart TB
     class INT warning
     class PERSIST,INFRA data
 
-    %% Subgraph styling fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    %% Subgraph styling
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
     style businessDomains fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
     style foundationLayers fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
