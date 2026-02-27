@@ -1,5 +1,49 @@
 # Business Architecture — Contoso IdentityProvider
 
+## Table of Contents
+
+- [Section 1: Executive Summary](#section-1-executive-summary)
+- [Section 2: Architecture Landscape](#section-2-architecture-landscape)
+  - [2.1 Business Strategy](#21-business-strategy)
+  - [2.2 Business Capabilities](#22-business-capabilities)
+  - [2.3 Value Streams](#23-value-streams)
+  - [2.4 Business Processes](#24-business-processes)
+  - [2.5 Business Services](#25-business-services)
+  - [2.6 Business Functions](#26-business-functions)
+  - [2.7 Business Roles & Actors](#27-business-roles--actors)
+  - [2.8 Business Rules](#28-business-rules)
+  - [2.9 Business Events](#29-business-events)
+  - [2.10 Business Objects/Entities](#210-business-objectsentities)
+  - [2.11 KPIs & Metrics](#211-kpis--metrics)
+- [Section 3: Architecture Principles](#section-3-architecture-principles)
+  - [Principle 1: Security-by-Default](#principle-1-security-by-default)
+  - [Principle 2: Privacy Compliance by Design](#principle-2-privacy-compliance-by-design)
+  - [Principle 3: Separation of Authentication Concerns](#principle-3-separation-of-authentication-concerns)
+  - [Principle 4: Progressive Security Enhancement](#principle-4-progressive-security-enhancement)
+  - [Principle 5: Configuration-Driven Infrastructure](#principle-5-configuration-driven-infrastructure)
+- [Section 4: Current State Baseline](#section-4-current-state-baseline)
+  - [Capability Coverage Assessment](#capability-coverage-assessment)
+  - [Gap Analysis](#gap-analysis)
+  - [Component Status Overview](#component-status-overview)
+- [Section 5: Component Catalog](#section-5-component-catalog)
+  - [5.1 Business Strategy](#51-business-strategy)
+  - [5.2 Business Capabilities](#52-business-capabilities)
+  - [5.3 Value Streams](#53-value-streams)
+  - [5.4 Business Processes](#54-business-processes)
+  - [5.5 Business Services](#55-business-services)
+  - [5.6 Business Functions](#56-business-functions)
+  - [5.7 Business Roles & Actors](#57-business-roles--actors)
+  - [5.8 Business Rules](#58-business-rules)
+  - [5.9 Business Events](#59-business-events)
+  - [5.10 Business Objects/Entities](#510-business-objectsentities)
+  - [5.11 KPIs & Metrics](#511-kpis--metrics)
+- [Section 8: Dependencies & Integration](#section-8-dependencies--integration)
+  - [Dependency Matrix](#dependency-matrix)
+  - [Data Flow Diagram](#data-flow-diagram)
+  - [Cross-Domain Dependencies](#cross-domain-dependencies)
+
+---
+
 ## Section 1: Executive Summary
 
 ### Overview
@@ -85,6 +129,8 @@ flowchart TD
     style strategies fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
     style domains fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -366,6 +412,8 @@ Primary gaps include: (1) the Email Notification Service is a development-only n
 
 > 📌 **Recommended Next Steps**: implement a production email sender, complete AppRegistration CRUD persistence, and add business-level telemetry events for capability usage tracking.
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Section 3: Architecture Principles
@@ -490,6 +538,8 @@ The five architecture principles form a layered governance framework. Foundation
 
 All five principles have direct source code evidence with line-range citations. Future architecture decisions should be evaluated against these principles, particularly when extending the platform with new identity capabilities or integrating additional external providers.
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Section 4: Current State Baseline
@@ -613,6 +663,8 @@ The Current State Baseline reveals a well-structured, framework-driven identity 
 > ⚠️ **Production Blocker**: Six gaps require attention: the no-op email sender (**GAP-001**) is the **highest-impact issue blocking production readiness**, followed by the incomplete App Registration persistence (GAP-002) and hardcoded email domain whitelist (GAP-003).
 
 Security-related gaps (**disabled lockout GAP-005**, **2FA bypass for external login GAP-006**) represent policy decisions that **should be reviewed** against enterprise security requirements. Recommended next steps: prioritize GAP-001 with a production email provider, address GAP-005/GAP-006 security policy alignment, and implement business-level telemetry (GAP-004).
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -1197,6 +1249,8 @@ The Component Catalog documents 38 components across all 11 Business Architectur
 
 Gaps in the catalog include: the Email Notification Service operating as a no-op stub (no production email delivery), the AppRegistration entity lacking CRUD persistence endpoints, and KPI tracking limited to infrastructure-level Azure Monitor without business-event-specific telemetry. Future enhancements should prioritize production email integration, AppRegistration persistence completion, and custom business telemetry events for registration rates, authentication success/failure ratios, and 2FA adoption metrics.
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Section 8: Dependencies & Integration
@@ -1392,3 +1446,5 @@ The dependency analysis reveals a hub-and-spoke integration pattern centered on 
 External integration with Azure Container Apps and Azure Monitor is fully configured through Infrastructure as Code.
 
 > 📌 **Recommended Next Steps**: bind a production SMTP or SendGrid email sender to `IEmailSender`, implement `ApplicationDbContext` entity mapping for `AppRegistration`, and add health check endpoints for runtime dependency monitoring.
+
+[Back to top](#table-of-contents)
