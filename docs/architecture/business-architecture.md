@@ -14,7 +14,7 @@ Strategic alignment is strong in identity management and GDPR compliance domains
 
 ```mermaid
 ---
-title: Strategic Alignment Map
+title: <b>Strategic Alignment Map</b>
 config:
   theme: base
   look: classic
