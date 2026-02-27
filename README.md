@@ -87,18 +87,18 @@ Contoso IdentityProvider offers a comprehensive set of identity management capab
 
 > 📌 **How It Works**: The application uses ASP.NET Core Identity with Entity Framework Core to manage user credentials, security stamps, and authentication tokens. Blazor Server's SignalR connection provides real-time, interactive UI components for all identity operations without requiring client-side JavaScript frameworks.
 
-| Feature | Description | Source |
-| --- | --- | --- |
-| 🔐 **User Authentication** | Email/password login with cookie-based session management | [Login.razor](src/IdentityProvider/Components/Account/Pages/Login.razor) |
-| 📝 **User Registration** | Self-service account creation with email confirmation | [Register.razor](src/IdentityProvider/Components/Account/Pages/Register.razor) |
-| 🔑 **Two-Factor Authentication** | TOTP-based 2FA with recovery codes | [LoginWith2fa.razor](src/IdentityProvider/Components/Account/Pages/LoginWith2fa.razor) |
-| 🔄 **Password Recovery** | Forgot password and reset password workflows | [ForgotPassword.razor](src/IdentityProvider/Components/Account/Pages/ForgotPassword.razor) |
-| 🌐 **External Login Providers** | OAuth/OpenID Connect integration for third-party authentication | [ExternalLogin.razor](src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor) |
-| 📋 **App Registration** | OAuth client registration management (ClientId, TenantId, Scopes, Grant Types) | [AppRegistration.cs](src/IdentityProvider/Components/AppRegistration.cs) |
-| 🛡️ **Security Stamp Revalidation** | Automatic session revalidation every 30 minutes | [IdentityRevalidatingAuthenticationStateProvider.cs](src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs) |
-| 🚫 **Account Lockout** | Brute-force protection with configurable lockout policies | [Program.cs](src/IdentityProvider/Program.cs) |
-| ☁️ **Azure Container Apps Deployment** | One-command deployment with Azure Developer CLI | [azure.yaml](azure.yaml) |
-| 📊 **Application Insights Monitoring** | Built-in observability with Azure Monitor integration | [resources.bicep](infra/resources.bicep) |
+| Feature | Description |
+| --- | --- |
+| 🔐 **User Authentication** | Email/password login with cookie-based session management |
+| 📝 **User Registration** | Self-service account creation with email confirmation |
+| 🔑 **Two-Factor Authentication** | TOTP-based 2FA with recovery codes |
+| 🔄 **Password Recovery** | Forgot password and reset password workflows |
+| 🌐 **External Login Providers** | OAuth/OpenID Connect integration for third-party authentication |
+| 📋 **App Registration** | OAuth client registration management (ClientId, TenantId, Scopes, Grant Types) |
+| 🛡️ **Security Stamp Revalidation** | Automatic session revalidation every 30 minutes |
+| 🚫 **Account Lockout** | Brute-force protection with configurable lockout policies |
+| ☁️ **Azure Container Apps Deployment** | One-command deployment with Azure Developer CLI |
+| 📊 **Application Insights Monitoring** | Built-in observability with Azure Monitor integration |
 
 ## Getting Started
 
@@ -174,11 +174,11 @@ The application uses the standard ASP.NET Core configuration system with environ
 
 When deployed to Azure Container Apps, the following environment variables are injected automatically by the infrastructure:
 
-| Variable | Purpose | Source |
-| --- | --- | --- |
-| `APPLICATIONINSIGHTS_CONNECTION_STRING` | Telemetry and monitoring | Azure Monitor module in [resources.bicep](infra/resources.bicep) |
-| `AZURE_CLIENT_ID` | Managed Identity authentication | User-Assigned Managed Identity |
-| `PORT` | Container listening port | Set to `8080` |
+| Variable | Purpose |
+| --- | --- |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING` | Telemetry and monitoring |
+| `AZURE_CLIENT_ID` | Managed Identity authentication |
+| `PORT` | Container listening port |
 
 ## Project Structure
 
