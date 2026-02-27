@@ -79,100 +79,100 @@ The following subsections catalog all 11 Business component types discovered thr
 
 ### 2.1 Business Strategy
 
-| Name                           | Description                                                                             | Confidence | Maturity    |
-| ------------------------------ | --------------------------------------------------------------------------------------- | ---------- | ----------- |
-| Cloud-Native Identity Platform | Strategic initiative to deliver IAM as a containerized Azure service with observability | 0.80       | 3 - Defined |
-| Digital Identity Enablement    | Platform vision for enterprise SSO, MFA, and compliance-ready identity services         | 0.75       | 3 - Defined |
+| Name                           | Description                                                                             |
+| ------------------------------ | --------------------------------------------------------------------------------------- |
+| Cloud-Native Identity Platform | Strategic initiative to deliver IAM as a containerized Azure service with observability |
+| Digital Identity Enablement    | Platform vision for enterprise SSO, MFA, and compliance-ready identity services         |
 
 ### 2.2 Business Capabilities
 
-| Name                          | Description                                                                  | Confidence | Maturity     |
-| ----------------------------- | ---------------------------------------------------------------------------- | ---------- | ------------ |
-| User Authentication           | Email/password credential verification with cookie-based session management  | 0.95       | 4 - Measured |
-| User Registration             | Self-service account creation with email confirmation workflow               | 0.95       | 4 - Measured |
-| Two-Factor Authentication     | TOTP-based authenticator app enrollment, verification, and recovery codes    | 0.92       | 3 - Defined  |
-| Password Lifecycle Management | Password change, reset, and initial set for external-login-only users        | 0.90       | 3 - Defined  |
-| External Identity Federation  | OAuth/OIDC external provider login, account linking, and provider management | 0.88       | 3 - Defined  |
-| GDPR Data Rights              | Personal data download (JSON export) and permanent account deletion          | 0.90       | 3 - Defined  |
-| OAuth App Registration        | OAuth client application registration with credential and scope management   | 0.78       | 2 - Managed  |
-| Email Management              | Email address change, verification, and confirmation resend workflows        | 0.88       | 3 - Defined  |
+| Name                          | Description                                                                  |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| User Authentication           | Email/password credential verification with cookie-based session management  |
+| User Registration             | Self-service account creation with email confirmation workflow               |
+| Two-Factor Authentication     | TOTP-based authenticator app enrollment, verification, and recovery codes    |
+| Password Lifecycle Management | Password change, reset, and initial set for external-login-only users        |
+| External Identity Federation  | OAuth/OIDC external provider login, account linking, and provider management |
+| GDPR Data Rights              | Personal data download (JSON export) and permanent account deletion          |
+| OAuth App Registration        | OAuth client application registration with credential and scope management   |
+| Email Management              | Email address change, verification, and confirmation resend workflows        |
 
 ### 2.3 Value Streams
 
-| Name               | Description                                                                     | Confidence | Maturity    |
-| ------------------ | ------------------------------------------------------------------------------- | ---------- | ----------- |
-| User Onboarding    | End-to-end flow: Register → Confirm Email → Login → Manage Profile              | 0.85       | 3 - Defined |
-| Password Recovery  | Self-service flow: Forgot Password → Email Link → Reset Password → Confirmation | 0.85       | 3 - Defined |
-| Security Hardening | User journey from basic authentication to 2FA enrollment with recovery codes    | 0.80       | 3 - Defined |
+| Name               | Description                                                                     |
+| ------------------ | ------------------------------------------------------------------------------- |
+| User Onboarding    | End-to-end flow: Register → Confirm Email → Login → Manage Profile              |
+| Password Recovery  | Self-service flow: Forgot Password → Email Link → Reset Password → Confirmation |
+| Security Hardening | User journey from basic authentication to 2FA enrollment with recovery codes    |
 
 ### 2.4 Business Processes
 
-| Name                      | Description                                                                 | Confidence | Maturity     |
-| ------------------------- | --------------------------------------------------------------------------- | ---------- | ------------ |
-| User Registration Process | Create account, generate confirmation token, send email, await confirmation | 0.92       | 4 - Measured |
-| Authentication Process    | Validate credentials, check lockout, handle 2FA requirement, issue cookie   | 0.92       | 4 - Measured |
-| Password Reset Process    | Accept email, generate reset token, verify token, update password           | 0.90       | 3 - Defined  |
-| 2FA Enrollment Process    | Generate shared key, display QR URI, verify TOTP code, enable 2FA           | 0.88       | 3 - Defined  |
-| Account Deletion Process  | Confirm password, delete user record, sign out, redirect                    | 0.88       | 3 - Defined  |
+| Name                      | Description                                                                 |
+| ------------------------- | --------------------------------------------------------------------------- |
+| User Registration Process | Create account, generate confirmation token, send email, await confirmation |
+| Authentication Process    | Validate credentials, check lockout, handle 2FA requirement, issue cookie   |
+| Password Reset Process    | Accept email, generate reset token, verify token, update password           |
+| 2FA Enrollment Process    | Generate shared key, display QR URI, verify TOTP code, enable 2FA           |
+| Account Deletion Process  | Confirm password, delete user record, sign out, redirect                    |
 
 ### 2.5 Business Services
 
-| Name                         | Description                                                                                  | Confidence | Maturity     |
-| ---------------------------- | -------------------------------------------------------------------------------------------- | ---------- | ------------ |
-| Identity Service             | Core ASP.NET Identity framework providing authentication, authorization, and user management | 0.95       | 4 - Measured |
-| Email Notification Service   | Placeholder email sender for confirmation links, password resets, and code delivery          | 0.80       | 2 - Managed  |
-| Authentication State Service | Server-side authentication state revalidation with 30-minute security stamp checks           | 0.88       | 3 - Defined  |
+| Name                         | Description                                                                                  |
+| ---------------------------- | -------------------------------------------------------------------------------------------- |
+| Identity Service             | Core ASP.NET Identity framework providing authentication, authorization, and user management |
+| Email Notification Service   | Placeholder email sender for confirmation links, password resets, and code delivery          |
+| Authentication State Service | Server-side authentication state revalidation with 30-minute security stamp checks           |
 
 ### 2.6 Business Functions
 
-| Name                      | Description                                                                                     | Confidence | Maturity    |
-| ------------------------- | ----------------------------------------------------------------------------------------------- | ---------- | ----------- |
-| Email Domain Validation   | Validates email addresses against a whitelist of approved domains                               | 0.85       | 2 - Managed |
-| Redirect Management       | Centralized redirect handling with status message cookie transport and open-redirect prevention | 0.82       | 3 - Defined |
-| User Access Resolution    | Retrieves current authenticated user or redirects to InvalidUser error page                     | 0.80       | 3 - Defined |
-| Identity Endpoint Routing | Maps non-Razor Identity HTTP endpoints for external login, logout, link, and data download      | 0.85       | 3 - Defined |
+| Name                      | Description                                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------------------------- |
+| Email Domain Validation   | Validates email addresses against a whitelist of approved domains                               |
+| Redirect Management       | Centralized redirect handling with status message cookie transport and open-redirect prevention |
+| User Access Resolution    | Retrieves current authenticated user or redirects to InvalidUser error page                     |
+| Identity Endpoint Routing | Maps non-Razor Identity HTTP endpoints for external login, logout, link, and data download      |
 
 ### 2.7 Business Roles & Actors
 
-| Name                       | Description                                                                     | Confidence | Maturity    |
-| -------------------------- | ------------------------------------------------------------------------------- | ---------- | ----------- |
-| Anonymous User             | Unauthenticated visitor who can register, login, or reset password              | 0.85       | 3 - Defined |
-| Authenticated User         | Signed-in user with access to profile, 2FA, email, and personal data management | 0.88       | 3 - Defined |
-| External Identity Provider | Third-party OAuth/OIDC provider that issues identity claims for federated login | 0.78       | 3 - Defined |
+| Name                       | Description                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| Anonymous User             | Unauthenticated visitor who can register, login, or reset password              |
+| Authenticated User         | Signed-in user with access to profile, 2FA, email, and personal data management |
+| External Identity Provider | Third-party OAuth/OIDC provider that issues identity claims for federated login |
 
 ### 2.8 Business Rules
 
-| Name                        | Description                                                                       | Confidence | Maturity     |
-| --------------------------- | --------------------------------------------------------------------------------- | ---------- | ------------ |
-| Password Complexity Policy  | Minimum 6 characters, maximum 100 characters, with confirmation match             | 0.92       | 3 - Defined  |
-| Email Confirmation Required | Account sign-in requires confirmed email address (RequireConfirmedAccount = true) | 0.95       | 4 - Measured |
-| Security Stamp Revalidation | Authentication state revalidated every 30 minutes against current security stamp  | 0.90       | 3 - Defined  |
-| Email Domain Whitelist      | Only emails from example.com and test.com domains are accepted                    | 0.88       | 2 - Managed  |
-| Information Non-Disclosure  | Password reset and email resend do not reveal whether user exists                 | 0.90       | 3 - Defined  |
+| Name                        | Description                                                                       |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| Password Complexity Policy  | Minimum 6 characters, maximum 100 characters, with confirmation match             |
+| Email Confirmation Required | Account sign-in requires confirmed email address (RequireConfirmedAccount = true) |
+| Security Stamp Revalidation | Authentication state revalidated every 30 minutes against current security stamp  |
+| Email Domain Whitelist      | Only emails from example.com and test.com domains are accepted                    |
+| Information Non-Disclosure  | Password reset and email resend do not reveal whether user exists                 |
 
 ### 2.9 Business Events
 
-| Name                      | Description                                                                    | Confidence | Maturity    |
-| ------------------------- | ------------------------------------------------------------------------------ | ---------- | ----------- |
-| User Registered           | Triggered when a new user account is successfully created                      | 0.90       | 3 - Defined |
-| Email Confirmed           | Triggered when user clicks confirmation link and email is verified             | 0.88       | 3 - Defined |
-| Password Reset Completed  | Triggered when user successfully resets password via token                     | 0.85       | 3 - Defined |
-| External Login Associated | Triggered when external OAuth provider is linked to an existing or new account | 0.82       | 3 - Defined |
-| Account Deleted           | Triggered when user permanently deletes their account (GDPR right to erasure)  | 0.88       | 3 - Defined |
+| Name                      | Description                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| User Registered           | Triggered when a new user account is successfully created                      |
+| Email Confirmed           | Triggered when user clicks confirmation link and email is verified             |
+| Password Reset Completed  | Triggered when user successfully resets password via token                     |
+| External Login Associated | Triggered when external OAuth provider is linked to an existing or new account |
+| Account Deleted           | Triggered when user permanently deletes their account (GDPR right to erasure)  |
 
 ### 2.10 Business Objects/Entities
 
-| Name            | Description                                                                     | Confidence | Maturity    |
-| --------------- | ------------------------------------------------------------------------------- | ---------- | ----------- |
-| ApplicationUser | Identity user entity inheriting IdentityUser with extensible profile fields     | 0.95       | 3 - Defined |
-| AppRegistration | OAuth/OIDC client registration entity with credentials, scopes, and grant types | 0.90       | 2 - Managed |
+| Name            | Description                                                                     |
+| --------------- | ------------------------------------------------------------------------------- |
+| ApplicationUser | Identity user entity inheriting IdentityUser with extensible profile fields     |
+| AppRegistration | OAuth/OIDC client registration entity with credentials, scopes, and grant types |
 
 ### 2.11 KPIs & Metrics
 
-| Name                               | Description                                                                         | Confidence | Maturity    |
-| ---------------------------------- | ----------------------------------------------------------------------------------- | ---------- | ----------- |
-| Application Performance Monitoring | Azure Application Insights integration for request telemetry and failure tracking   | 0.80       | 3 - Defined |
-| Recovery Code Threshold Alerts     | UI-level alerting when 2FA recovery codes fall below safety thresholds (0, 1, or 3) | 0.75       | 2 - Managed |
+| Name                               | Description                                                                         |
+| ---------------------------------- | ----------------------------------------------------------------------------------- |
+| Application Performance Monitoring | Azure Application Insights integration for request telemetry and failure tracking   |
+| Recovery Code Threshold Alerts     | UI-level alerting when 2FA recovery codes fall below safety thresholds (0, 1, or 3) |
 
 **Business Capability Map:**
 
@@ -432,38 +432,38 @@ The following analysis establishes the baseline for gap identification and impro
 
 ### Capability Coverage Assessment
 
-| Domain              | Capabilities                          | Avg Maturity | Coverage |
-| ------------------- | ------------------------------------- | ------------ | -------- |
-| Authentication      | User Auth, 2FA, Password Mgmt         | 3.3          | Complete |
-| Identity Management | Registration, GDPR, Email Mgmt        | 3.3          | Complete |
-| Integration         | External Federation, App Registration | 2.5          | Partial  |
+| Domain              | Capabilities                          | Coverage |
+| ------------------- | ------------------------------------- | -------- |
+| Authentication      | User Auth, 2FA, Password Mgmt         | Complete |
+| Identity Management | Registration, GDPR, Email Mgmt        | Complete |
+| Integration         | External Federation, App Registration | Partial  |
 
 ### Gap Analysis
 
-| Gap ID  | Gap Description                                                                   | Impact                                                                      | Evidence                                                                  |
-| ------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| GAP-001 | No production email sender — IdentityNoOpEmailSender sends no actual emails       | High — email confirmations and password resets non-functional in production | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23   |
-| GAP-002 | App Registration form lacks persistence — submits redirect to home without saving | Medium — OAuth client registration is UI-only with no backend storage       | src/IdentityProvider/Components/Pages/AppRegistrationForm.razor:98-99     |
-| GAP-003 | Email domain whitelist hardcoded to example.com and test.com                      | Medium — email validation blocks all real-world domains                     | src/IdentityProvider/Components/eMail.cs:14-14                            |
-| GAP-004 | No application-level business metrics or KPI telemetry                            | Low — only infrastructure-level Application Insights configured             | infra/resources.bicep:20-29                                               |
-| GAP-005 | Account lockout disabled in Login flow (lockoutOnFailure: false)                  | Medium — brute-force protection not enforced                                | src/IdentityProvider/Components/Account/Pages/Login.razor:91-91           |
-| GAP-006 | External login bypasses 2FA (bypassTwoFactor: true)                               | Medium — security policy inconsistency for federated users                  | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:103-106 |
+| Gap ID  | Gap Description                                                                   | Impact                                                                      |
+| ------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| GAP-001 | No production email sender — IdentityNoOpEmailSender sends no actual emails       | High — email confirmations and password resets non-functional in production |
+| GAP-002 | App Registration form lacks persistence — submits redirect to home without saving | Medium — OAuth client registration is UI-only with no backend storage       |
+| GAP-003 | Email domain whitelist hardcoded to example.com and test.com                      | Medium — email validation blocks all real-world domains                     |
+| GAP-004 | No application-level business metrics or KPI telemetry                            | Low — only infrastructure-level Application Insights configured             |
+| GAP-005 | Account lockout disabled in Login flow (lockoutOnFailure: false)                  | Medium — brute-force protection not enforced                                |
+| GAP-006 | External login bypasses 2FA (bypassTwoFactor: true)                               | Medium — security policy inconsistency for federated users                  |
 
 ### Maturity Heatmap
 
-| Component Type            | Count | Avg Confidence | Maturity Range | Status |
-| ------------------------- | ----- | -------------- | -------------- | ------ |
-| Business Strategy         | 2     | 0.78           | 3              | Stable |
-| Business Capabilities     | 8     | 0.90           | 2-4            | Active |
-| Value Streams             | 3     | 0.83           | 3              | Stable |
-| Business Processes        | 5     | 0.90           | 3-4            | Active |
-| Business Services         | 3     | 0.88           | 2-4            | Mixed  |
-| Business Functions        | 4     | 0.83           | 2-3            | Stable |
-| Business Roles & Actors   | 3     | 0.84           | 3              | Stable |
-| Business Rules            | 5     | 0.91           | 2-4            | Active |
-| Business Events           | 5     | 0.87           | 3              | Stable |
-| Business Objects/Entities | 2     | 0.93           | 2-3            | Stable |
-| KPIs & Metrics            | 2     | 0.78           | 2-3            | Gap    |
+| Component Type            | Count | Status |
+| ------------------------- | ----- | ------ |
+| Business Strategy         | 2     | Stable |
+| Business Capabilities     | 8     | Active |
+| Value Streams             | 3     | Stable |
+| Business Processes        | 5     | Active |
+| Business Services         | 3     | Mixed  |
+| Business Functions        | 4     | Stable |
+| Business Roles & Actors   | 3     | Stable |
+| Business Rules            | 5     | Active |
+| Business Events           | 5     | Stable |
+| Business Objects/Entities | 2     | Stable |
+| KPIs & Metrics            | 2     | Gap    |
 
 **Capability Maturity Visualization:**
 
@@ -563,8 +563,6 @@ The catalog covers 38 components across 11 Business Architecture component types
 | -------------- | ---------------------------------------------------------------------------------------------- |
 | Description    | Email/password credential verification issuing cookie-based sessions with configurable lockout |
 | Classification | Core                                                                                           |
-| Confidence     | 0.95                                                                                           |
-| Maturity       | 4 — Measured                                                                                   |
 | Owner          | Identity Team                                                                                  |
 | Status         | Active                                                                                         |
 | Alignment      | Security-by-Default                                                                            |
@@ -589,8 +587,6 @@ The catalog covers 38 components across 11 Business Architecture component types
 | -------------- | ---------------------------------------------------------------------------------------------- |
 | Description    | TOTP authenticator app enrollment with shared key, QR URI, verification, and 10 recovery codes |
 | Classification | Core                                                                                           |
-| Confidence     | 0.92                                                                                           |
-| Maturity       | 3 — Defined                                                                                    |
 | Owner          | Security Team                                                                                  |
 | Status         | Active                                                                                         |
 | Alignment      | Progressive Security Enhancement                                                               |
@@ -681,8 +677,6 @@ flowchart LR
 | -------------- | --------------------------------------------------------------------------------------- |
 | Description    | PasswordSignInAsync → Check lockout → Check 2FA → Issue cookie → Redirect to return URL |
 | Classification | Core                                                                                    |
-| Confidence     | 0.92                                                                                    |
-| Maturity       | 4 — Measured                                                                            |
 | Owner          | Identity Team                                                                           |
 | Status         | Active                                                                                  |
 | Alignment      | Security-by-Default                                                                     |
@@ -711,8 +705,6 @@ flowchart LR
 | -------------- | --------------------------------------------------------------------------------------- |
 | Description    | GDPR right-to-erasure implementation with password confirmation and session termination |
 | Classification | Compliance                                                                              |
-| Confidence     | 0.88                                                                                    |
-| Maturity       | 3 — Defined                                                                             |
 | Owner          | Compliance Team                                                                         |
 | Status         | Active                                                                                  |
 | Alignment      | Privacy Compliance by Design                                                            |
@@ -746,8 +738,6 @@ flowchart LR
 | -------------- | -------------------------------------------------------------------------------------- |
 | Description    | Core ASP.NET Identity registration providing UserManager, SignInManager, and EF stores |
 | Classification | Core                                                                                   |
-| Confidence     | 0.95                                                                                   |
-| Maturity       | 4 — Measured                                                                           |
 | Owner          | Identity Team                                                                          |
 | Status         | Active                                                                                 |
 | Alignment      | Security-by-Default                                                                    |
@@ -802,8 +792,6 @@ flowchart LR
 | -------------- | --------------------------------------------------------------------- |
 | Description    | Minimum 6 characters, maximum 100 characters, with confirmation match |
 | Classification | Security                                                              |
-| Confidence     | 0.92                                                                  |
-| Maturity       | 3 — Defined                                                           |
 | Owner          | Security Team                                                         |
 | Status         | Active                                                                |
 | Alignment      | Security-by-Default                                                   |
@@ -823,8 +811,6 @@ flowchart LR
 | -------------- | ------------------------------------------------------------------- |
 | Description    | SignIn.RequireConfirmedAccount = true — blocks unconfirmed accounts |
 | Classification | Security                                                            |
-| Confidence     | 0.95                                                                |
-| Maturity       | 4 — Measured                                                        |
 | Owner          | Identity Team                                                       |
 | Status         | Active                                                              |
 | Alignment      | Privacy Compliance by Design                                        |
@@ -917,8 +903,6 @@ flowchart TD
 | -------------- | --------------------------------------------------------------------------- |
 | Description    | Core identity entity inheriting IdentityUser with extensible profile fields |
 | Classification | Core Entity                                                                 |
-| Confidence     | 0.95                                                                        |
-| Maturity       | 3 — Defined                                                                 |
 | Owner          | Identity Team                                                               |
 | Status         | Active                                                                      |
 | Alignment      | Security-by-Default                                                         |
