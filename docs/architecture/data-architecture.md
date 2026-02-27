@@ -106,29 +106,37 @@ flowchart TB
     accTitle: IdentityProvider Data Domain Map
     accDescr: Diagram showing the two primary data domains (Identity and Application Registration) with their constituent entities and relationships to the shared data store
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph IDENTITY_DOMAIN["🔐 Identity Domain"]
         direction TB
-        AU["👤 ApplicationUser\nPII | 0.83"]
-        IR["🔑 IdentityRole\nInternal | 0.80"]
-        IUR["🔗 IdentityUserRole\nInternal | 0.78"]
-        IUC["📝 IdentityUserClaim\nPII | 0.78"]
-        IRC["📝 IdentityRoleClaim\nInternal | 0.78"]
-        IUL["🔗 IdentityUserLogin\nPII | 0.78"]
-        IUT["🎫 IdentityUserToken\nConfidential | 0.78"]
+        AU["👤 ApplicationUser\nPII | 0.83"]:::neutral
+        IR["🔑 IdentityRole\nInternal | 0.80"]:::neutral
+        IUR["🔗 IdentityUserRole\nInternal | 0.78"]:::neutral
+        IUC["📝 IdentityUserClaim\nPII | 0.78"]:::neutral
+        IRC["📝 IdentityRoleClaim\nInternal | 0.78"]:::neutral
+        IUL["🔗 IdentityUserLogin\nPII | 0.78"]:::neutral
+        IUT["🎫 IdentityUserToken\nConfidential | 0.78"]:::neutral
     end
 
     subgraph APPREG_DOMAIN["📱 Application Registration Domain"]
-        AR["🔑 AppRegistration\nConfidential | 0.71"]
+        AR["🔑 AppRegistration\nConfidential | 0.71"]:::neutral
     end
 
     subgraph DATA_STORE["💾 Shared Data Store"]
-        SQLITE["🗃️ SQLite Database\nidentityProviderDB.db"]
+        SQLITE["🗃️ SQLite Database\nidentityProviderDB.db"]:::neutral
     end
 
     subgraph SCHEMA_MGMT["🔄 Schema Management"]
-        MIG["📦 InitialCreate Migration\n0.89"]
-        SNAP["📸 ModelSnapshot\n0.91"]
-        CTX["📋 ApplicationDbContext\n0.96"]
+        MIG["📦 InitialCreate Migration\n0.89"]:::neutral
+        SNAP["📸 ModelSnapshot\n0.91"]:::neutral
+        CTX["📋 ApplicationDbContext\n0.96"]:::neutral
     end
 
     AU --> IUR
@@ -143,9 +151,11 @@ flowchart TB
     CTX --> SNAP
     MIG --> SQLITE
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style IDENTITY_DOMAIN fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style APPREG_DOMAIN fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
-    style DATA_STORE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style APPREG_DOMAIN fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
+    style DATA_STORE fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style SCHEMA_MGMT fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
@@ -167,38 +177,48 @@ flowchart LR
     accTitle: IdentityProvider Storage Tier Architecture
     accDescr: Diagram showing the three storage tiers in the application - application configuration, ORM metadata, and persistent database storage with data classification
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph TIER1["⚙️ Configuration Tier"]
-        AS["📄 appsettings.json\nConnection strings"]
-        US["🔒 User Secrets\nDev-time secrets"]
-        ENV["🌐 Environment Variables\nRuntime config"]
+        AS["📄 appsettings.json\nConnection strings"]:::neutral
+        US["🔒 User Secrets\nDev-time secrets"]:::neutral
+        ENV["🌐 Environment Variables\nRuntime config"]:::neutral
     end
 
     subgraph TIER2["📋 ORM Metadata Tier"]
-        CTX2["📋 ApplicationDbContext\nSchema definition"]
-        MIG2["🔄 Migrations\nSchema evolution"]
-        SNAP2["📸 ModelSnapshot\nSchema state"]
+        CTX2["📋 ApplicationDbContext\nSchema definition"]:::neutral
+        MIG2["🔄 Migrations\nSchema evolution"]:::neutral
+        SNAP2["📸 ModelSnapshot\nSchema state"]:::neutral
     end
 
     subgraph TIER3["💾 Persistent Storage Tier"]
-        DB["🗃️ SQLite Database\nidentityProviderDB.db"]
+        DB["🗃️ SQLite Database\nidentityProviderDB.db"]:::neutral
         subgraph TABLES["📊 Tables (8)"]
-            T1["AspNetUsers"]
-            T2["AspNetRoles"]
-            T3["AspNetUserRoles"]
-            T4["AspNetUserClaims"]
-            T5["AspNetRoleClaims"]
-            T6["AspNetUserLogins"]
-            T7["AspNetUserTokens"]
+            T1["👥 AspNetUsers"]:::neutral
+            T2["🔑 AspNetRoles"]:::neutral
+            T3["🔗 AspNetUserRoles"]:::neutral
+            T4["📝 AspNetUserClaims"]:::neutral
+            T5["📝 AspNetRoleClaims"]:::neutral
+            T6["🔗 AspNetUserLogins"]:::neutral
+            T7["🎫 AspNetUserTokens"]:::neutral
         end
     end
 
     TIER1 --> TIER2
     TIER2 --> TIER3
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style TIER1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     style TIER2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style TIER3 fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
-    style TABLES fill:#FFF8E1,stroke:#C19C00,stroke-width:1px,color:#323130
+    style TIER3 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    style TABLES fill:#FAFAFA,stroke:#8A8886,stroke-width:1px,color:#323130
 ```
 
 ### Summary
@@ -264,21 +284,29 @@ flowchart TB
     accTitle: Data Architecture Principle Hierarchy
     accDescr: Hierarchical diagram showing how data architecture principles cascade from strategic principles through design principles to implementation practices
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph STRATEGIC["🎯 Strategic Principles"]
-        SP1["🔒 Security By Default\nAll credential data protected\nvia framework-provided hashing"]
-        SP2["📦 Code-First Schema\nC# entities as single\nsource of truth"]
+        SP1["🔒 Security By Default\nAll credential data protected\nvia framework-provided hashing"]:::neutral
+        SP2["📦 Code-First Schema\nC# entities as single\nsource of truth"]:::neutral
     end
 
     subgraph DESIGN["📐 Design Principles"]
-        DP1["🔄 Migration-Based Evolution\nVersioned, reversible\nschema changes"]
-        DP2["⚙️ Convention Over Configuration\nEF Core conventions reduce\nboilerplate"]
-        DP3["🔗 Referential Integrity\nFK constraints with cascade\ndelete on all relationships"]
+        DP1["🔄 Migration-Based Evolution\nVersioned, reversible\nschema changes"]:::neutral
+        DP2["⚙️ Convention Over Configuration\nEF Core conventions reduce\nboilerplate"]:::neutral
+        DP3["🔗 Referential Integrity\nFK constraints with cascade\ndelete on all relationships"]:::neutral
     end
 
     subgraph IMPLEMENTATION["🛠️ Implementation Practices"]
-        IP1["📊 Index-Optimized Access\nUnique indexes on\nkey query paths"]
-        IP2["📏 Explicit Column Types\nTEXT/INTEGER declarations\nin all DDL"]
-        IP3["🔑 GUID Primary Keys\nString-based IDs for\ndistributed compatibility"]
+        IP1["📊 Index-Optimized Access\nUnique indexes on\nkey query paths"]:::neutral
+        IP2["📏 Explicit Column Types\nTEXT/INTEGER declarations\nin all DDL"]:::neutral
+        IP3["🔑 GUID Primary Keys\nString-based IDs for\ndistributed compatibility"]:::neutral
     end
 
     SP1 --> DP1
@@ -290,9 +318,11 @@ flowchart TB
     DP3 --> IP1
     DP2 --> IP3
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style STRATEGIC fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
     style DESIGN fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style IMPLEMENTATION fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style IMPLEMENTATION fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ---
@@ -323,26 +353,34 @@ flowchart TB
     accTitle: IdentityProvider Current State Data Architecture
     accDescr: Flowchart showing the current data architecture topology with application layer, ORM layer, and database layer for the IdentityProvider system
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph APP["🖥️ Application Layer"]
-        P["⚙️ Program.cs<br/>Service Configuration"]
-        UA["👤 IdentityUserAccessor<br/>User Data Access"]
-        ES["📧 IdentityNoOpEmailSender<br/>Email Service"]
+        P["⚙️ Program.cs<br/>Service Configuration"]:::neutral
+        UA["👤 IdentityUserAccessor<br/>User Data Access"]:::neutral
+        ES["📧 IdentityNoOpEmailSender<br/>Email Service"]:::neutral
     end
 
     subgraph ORM["🗄️ ORM Layer - Entity Framework Core 9.0"]
-        DBC["📋 ApplicationDbContext<br/>IdentityDbContext&lt;ApplicationUser&gt;"]
-        MIG["🔄 InitialCreate Migration<br/>Schema DDL"]
-        SNAP["📸 ModelSnapshot<br/>Schema State"]
+        DBC["📋 ApplicationDbContext<br/>IdentityDbContext&lt;ApplicationUser&gt;"]:::neutral
+        MIG["🔄 InitialCreate Migration<br/>Schema DDL"]:::neutral
+        SNAP["📸 ModelSnapshot<br/>Schema State"]:::neutral
     end
 
     subgraph DB["💾 SQLite Database - identityProviderDB.db"]
-        USERS["👥 AspNetUsers"]
-        ROLES["🔑 AspNetRoles"]
-        UC["📝 AspNetUserClaims"]
-        RC["📝 AspNetRoleClaims"]
-        UL["🔗 AspNetUserLogins"]
-        UR["🔗 AspNetUserRoles"]
-        UT["🎫 AspNetUserTokens"]
+        USERS["👥 AspNetUsers"]:::neutral
+        ROLES["🔑 AspNetRoles"]:::neutral
+        UC["📝 AspNetUserClaims"]:::neutral
+        RC["📝 AspNetRoleClaims"]:::neutral
+        UL["🔗 AspNetUserLogins"]:::neutral
+        UR["🔗 AspNetUserRoles"]:::neutral
+        UT["🎫 AspNetUserTokens"]:::neutral
     end
 
     P --> DBC
@@ -359,9 +397,11 @@ flowchart TB
     ROLES --> RC
     ROLES --> UR
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style APP fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
     style ORM fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style DB fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style DB fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ### Storage Distribution
@@ -422,36 +462,48 @@ flowchart TB
     accTitle: Data Quality Heatmap
     accDescr: Heatmap diagram comparing current data quality scores against target scores across five quality dimensions for the IdentityProvider data architecture
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph QUALITY["📊 Data Quality Dimensions"]
         direction TB
         subgraph COMPLETENESS["Schema Completeness"]
-            SC_C["Current: 4/5 🟩"]
-            SC_T["Target: 5/5 🎯"]
+            SC_C["Current: 4/5 🟩"]:::success
+            SC_T["Target: 5/5 🎯"]:::neutral
         end
         subgraph INTEGRITY["Data Integrity"]
-            DI_C["Current: 4/5 🟩"]
-            DI_T["Target: 5/5 🎯"]
+            DI_C["Current: 4/5 🟩"]:::success
+            DI_T["Target: 5/5 🎯"]:::neutral
         end
         subgraph CLASSIFICATION["Data Classification"]
-            DC_C["Current: 2/5 🟧"]
-            DC_T["Target: 4/5 🎯"]
+            DC_C["Current: 2/5 🟧"]:::warning
+            DC_T["Target: 4/5 🎯"]:::neutral
         end
         subgraph GOVERNANCE["Governance Coverage"]
-            GC_C["Current: 2/5 🟧"]
-            GC_T["Target: 4/5 🎯"]
+            GC_C["Current: 2/5 🟧"]:::warning
+            GC_T["Target: 4/5 🎯"]:::neutral
         end
         subgraph SECURITY["Security Posture"]
-            SP_C["Current: 4/5 🟩"]
-            SP_T["Target: 5/5 🎯"]
+            SP_C["Current: 4/5 🟩"]:::success
+            SP_T["Target: 5/5 🎯"]:::neutral
         end
     end
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+
     style COMPLETENESS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     style INTEGRITY fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style CLASSIFICATION fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
-    style GOVERNANCE fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    style CLASSIFICATION fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    style GOVERNANCE fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style SECURITY fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style QUALITY fill:#FAF9F8,stroke:#EDEBE9,stroke-width:1px,color:#323130
+    style QUALITY fill:#F3F2F1,stroke:#605E5C,stroke-width:1px,color:#323130
 ```
 
 ### Governance Maturity Matrix
@@ -472,29 +524,42 @@ flowchart LR
     accTitle: Governance Maturity Progress Matrix
     accDescr: Matrix showing the progression from current Level 2 governance maturity through intermediate improvements to the target Level 4 state
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph L1["Level 1: Ad-hoc"]
-        L1D["❌ No catalog\n❌ Manual ETL\n❌ No versioning"]
+        L1D["❌ No catalog\n❌ Manual ETL\n❌ No versioning"]:::danger
     end
 
     subgraph L2["Level 2: Managed ← CURRENT"]
-        L2D["✅ EF Core migrations\n✅ Schema tracked in VCS\n✅ Role-based access\n⚠️ No formal catalog"]
+        L2D["✅ EF Core migrations\n✅ Schema tracked in VCS\n✅ Role-based access\n⚠️ No formal catalog"]:::core
     end
 
     subgraph L3["Level 3: Defined"]
-        L3D["🎯 Data catalog\n🎯 Automated quality checks\n🎯 Classification taxonomy\n🎯 Lineage tracking"]
+        L3D["🎯 Data catalog\n🎯 Automated quality checks\n🎯 Classification taxonomy\n🎯 Lineage tracking"]:::warning
     end
 
     subgraph L4["Level 4: Measured ← TARGET"]
-        L4D["🎯 Quality SLAs\n🎯 Anomaly detection\n🎯 Contract testing\n🎯 Compliance dashboards"]
+        L4D["🎯 Quality SLAs\n🎯 Anomaly detection\n🎯 Contract testing\n🎯 Compliance dashboards"]:::success
     end
 
     L1 --> L2
     L2 --> L3
     L3 --> L4
 
-    style L1 fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+
+    style L1 fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#323130
     style L2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style L3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    style L3 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style L4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
@@ -679,24 +744,32 @@ flowchart LR
     accTitle: Schema Evolution Timeline
     accDescr: Timeline diagram showing the schema evolution history from initial entity definition through migration generation to current deployed schema state
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph PHASE1["📝 Phase 1: Entity Definition"]
-        E1["ApplicationUser.cs\nextends IdentityUser"]
-        E2["AppRegistration.cs\nOAuth/OIDC entity"]
-        E3["ApplicationDbContext.cs\nIdentityDbContext"]
+        E1["👤 ApplicationUser.cs\nextends IdentityUser"]:::neutral
+        E2["🔑 AppRegistration.cs\nOAuth/OIDC entity"]:::neutral
+        E3["📋 ApplicationDbContext.cs\nIdentityDbContext"]:::neutral
     end
 
     subgraph PHASE2["🔄 Phase 2: Migration Generation"]
-        M1["20250311003709\nInitialCreate"]
-        M1_UP["Up(): 7 tables\n+ indexes + FKs"]
-        M1_DOWN["Down(): Full\nrollback DDL"]
+        M1["📦 20250311003709\nInitialCreate"]:::neutral
+        M1_UP["⬆️ Up(): 7 tables\n+ indexes + FKs"]:::neutral
+        M1_DOWN["⬇️ Down(): Full\nrollback DDL"]:::neutral
     end
 
     subgraph PHASE3["📸 Phase 3: Schema State"]
-        S1["ModelSnapshot\n266 lines\nCurrent schema"]
+        S1["📸 ModelSnapshot\n266 lines\nCurrent schema"]:::neutral
     end
 
     subgraph PHASE4["💾 Phase 4: Deployed Schema"]
-        D1["SQLite Database\n7 Identity tables\n+ indexes"]
+        D1["🗃️ SQLite Database\n7 Identity tables\n+ indexes"]:::neutral
     end
 
     PHASE1 --> PHASE2
@@ -705,10 +778,12 @@ flowchart LR
     PHASE2 --> PHASE3
     PHASE3 --> PHASE4
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style PHASE1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style PHASE2 fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
+    style PHASE2 fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
     style PHASE3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style PHASE4 fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style PHASE4 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ### 5.10 Data Contracts
@@ -802,18 +877,26 @@ flowchart TB
     accTitle: Architecture Decision Relationships
     accDescr: Flowchart showing how key architectural decisions relate to each other and influence the overall data architecture
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph STORAGE["💾 Storage Decisions"]
-        ADR1["ADR-001<br/>SQLite Database"]
-        ADR4["ADR-004<br/>GUID Primary Keys"]
+        ADR1["💾 ADR-001<br/>SQLite Database"]:::neutral
+        ADR4["🔑 ADR-004<br/>GUID Primary Keys"]:::neutral
     end
 
     subgraph ORM_DECISIONS["🗄️ ORM Decisions"]
-        ADR2["ADR-002<br/>EF Core Code-First"]
-        ADR5["ADR-005<br/>Auto-Migration (Dev)"]
+        ADR2["📋 ADR-002<br/>EF Core Code-First"]:::neutral
+        ADR5["🔄 ADR-005<br/>Auto-Migration (Dev)"]:::neutral
     end
 
     subgraph FRAMEWORK["🔐 Framework Decisions"]
-        ADR3["ADR-003<br/>ASP.NET Identity"]
+        ADR3["🔐 ADR-003<br/>ASP.NET Identity"]:::neutral
     end
 
     ADR3 --> ADR1
@@ -822,7 +905,9 @@ flowchart TB
     ADR2 --> ADR5
     ADR2 --> ADR1
 
-    style STORAGE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
+    style STORAGE fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style ORM_DECISIONS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     style FRAMEWORK fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
 ```
@@ -897,35 +982,48 @@ flowchart TB
     accTitle: Data Classification Taxonomy
     accDescr: Hierarchical diagram showing the data classification categories applied to IdentityProvider data assets
 
-    ROOT["📊 Data Classification<br/>Taxonomy"]
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
+    ROOT["📊 Data Classification<br/>Taxonomy"]:::neutral
 
     subgraph PII_GROUP["🔴 PII - Personally Identifiable Information"]
-        PII1["👤 ApplicationUser<br/>Email, UserName, Phone"]
-        PII2["📝 IdentityUserClaim<br/>User-specific claims"]
-        PII3["🔗 IdentityUserLogin<br/>External auth data"]
+        PII1["👤 ApplicationUser<br/>Email, UserName, Phone"]:::danger
+        PII2["📝 IdentityUserClaim<br/>User-specific claims"]:::danger
+        PII3["🔗 IdentityUserLogin<br/>External auth data"]:::danger
     end
 
     subgraph CONF_GROUP["🟠 Confidential - Sensitive Credentials"]
-        CONF1["🔑 AppRegistration<br/>ClientSecret, TenantId"]
-        CONF2["🎫 IdentityUserToken<br/>Auth tokens"]
-        CONF3["🔒 Identity Security<br/>PasswordHash, SecurityStamp"]
-        CONF4["💾 SQLite Database<br/>Contains all data"]
+        CONF1["🔑 AppRegistration<br/>ClientSecret, TenantId"]:::warning
+        CONF2["🎫 IdentityUserToken<br/>Auth tokens"]:::warning
+        CONF3["🔒 Identity Security<br/>PasswordHash, SecurityStamp"]:::warning
+        CONF4["💾 SQLite Database<br/>Contains all data"]:::warning
     end
 
     subgraph INT_GROUP["🟢 Internal - System Data"]
-        INT1["🔑 IdentityRole<br/>Role definitions"]
-        INT2["📝 IdentityRoleClaim<br/>Role claims"]
-        INT3["🔗 IdentityUserRole<br/>User-role assignments"]
-        INT4["📋 ApplicationDbContext<br/>ORM model"]
-        INT5["🔄 Migrations<br/>Schema DDL"]
+        INT1["🔑 IdentityRole<br/>Role definitions"]:::success
+        INT2["📝 IdentityRoleClaim<br/>Role claims"]:::success
+        INT3["🔗 IdentityUserRole<br/>User-role assignments"]:::success
+        INT4["📋 ApplicationDbContext<br/>ORM model"]:::success
+        INT5["🔄 Migrations<br/>Schema DDL"]:::success
     end
 
     ROOT --> PII_GROUP
     ROOT --> CONF_GROUP
     ROOT --> INT_GROUP
 
-    style PII_GROUP fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
-    style CONF_GROUP fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+
+    style PII_GROUP fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#323130
+    style CONF_GROUP fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style INT_GROUP fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
@@ -967,26 +1065,34 @@ flowchart LR
     accTitle: IdentityProvider Data Dependency Graph
     accDescr: Flowchart showing producer-consumer data relationships between application components and the SQLite database through the EF Core ORM layer
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph PRODUCERS["📤 Data Producers"]
-        REG["📝 Registration UI"]
-        ADMIN["🔧 Admin Portal"]
-        EXT["🔗 External Auth Providers"]
+        REG["📝 Registration UI"]:::neutral
+        ADMIN["🔧 Admin Portal"]:::neutral
+        EXT["🔗 External Auth Providers"]:::neutral
     end
 
     subgraph ORM["🗄️ EF Core ORM"]
-        CTX["📋 ApplicationDbContext"]
-        UM["👤 UserManager"]
-        SM["🔐 SignInManager"]
+        CTX["📋 ApplicationDbContext"]:::neutral
+        UM["👤 UserManager"]:::neutral
+        SM["🔐 SignInManager"]:::neutral
     end
 
     subgraph CONSUMERS["📥 Data Consumers"]
-        AUTH["🔒 Auth Middleware"]
-        AUTHZ["🛡️ Authorization"]
-        TOKEN["🎫 Token Validation"]
+        AUTH["🔒 Auth Middleware"]:::neutral
+        AUTHZ["🛡️ Authorization"]:::neutral
+        TOKEN["🎫 Token Validation"]:::neutral
     end
 
     subgraph STORE["💾 SQLite"]
-        SQLDB["🗃️ identityProviderDB.db"]
+        SQLDB["🗃️ identityProviderDB.db"]:::neutral
     end
 
     REG --> UM
@@ -1000,10 +1106,12 @@ flowchart LR
     CTX --> AUTHZ
     CTX --> TOKEN
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style PRODUCERS fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
     style ORM fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style CONSUMERS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
-    style STORE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style CONSUMERS fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
+    style STORE fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ### Cross-Layer Dependencies
@@ -1034,30 +1142,38 @@ flowchart LR
     accTitle: IdentityProvider Data Lineage Graph
     accDescr: Data lineage diagram tracing the full path from source systems through transformations to persistent storage and downstream consumers for all identity data flows
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph SOURCES["📥 Data Sources"]
-        SRC1["📝 User Registration Form\nEmail, UserName, Password"]
-        SRC2["🔗 External OAuth Provider\nLoginProvider, ProviderKey"]
-        SRC3["🔧 Admin Configuration\nRoles, Claims, AppRegistrations"]
-        SRC4["⚙️ appsettings.json\nConnection strings"]
+        SRC1["📝 User Registration Form\nEmail, UserName, Password"]:::neutral
+        SRC2["🔗 External OAuth Provider\nLoginProvider, ProviderKey"]:::neutral
+        SRC3["🔧 Admin Configuration\nRoles, Claims, AppRegistrations"]:::neutral
+        SRC4["⚙️ appsettings.json\nConnection strings"]:::neutral
     end
 
     subgraph TRANSFORMS["🔄 Transformations"]
-        T1["🔒 Password Hasher\nPlaintext → Hash"]
-        T2["📧 Email Normalizer\nEmail → NormalizedEmail"]
-        T3["👤 UserName Normalizer\nUserName → NormalizedUserName"]
-        T4["📦 EF Core Migration\nModel → DDL"]
+        T1["🔒 Password Hasher\nPlaintext → Hash"]:::neutral
+        T2["📧 Email Normalizer\nEmail → NormalizedEmail"]:::neutral
+        T3["👤 UserName Normalizer\nUserName → NormalizedUserName"]:::neutral
+        T4["📦 EF Core Migration\nModel → DDL"]:::neutral
     end
 
     subgraph STORAGE["💾 Persistent Storage"]
-        DB1["🗃️ AspNetUsers\n+ AspNetUserClaims\n+ AspNetUserLogins\n+ AspNetUserTokens"]
-        DB2["🔑 AspNetRoles\n+ AspNetRoleClaims\n+ AspNetUserRoles"]
+        DB1["🗃️ AspNetUsers\n+ AspNetUserClaims\n+ AspNetUserLogins\n+ AspNetUserTokens"]:::neutral
+        DB2["🔑 AspNetRoles\n+ AspNetRoleClaims\n+ AspNetUserRoles"]:::neutral
     end
 
     subgraph CONSUMERS["📤 Data Consumers"]
-        CON1["🔐 SignInManager\nAuthentication"]
-        CON2["🛡️ Authorization Middleware\nClaims/Role checks"]
-        CON3["🎫 Token Service\nJWT/Cookie issuance"]
-        CON4["👤 UserManager\nProfile operations"]
+        CON1["🔐 SignInManager\nAuthentication"]:::neutral
+        CON2["🛡️ Authorization Middleware\nClaims/Role checks"]:::neutral
+        CON3["🎫 Token Service\nJWT/Cookie issuance"]:::neutral
+        CON4["👤 UserManager\nProfile operations"]:::neutral
     end
 
     SRC1 --> T1
@@ -1076,9 +1192,11 @@ flowchart LR
     DB2 --> CON2
     DB1 --> CON3
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
     style SOURCES fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style TRANSFORMS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
-    style STORAGE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style TRANSFORMS fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#323130
+    style STORAGE fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style CONSUMERS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
@@ -1162,31 +1280,42 @@ flowchart TB
     accTitle: Data Governance Maturity Assessment
     accDescr: Diagram showing the current governance maturity levels across seven dimensions with current state and target state indicators
 
+    %% ── AZURE / FLUENT v1.1 ──────────────────────────────────
+    %% PHASE 1 — Structural ✔  direction explicit, nesting ≤ 3
+    %% PHASE 2 — Semantic   ✔  neutral-first, max 5 classes
+    %% PHASE 3 — Font       ✔  dark text on light bg
+    %% PHASE 4 — Accessibility ✔  accTitle + accDescr present
+    %% PHASE 5 — Standards  ✔  centralized classDefs below
+    %% ─────────────────────────────────────────────────────────
+
     subgraph MATURITY["📊 Governance Maturity Assessment"]
         direction TB
 
         subgraph CURRENT["🔵 Current State (Avg: Level 1.7)"]
-            C1["📋 Catalog<br/>Level 1 ⬜⬜⬜⬜"]
-            C2["✅ Quality<br/>Level 2 🟩⬜⬜⬜"]
-            C3["🔗 Lineage<br/>Level 2 🟩⬜⬜⬜"]
-            C4["🔒 Security<br/>Level 3 🟩🟩⬜⬜"]
-            C5["♻️ Lifecycle<br/>Level 1 ⬜⬜⬜⬜"]
-            C6["📜 Compliance<br/>Level 1 ⬜⬜⬜⬜"]
-            C7["📏 Standards<br/>Level 2 🟩⬜⬜⬜"]
+            C1["📋 Catalog<br/>Level 1 ⬜⬜⬜⬜"]:::core
+            C2["✅ Quality<br/>Level 2 🟩⬜⬜⬜"]:::core
+            C3["🔗 Lineage<br/>Level 2 🟩⬜⬜⬜"]:::core
+            C4["🔒 Security<br/>Level 3 🟩🟩⬜⬜"]:::core
+            C5["♻️ Lifecycle<br/>Level 1 ⬜⬜⬜⬜"]:::core
+            C6["📜 Compliance<br/>Level 1 ⬜⬜⬜⬜"]:::core
+            C7["📏 Standards<br/>Level 2 🟩⬜⬜⬜"]:::core
         end
 
         subgraph TARGET["🎯 Target State (Avg: Level 3.3)"]
-            T1["📋 Catalog<br/>Level 3 🟩🟩⬜⬜"]
-            T2["✅ Quality<br/>Level 4 🟩🟩🟩⬜"]
-            T3["🔗 Lineage<br/>Level 3 🟩🟩⬜⬜"]
-            T4["🔒 Security<br/>Level 4 🟩🟩🟩⬜"]
-            T5["♻️ Lifecycle<br/>Level 3 🟩🟩⬜⬜"]
-            T6["📜 Compliance<br/>Level 3 🟩🟩⬜⬜"]
-            T7["📏 Standards<br/>Level 3 🟩🟩⬜⬜"]
+            T1["📋 Catalog<br/>Level 3 🟩🟩⬜⬜"]:::success
+            T2["✅ Quality<br/>Level 4 🟩🟩🟩⬜"]:::success
+            T3["🔗 Lineage<br/>Level 3 🟩🟩⬜⬜"]:::success
+            T4["🔒 Security<br/>Level 4 🟩🟩🟩⬜"]:::success
+            T5["♻️ Lifecycle<br/>Level 3 🟩🟩⬜⬜"]:::success
+            T6["📜 Compliance<br/>Level 3 🟩🟩⬜⬜"]:::success
+            T7["📏 Standards<br/>Level 3 🟩🟩⬜⬜"]:::success
         end
     end
 
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+
     style CURRENT fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
     style TARGET fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style MATURITY fill:#FAF9F8,stroke:#EDEBE9,stroke-width:1px,color:#323130
+    style MATURITY fill:#F3F2F1,stroke:#605E5C,stroke-width:1px,color:#323130
 ```
