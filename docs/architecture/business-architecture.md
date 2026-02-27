@@ -1052,16 +1052,30 @@ flowchart TD
 
 ```mermaid
 ---
+title: User Registration Business Process Flow
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart LR
     accTitle: User Registration Business Process Flow
     accDescr: Shows the end-to-end registration process from form submission through email confirmation to active account
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["User Registration Process"]
         subgraph inputPhase["Input Phase"]
@@ -1090,18 +1104,20 @@ flowchart LR
     F --> G
     G --> H
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class A,B core
+    class C,D,E success
+    class F,G,H data
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style inputPhase fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style processingPhase fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style completionPhase fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style A fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style B fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style C fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style D fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style E fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style F fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style G fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style H fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style inputPhase fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style processingPhase fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style completionPhase fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 **Authentication Decision Flow:**
