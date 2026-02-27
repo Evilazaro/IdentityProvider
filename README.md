@@ -25,13 +25,22 @@ flowchart TD
     accTitle: Contoso IdentityProvider Architecture
     accDescr: Component diagram showing Blazor Server UI, ASP.NET Core Identity, data layer, and Azure deployment infrastructure
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
     subgraph client["🌐 Client"]
-        direction TB
         browser["🖥️ Web Browser"]
     end
 
     subgraph app["🔷 Blazor Server Application"]
-        direction TB
         ui["📄 Razor Components"]
         identity["🔐 ASP.NET Core Identity"]
         auth["🛡️ Authentication State Provider"]
@@ -39,12 +48,10 @@ flowchart TD
     end
 
     subgraph data["💾 Data Layer"]
-        direction TB
         sqlite["📦 SQLite Database"]
     end
 
     subgraph azure["☁️ Azure Infrastructure"]
-        direction TB
         aca["🚀 Container Apps"]
         acr["📦 Container Registry"]
         monitor["📊 Azure Monitor"]
@@ -61,20 +68,25 @@ flowchart TD
     monitor -->|"observes"| aca
     mi -->|"secures access"| acr
 
-    style client fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
-    style app fill:#DEECF9,stroke:#0078D4,stroke-width:2px
-    style data fill:#D2F0D2,stroke:#107C10,stroke-width:2px
-    style azure fill:#E6F2FB,stroke:#0078D4,stroke-width:2px
-
+    %% Centralized semantic classDefs (7 canonical)
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#D2F0D2,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef infra fill:#E6F2FB,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 
     class browser neutral
     class ui,identity,auth,efcore core
     class sqlite data
-    class aca,acr,monitor,mi infra
+    class aca,acr,monitor,mi success
+
+    %% Subgraph styling (style directives — not class)
+    style client fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style app fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azure fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ## Features
