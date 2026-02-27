@@ -6,8 +6,6 @@
 
 The Contoso IdentityProvider repository implements a full-featured identity and access management (IAM) platform built on ASP.NET Core Identity with Blazor Server interactive rendering. The application exposes 14 distinct business capabilities spanning user authentication, multi-factor authentication, password lifecycle management, external identity federation (OAuth/OIDC), GDPR data rights compliance, and OAuth client application registration. Analysis of 55 source files produced 38 business components across all 11 TOGAF Business Architecture component types.
 
-This assessment applies the TOGAF 10 Business Architecture framework to map source code artifacts to formal business capabilities, processes, services, rules, events, and entities. The architecture covers core authentication capabilities comprehensively, with well-defined patterns for ancillary features such as OAuth client registration and email validation.
-
 Strategic alignment is strong in identity management and GDPR compliance domains. The primary gaps are the absence of a production email sender (currently a no-op stub), incomplete OAuth App Registration persistence, and no formal business-process orchestration engine. The platform targets Azure Container Apps deployment with Azure Monitor observability, demonstrating a clear cloud-native operational strategy.
 
 **Strategic Alignment Map:**
