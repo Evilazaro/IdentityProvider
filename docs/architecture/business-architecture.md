@@ -26,7 +26,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Strategic Alignment Map — Contoso IdentityProvider
     accDescr: Maps strategic objectives to the three business domains showing alignment with Digital Identity Enablement vision
 
@@ -209,7 +209,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Business Capability Map — Contoso IdentityProvider
     accDescr: Hierarchical view of 8 business capabilities organized by Authentication, Identity Management, and Integration domains
 
@@ -281,7 +281,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Business Ecosystem Map — Contoso IdentityProvider
     accDescr: Shows relationships between actors, core capabilities, support services, and platform within the identity ecosystem
 
@@ -430,7 +430,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Architecture Principle Hierarchy — Contoso IdentityProvider
     accDescr: Shows the 5 architecture principles organized by Foundation, Structural, and Evolution layers with dependency relationships
 
@@ -551,7 +551,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Capability Assessment Heatmap — Contoso IdentityProvider
     accDescr: Visual heatmap showing capability status across key business capabilities with color-coded gap identification
 
@@ -717,7 +717,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Value Stream Map — Contoso IdentityProvider
     accDescr: Shows the three value streams with their sequential stages from trigger to outcome
 
@@ -1068,7 +1068,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: User Registration Business Process Flow
     accDescr: Shows the end-to-end registration process from form submission through email confirmation to active account
 
@@ -1238,7 +1238,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: IdentityProvider Integration Data Flow
     accDescr: Shows data flow between user interactions, business services, persistence layer, and external systems
 
@@ -1330,7 +1330,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart LR
+flowchart TD
     accTitle: Cross-Domain Dependency Graph — Contoso IdentityProvider
     accDescr: Shows bidirectional dependencies between Authentication, Identity Management, Integration, Persistence, and Infrastructure domains
 
