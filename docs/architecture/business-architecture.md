@@ -10,6 +10,61 @@ This assessment applies the TOGAF 10 Business Architecture framework to map sour
 
 Strategic alignment is strong in identity management and GDPR compliance domains. The primary gaps are the absence of a production email sender (currently a no-op stub), incomplete OAuth App Registration persistence, and no formal business-process orchestration engine. The platform targets Azure Container Apps deployment with Azure Monitor observability, demonstrating a clear cloud-native operational strategy.
 
+**Strategic Alignment Map:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart TB
+    accTitle: Strategic Alignment Map — Contoso IdentityProvider
+    accDescr: Maps strategic objectives to the three business domains showing alignment with Digital Identity Enablement vision
+
+    subgraph main["Contoso IdentityProvider — Strategic Alignment"]
+        subgraph vision["Digital Identity Enablement Vision"]
+            V1["🎯 Enterprise SSO & MFA<br/>Cloud-Native IAM Platform"]
+        end
+
+        subgraph strategies["Strategic Objectives"]
+            SO1["🔐 Zero-Trust Authentication<br/>Cookie + 2FA + Stamp Revalidation"]
+            SO2["🛡️ GDPR Compliance<br/>Data Portability & Right to Erasure"]
+            SO3["☁️ Cloud-Native Operations<br/>Azure Container Apps + IaC"]
+        end
+
+        subgraph domains["Business Domains"]
+            D1["Authentication Domain<br/>Login · 2FA · Password Mgmt"]
+            D2["Identity Management Domain<br/>Registration · GDPR · Email"]
+            D3["Integration Domain<br/>OAuth Federation · App Registration"]
+        end
+    end
+
+    V1 --> SO1
+    V1 --> SO2
+    V1 --> SO3
+    SO1 --> D1
+    SO2 --> D2
+    SO3 --> D3
+    D1 <-->|Confirmed Account Required| D2
+    D1 <-->|External Login Challenge| D3
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style vision fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
+    style strategies fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
+    style domains fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
+    style V1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style SO1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style SO2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style SO3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style D1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style D2 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style D3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+```
+
 ---
 
 ## Section 2: Architecture Landscape
@@ -171,6 +226,85 @@ flowchart TB
     style cap6 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     style cap7 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
     style cap8 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+```
+
+**Business Ecosystem Map:**
+
+```mermaid
+---
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+flowchart LR
+    accTitle: Business Ecosystem Map — Contoso IdentityProvider
+    accDescr: Shows relationships between actors, core capabilities, support services, and platform within the identity ecosystem
+
+    subgraph main["IdentityProvider Business Ecosystem"]
+        subgraph actors["Actors"]
+            A1["👤 Anonymous User"]
+            A2["🔐 Authenticated User"]
+            A3["🌐 External IdP<br/>(OAuth/OIDC)"]
+        end
+
+        subgraph capabilities["Core Capabilities"]
+            C1["📝 Registration"]
+            C2["🔐 Authentication"]
+            C3["🔑 2FA Enrollment"]
+            C4["📧 Email Management"]
+            C5["🛡️ GDPR Rights"]
+            C6["🔄 Password Lifecycle"]
+        end
+
+        subgraph support["Support Services"]
+            SS1["📧 Email Service<br/>(No-Op Stub)"]
+            SS2["🔄 Auth State Service"]
+            SS3["🗄️ Identity Service"]
+        end
+
+        subgraph platform["Platform"]
+            P1["☁️ Azure Container Apps"]
+            P2["📊 Azure Monitor"]
+        end
+    end
+
+    A1 -->|Register| C1
+    A1 -->|Login| C2
+    A1 -->|Forgot Password| C6
+    A2 -->|Manage Profile| C4
+    A2 -->|Enable 2FA| C3
+    A2 -->|Download/Delete Data| C5
+    A2 -->|Change Password| C6
+    A3 -->|OAuth Claims| C2
+    C1 --> SS1
+    C2 --> SS3
+    C6 --> SS1
+    SS3 --> SS2
+    SS3 --> P1
+    P1 --> P2
+
+    style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style actors fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
+    style capabilities fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
+    style support fill:#E1DFDD,stroke:#C19C00,stroke-width:2px,color:#323130
+    style platform fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
+    style A1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style A2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
+    style A3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style C1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style C2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style C3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style C4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style C5 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style C6 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style SS1 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style SS2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style SS3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style P1 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style P2 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
 ```
 
 ### Summary
