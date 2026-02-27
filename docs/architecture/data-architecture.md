@@ -1,18 +1,65 @@
 # Data Architecture - IdentityProvider
 
+## Table of Contents
+
+- [Section 1: Executive Summary](#section-1-executive-summary)
+  - [Overview](#overview)
+  - [Coverage Summary](#coverage-summary)
+- [Section 2: Architecture Landscape](#section-2-architecture-landscape)
+  - [Data Entities](#21-data-entities)
+  - [Data Models](#22-data-models)
+  - [Data Stores](#23-data-stores)
+  - [Data Domain Map](#data-domain-map)
+  - [Storage Tier Diagram](#storage-tier-diagram)
+- [Section 3: Architecture Principles](#section-3-architecture-principles)
+  - [Core Data Principles](#core-data-principles)
+  - [Data Schema Design Standards](#data-schema-design-standards)
+  - [Data Classification Taxonomy](#data-classification-taxonomy)
+- [Section 4: Current State Baseline](#section-4-current-state-baseline)
+  - [Storage Distribution](#storage-distribution)
+  - [Quality Baseline](#quality-baseline)
+  - [Governance Maturity](#governance-maturity)
+  - [Compliance Posture](#compliance-posture)
+- [Section 5: Component Catalog](#section-5-component-catalog)
+  - [Data Entities](#51-data-entities)
+  - [Data Transformations](#59-data-transformations)
+  - [Data Security](#511-data-security)
+- [Section 6: Architecture Decisions](#section-6-architecture-decisions)
+  - [ADR-001: SQLite as Primary Data Store](#611-adr-001-sqlite-as-primary-data-store)
+  - [ADR-002: Code-First ORM with Entity Framework](#612-adr-002-code-first-orm-with-entity-framework-core)
+  - [ADR-003: ASP.NET Core Identity Framework](#613-adr-003-aspnet-core-identity-framework)
+  - [ADR-004: String-Based Primary Keys](#614-adr-004-string-based-primary-keys-guids)
+  - [ADR-005: Auto-Migration in Development](#615-adr-005-automatic-migration-execution-in-development)
+- [Section 7: Architecture Standards](#section-7-architecture-standards)
+  - [Data Naming Conventions](#data-naming-conventions)
+  - [Schema Design Standards](#schema-design-standards)
+  - [Data Quality Standards](#data-quality-standards)
+- [Section 8: Dependencies & Integration](#section-8-dependencies--integration)
+  - [Data Flow Patterns](#data-flow-patterns)
+  - [Cross-Layer Dependencies](#cross-layer-dependencies)
+- [Section 9: Governance & Management](#section-9-governance--management)
+  - [Data Ownership Model](#data-ownership-model)
+  - [Access Control Model](#access-control-model)
+  - [Audit & Compliance](#audit--compliance)
+  - [Data Governance Maturity Assessment](#data-governance-maturity-assessment)
+
+---
+
 ## Section 1: Executive Summary
 
 ### Overview
 
-The IdentityProvider repository implements an ASP.NET Core Identity-based authentication and authorization system using Entity Framework Core with SQLite as the backing data store. This analysis examines the Data layer architecture, identifying 13 data components across entities, models, stores, transformations, and security structures spanning the ASP.NET Identity schema and custom application registration entities.
+The IdentityProvider repository implements an ASP.NET Core Identity-based authentication and authorization system using Entity Framework Core with SQLite as the backing data store. This analysis examines the Data layer architecture, identifying **13 data components** across entities, models, stores, transformations, and security structures spanning the ASP.NET Identity schema and custom application registration entities.
 
-The data architecture follows a Code-First ORM paradigm using Entity Framework Core 9.0 with migration-based schema management. The primary data domain is Identity and Access Management (IAM), encompassing user accounts, roles, claims, external logins, and OAuth/OIDC application registrations. All schema definitions are traceable to C# entity classes and EF Core migration files, providing full data lineage from code to database.
+The data architecture follows a **Code-First ORM paradigm** using **Entity Framework Core 9.0** with migration-based schema management. The primary data domain is **Identity and Access Management (IAM)**, encompassing user accounts, roles, claims, external logins, and OAuth/OIDC application registrations. All schema definitions are traceable to C# entity classes and EF Core migration files, providing full data lineage from code to database.
 
-Strategic alignment demonstrates a Level 2-3 governance maturity with framework-enforced schema validation through DataAnnotations, automatic migration application in development, and secrets management via User Secrets. The absence of explicit data governance policies, formal data contracts, and data quality monitoring frameworks represents the primary gaps requiring architectural attention.
+Strategic alignment demonstrates a **Level 2-3 governance maturity** with framework-enforced schema validation through DataAnnotations, automatic migration application in development, and secrets management via User Secrets. The absence of explicit data governance policies, formal data contracts, and data quality monitoring frameworks represents the **primary gaps requiring architectural attention**.
 
 ### Coverage Summary
 
-The data architecture is well-structured for its core IAM domain with 8 entity types mapped across 8 database tables. Schema integrity is enforced through EF Core migrations with explicit column types, max lengths, and foreign key constraints. The primary governance gap is the absence of formal data classification policies and data quality monitoring beyond schema-level validation. Data security is strong through ASP.NET Identity's built-in password hashing, security stamps, and account lockout mechanisms.
+The data architecture is well-structured for its core IAM domain with **8 entity types mapped across 8 database tables**. Schema integrity is enforced through EF Core migrations with explicit column types, max lengths, and foreign key constraints. The primary governance gap is the **absence of formal data classification policies** and data quality monitoring beyond schema-level validation. Data security is strong through ASP.NET Identity's built-in password hashing, security stamps, and account lockout mechanisms.
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -20,9 +67,9 @@ The data architecture is well-structured for its core IAM domain with 8 entity t
 
 ### Overview
 
-The Architecture Landscape organizes data components into two primary domains aligned with the Identity Provider's purpose: the Identity Domain (user accounts, roles, claims, tokens, and logins) and the Application Registration Domain (OAuth/OIDC client registrations). Both domains share a single SQLite database as the backing store.
+The Architecture Landscape organizes data components into two primary domains aligned with the Identity Provider's purpose: the Identity Domain (user accounts, roles, claims, tokens, and logins) and the Application Registration Domain (OAuth/OIDC client registrations). Both domains share a **single SQLite database** as the backing store.
 
-The data topology follows a single-database, multi-table relational model managed through Entity Framework Core's Code-First approach. Schema evolution is handled through timestamped migrations that provide both forward (Up) and rollback (Down) capabilities. The EF Core model snapshot maintains a point-in-time record of the current schema state for migration diff calculations.
+The data topology follows a **single-database, multi-table relational model** managed through Entity Framework Core's Code-First approach. Schema evolution is handled through timestamped migrations that provide both forward (Up) and rollback (Down) capabilities. The EF Core model snapshot maintains a point-in-time record of the current schema state for migration diff calculations.
 
 The following subsections catalog all 11 Data component types discovered through source file analysis.
 
@@ -227,6 +274,8 @@ The Architecture Landscape reveals a focused identity management data architectu
 
 Six component types (Data Flows, Data Services, Data Governance, Data Quality Rules, Master Data, Data Contracts) were not detected, indicating a domain-focused architecture that relies on framework conventions rather than explicit governance structures. The primary architectural observation is the strong reliance on ASP.NET Identity's built-in patterns for security and schema management.
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Section 3: Architecture Principles
@@ -324,6 +373,8 @@ flowchart TB
     style DESIGN fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     style IMPLEMENTATION fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -567,7 +618,11 @@ flowchart LR
 
 The Current State Baseline reveals a functional Code-First data architecture with EF Core migration-based schema management operating at Level 2 governance maturity (Managed). Schema integrity is well-maintained through foreign key constraints, unique indexes, and DataAnnotation validations. Security fundamentals are strong with password hashing, lockout, and 2FA schema support.
 
-Primary gaps include: (1) absence of formal data classification and governance policies, (2) no data encryption at rest for the SQLite database, (3) no audit logging beyond ConcurrencyStamp fields, and (4) no automated backup strategy. Recommended next steps include implementing data classification annotations, enabling SQLite encryption extensions, and establishing formal data governance documentation.
+Primary gaps include: (1) **absence of formal data classification** and governance policies, (2) **no data encryption at rest** for the SQLite database, (3) **no audit logging** beyond ConcurrencyStamp fields, and (4) **no automated backup strategy**. Recommended next steps include implementing data classification annotations, enabling SQLite encryption extensions, and establishing formal data governance documentation.
+
+> ⚠️ **Security Gap**: No data encryption at rest and no audit logging represent significant security risks for an identity provider handling PII and credential data.
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -802,6 +857,8 @@ The Component Catalog documents 13 components across 5 of 11 Data component type
 
 Six component types remain undetected: Data Flows, Data Services, Data Governance, Data Quality Rules, Master Data, and Data Contracts. This distribution is consistent with a framework-centric application that delegates data management concerns to ASP.NET Identity and Entity Framework Core rather than implementing custom data layer infrastructure. Future enhancements should prioritize formalizing data contracts for the AppRegistration entity and implementing explicit data governance policies.
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Section 6: Architecture Decisions
@@ -829,7 +886,7 @@ For future architectural evolution, these decisions should be formalized using t
 #### 6.1.1 ADR-001: SQLite as Primary Data Store
 
 - **Context**: The application requires a relational database for persisting identity data (users, roles, claims, tokens). The deployment target is Azure Container Apps (infra/resources.bicep:78-126) which supports both embedded and networked database options.
-- **Decision**: Use SQLite as the primary data store (src/IdentityProvider/appsettings.json:3 — `"Data Source=identityProviderDB.db;"`).
+- **Decision**: **Use SQLite as the primary data store** (src/IdentityProvider/appsettings.json:3 — `"Data Source=identityProviderDB.db;"`).
 - **Rationale**: SQLite provides zero-configuration deployment, single-file storage, and sufficient performance for identity workloads. It eliminates external database dependency for development and small-scale production scenarios.
 - **Consequences**: (1) No concurrent write scaling — single-writer model limits throughput. (2) No network-accessible database management tools. (3) Backup requires file-level copy. (4) Migration to SQL Server or PostgreSQL will require connection string change and potential schema adjustments.
 
@@ -859,7 +916,9 @@ For future architectural evolution, these decisions should be formalized using t
 - **Context**: Development workflow requires schema synchronization without manual migration steps.
 - **Decision**: Apply migrations automatically at application startup in Development environment (src/IdentityProvider/Program.cs:41-46 — `context.Database.Migrate()`).
 - **Rationale**: Reduces friction in development by ensuring the database schema matches the current model on every startup.
-- **Consequences**: (1) Not suitable for production — migration failures at startup would prevent application launch. (2) No migration review step before application. (3) Must be disabled or guarded for staging/production deployments.
+- **Consequences**: (1) **Not suitable for production** — migration failures at startup would prevent application launch. (2) No migration review step before application. (3) Must be disabled or guarded for staging/production deployments.
+
+> ⚠️ **Production Risk**: Automatic migration execution at startup must be disabled or guarded for staging and production deployments to prevent startup failures.
 
 ```mermaid
 ---
@@ -912,6 +971,8 @@ flowchart TB
     style FRAMEWORK fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
 ```
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Section 7: Architecture Standards
@@ -963,6 +1024,10 @@ For mature data platforms, standards should be codified in `/docs/standards/` an
 | Data Completeness Monitoring      | Automated checks for null/empty required fields        | Not Implemented | No runtime quality monitoring             |
 | Data Freshness Monitoring         | SLA-based staleness detection for critical data        | Not Implemented | No freshness tracking                     |
 | Data Anomaly Detection            | Statistical anomaly detection on data patterns         | Not Implemented | No anomaly detection framework            |
+
+> ⚠️ **Governance Gap**: Input sanitization, data completeness monitoring, freshness monitoring, and anomaly detection are not implemented, leaving the identity data layer without runtime quality assurance.
+
+[Back to top](#table-of-contents)
 
 ### Classification Taxonomy
 
@@ -1202,9 +1267,13 @@ flowchart LR
 
 ### Summary
 
-The Dependencies & Integration analysis reveals a tightly-coupled monolithic data access pattern centered on the ApplicationDbContext as the single data gateway. All 5 identified data flow patterns are synchronous ORM-mediated operations with no asynchronous messaging or event-driven integration points. Cross-layer dependencies are compile-time bindings through dependency injection, providing type safety but limiting runtime flexibility.
+The Dependencies & Integration analysis reveals a **tightly-coupled monolithic data access pattern** centered on the ApplicationDbContext as the single data gateway. All 5 identified data flow patterns are synchronous ORM-mediated operations with no asynchronous messaging or event-driven integration points. Cross-layer dependencies are compile-time bindings through dependency injection, providing type safety but limiting runtime flexibility.
 
 Integration health is adequate for a single-service identity provider but would require architectural evolution for multi-service scenarios. Recommendations include implementing a repository pattern abstraction over DbContext for testability, externalizing data contracts for the AppRegistration entity, and considering an event-driven pattern for audit logging of identity operations.
+
+> 💡 **Recommendation**: Implement a repository pattern abstraction over DbContext to improve testability and prepare for multi-service architectural evolution.
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -1252,16 +1321,18 @@ The following subsections document governance structures detected and inferred f
 | Data Retention Auditing | Not implemented                                                   | Retention policy enforcement with deletion logs | High   |
 | Breach Notification     | Not implemented                                                   | Automated breach detection and notification     | High   |
 
+> ⚠️ **Compliance Risk**: Six audit capabilities are at High gap priority, including data change auditing, login auditing, data access auditing, compliance reporting, data retention auditing, and breach notification.
+
 ### Data Governance Maturity Assessment
 
 | Dimension                    | Current Level | Target Level | Gap Priority |
 | ---------------------------- | ------------- | ------------ | ------------ |
-| Data Catalog & Discovery     | Level 1       | Level 3      | High         |
+| Data Catalog & Discovery     | Level 1       | Level 3      | **High**     |
 | Data Quality Management      | Level 2       | Level 4      | Medium       |
 | Data Lineage & Traceability  | Level 2       | Level 3      | Medium       |
 | Data Security & Privacy      | Level 3       | Level 4      | Medium       |
-| Data Lifecycle Management    | Level 1       | Level 3      | High         |
-| Regulatory Compliance        | Level 1       | Level 3      | High         |
+| Data Lifecycle Management    | Level 1       | Level 3      | **High**     |
+| Regulatory Compliance        | Level 1       | Level 3      | **High**     |
 | Data Standards & Conventions | Level 2       | Level 3      | Low          |
 
 ```mermaid
@@ -1319,3 +1390,5 @@ flowchart TB
     style TARGET fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     style MATURITY fill:#F3F2F1,stroke:#605E5C,stroke-width:1px,color:#323130
 ```
+
+[Back to top](#table-of-contents)
