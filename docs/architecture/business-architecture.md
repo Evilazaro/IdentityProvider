@@ -1136,14 +1136,14 @@ flowchart LR
 
 ### Cross-Domain Dependencies
 
-| Source Domain       | Target Domain       | Dependency Nature                                     | Evidence                                                                |
-| ------------------- | ------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------- |
-| Authentication      | Identity Management | Login requires confirmed email from Registration      | src/IdentityProvider/Program.cs:32-32                                   |
-| Authentication      | Identity Management | 2FA enrollment enables LoginWith2fa process           | src/IdentityProvider/Components/Account/Pages/Login.razor:97-99         |
-| Identity Management | Authentication      | Registration flow terminates with Login redirect      | src/IdentityProvider/Components/Account/Pages/Register.razor:90-100     |
-| Authentication      | Integration         | External Login uses OAuth challenge/callback          | src/IdentityProvider/Components/Account/Pages/ExternalLogin.razor:1-185 |
-| All Domains         | Persistence         | All processes depend on ApplicationDbContext (SQLite) | src/IdentityProvider/Data/ApplicationDbContext.cs:1-9                   |
-| All Domains         | Infrastructure      | Azure Container Apps hosts all services               | infra/resources.bicep:71-108                                            |
+| Source Domain       | Target Domain       | Dependency Nature                                     |
+| ------------------- | ------------------- | ----------------------------------------------------- |
+| Authentication      | Identity Management | Login requires confirmed email from Registration      |
+| Authentication      | Identity Management | 2FA enrollment enables LoginWith2fa process           |
+| Identity Management | Authentication      | Registration flow terminates with Login redirect      |
+| Authentication      | Integration         | External Login uses OAuth challenge/callback          |
+| All Domains         | Persistence         | All processes depend on ApplicationDbContext (SQLite) |
+| All Domains         | Infrastructure      | Azure Container Apps hosts all services               |
 
 **Cross-Domain Dependency Graph:**
 
