@@ -269,16 +269,30 @@ flowchart TB
 
 ```mermaid
 ---
+title: Business Ecosystem Map
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart LR
     accTitle: Business Ecosystem Map — Contoso IdentityProvider
     accDescr: Shows relationships between actors, core capabilities, support services, and platform within the identity ecosystem
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["IdentityProvider Business Ecosystem"]
         subgraph actors["Actors"]
@@ -323,25 +337,23 @@ flowchart LR
     SS3 --> P1
     P1 --> P2
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class A1,A2 core
+    class A3,SS1 warning
+    class C1,C2,C3,C4,C5,C6,SS2,SS3 success
+    class P1,P2 data
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style actors fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style capabilities fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style support fill:#E1DFDD,stroke:#C19C00,stroke-width:2px,color:#323130
-    style platform fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style A1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style A2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style A3 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style C1 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style C2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style C3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style C4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style C5 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style C6 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style SS1 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style SS2 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style SS3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style P1 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style P2 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style actors fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style capabilities fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style support fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
+    style platform fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 ### Summary
@@ -404,16 +416,30 @@ Each principle is stated with its rationale (why it exists) and implications (wh
 
 ```mermaid
 ---
+title: Architecture Principle Hierarchy
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: Architecture Principle Hierarchy — Contoso IdentityProvider
     accDescr: Shows the 5 architecture principles organized by Foundation, Structural, and Evolution layers with dependency relationships
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Architecture Principles — Dependency Hierarchy"]
         subgraph foundation["Foundation Principles"]
@@ -438,15 +464,20 @@ flowchart TB
     P5 -->|Supports| P3
     P4 -->|Extends| P2
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class P1,P2 core
+    class P3,P5 success
+    class P4 data
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style foundation fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style structural fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style evolution fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style P1 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style P2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style P3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style P4 fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style P5 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style foundation fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style structural fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style evolution fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 ### Summary
@@ -506,16 +537,30 @@ The following analysis establishes the baseline for gap identification and impro
 
 ```mermaid
 ---
+title: Capability Assessment Heatmap
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: Capability Assessment Heatmap — Contoso IdentityProvider
     accDescr: Visual heatmap showing capability status across key business capabilities with color-coded gap identification
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["Capability Assessment"]
         subgraph level4["Fully Operational"]
@@ -539,21 +584,22 @@ flowchart TB
         end
     end
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+
+    class M4A,M4B,M4C success
+    class M3A,M3B,M3C,M3D,M3E core
+    class M2A,M2C warning
+    class M2B danger
+
+    %% Subgraph styling (semantic fills retained — heatmap pattern)
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
     style level4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style level3 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style level2 fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style M4A fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style M4B fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style M4C fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style M3A fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style M3B fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style M3C fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style M3D fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style M3E fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style M2A fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
-    style M2B fill:#FED9CC,stroke:#D13438,stroke-width:2px,color:#A4262C
-    style M2C fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#8A6914
+    style level3 fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    style level2 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
 ```
 
 ### Summary
