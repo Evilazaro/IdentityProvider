@@ -763,165 +763,6 @@ Six component types remain undetected: Data Flows, Data Services, Data Governanc
 
 ---
 
-## Section 8: Dependencies & Integration
-
-### Overview
-
-The Dependencies & Integration analysis examines cross-component data relationships, producer-consumer patterns, and integration points within the IdentityProvider data architecture. The primary integration pattern is a tightly-coupled ORM-mediated data access model where all data operations flow through the ApplicationDbContext.
-
-The application follows a monolithic integration pattern where the ASP.NET Core application layer directly accesses the SQLite database through Entity Framework Core. There are no external data integration points, message queues, or event-driven data flows. Cross-component dependencies are managed through EF Core's navigation properties and foreign key constraints defined in migration files.
-
-### Data Flow Patterns
-
-| Flow Pattern       | Type            | Producer                 | Consumer             | Contract                | Source Evidence                                                      |
-| ------------------ | --------------- | ------------------------ | -------------------- | ----------------------- | -------------------------------------------------------------------- |
-| User Registration  | Synchronous     | Registration UI          | ApplicationDbContext | ApplicationUser entity  | src/IdentityProvider/Program.cs:31-34                                |
-| Authentication     | Synchronous     | SignInManager            | ApplicationDbContext | AspNetUsers table       | src/IdentityProvider/Program.cs:19-24                                |
-| User Lookup        | Synchronous     | IdentityUserAccessor     | UserManager          | ApplicationUser entity  | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:7-19 |
-| Schema Migration   | Batch (startup) | EF Core Migration Runner | SQLite Database      | InitialCreate migration | src/IdentityProvider/Program.cs:41-46                                |
-| Configuration Load | Startup         | appsettings.json         | DbContext Options    | Connection string       | src/IdentityProvider/appsettings.json:2-4                            |
-
-### Producer-Consumer Relationships
-
-```mermaid
----
-title: IdentityProvider - Data Dependency Graph
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '16px'
-  flowchart:
-    htmlLabels: true
----
-flowchart LR
-    accTitle: IdentityProvider Data Dependency Graph
-    accDescr: Flowchart showing producer-consumer data relationships between application components and the SQLite database through the EF Core ORM layer
-
-    subgraph PRODUCERS["📤 Data Producers"]
-        REG["📝 Registration UI"]
-        ADMIN["🔧 Admin Portal"]
-        EXT["🔗 External Auth Providers"]
-    end
-
-    subgraph ORM["🗄️ EF Core ORM"]
-        CTX["📋 ApplicationDbContext"]
-        UM["👤 UserManager"]
-        SM["🔐 SignInManager"]
-    end
-
-    subgraph CONSUMERS["📥 Data Consumers"]
-        AUTH["🔒 Auth Middleware"]
-        AUTHZ["🛡️ Authorization"]
-        TOKEN["🎫 Token Validation"]
-    end
-
-    subgraph STORE["💾 SQLite"]
-        SQLDB["🗃️ identityProviderDB.db"]
-    end
-
-    REG --> UM
-    ADMIN --> UM
-    EXT --> SM
-    UM --> CTX
-    SM --> CTX
-    CTX --> SQLDB
-    SQLDB --> CTX
-    CTX --> AUTH
-    CTX --> AUTHZ
-    CTX --> TOKEN
-
-    style PRODUCERS fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style ORM fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style CONSUMERS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
-    style STORE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
-```
-
-### Cross-Layer Dependencies
-
-| Dependency                   | From (Layer)  | To (Layer)   | Type         | Evidence                                                             |
-| ---------------------------- | ------------- | ------------ | ------------ | -------------------------------------------------------------------- |
-| DbContext Registration       | Application   | Data         | Compile-time | src/IdentityProvider/Program.cs:27-28 — AddDbContext registration    |
-| Identity Store Configuration | Application   | Data         | Compile-time | src/IdentityProvider/Program.cs:31-32 — AddEntityFrameworkStores     |
-| Connection String Binding    | Configuration | Data         | Runtime      | src/IdentityProvider/appsettings.json:2-4 — DefaultConnection        |
-| Migration Execution          | Data          | Data (Store) | Startup      | src/IdentityProvider/Program.cs:41-46 — Database.Migrate()           |
-| Container Deployment         | Technology    | Data         | Deploy-time  | infra/resources.bicep:78-126 — Container App hosting the application |
-
-### Data Lineage Diagram
-
-```mermaid
----
-title: IdentityProvider - Data Lineage Graph
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '16px'
-  flowchart:
-    htmlLabels: true
----
-flowchart LR
-    accTitle: IdentityProvider Data Lineage Graph
-    accDescr: Data lineage diagram tracing the full path from source systems through transformations to persistent storage and downstream consumers for all identity data flows
-
-    subgraph SOURCES["📥 Data Sources"]
-        SRC1["📝 User Registration Form\nEmail, UserName, Password"]
-        SRC2["🔗 External OAuth Provider\nLoginProvider, ProviderKey"]
-        SRC3["🔧 Admin Configuration\nRoles, Claims, AppRegistrations"]
-        SRC4["⚙️ appsettings.json\nConnection strings"]
-    end
-
-    subgraph TRANSFORMS["🔄 Transformations"]
-        T1["🔒 Password Hasher\nPlaintext → Hash"]
-        T2["📧 Email Normalizer\nEmail → NormalizedEmail"]
-        T3["👤 UserName Normalizer\nUserName → NormalizedUserName"]
-        T4["📦 EF Core Migration\nModel → DDL"]
-    end
-
-    subgraph STORAGE["💾 Persistent Storage"]
-        DB1["🗃️ AspNetUsers\n+ AspNetUserClaims\n+ AspNetUserLogins\n+ AspNetUserTokens"]
-        DB2["🔑 AspNetRoles\n+ AspNetRoleClaims\n+ AspNetUserRoles"]
-    end
-
-    subgraph CONSUMERS["📤 Data Consumers"]
-        CON1["🔐 SignInManager\nAuthentication"]
-        CON2["🛡️ Authorization Middleware\nClaims/Role checks"]
-        CON3["🎫 Token Service\nJWT/Cookie issuance"]
-        CON4["👤 UserManager\nProfile operations"]
-    end
-
-    SRC1 --> T1
-    SRC1 --> T2
-    SRC1 --> T3
-    SRC2 --> DB1
-    SRC3 --> DB2
-    SRC4 --> T4
-    T1 --> DB1
-    T2 --> DB1
-    T3 --> DB1
-    T4 --> DB1
-    T4 --> DB2
-    DB1 --> CON1
-    DB1 --> CON4
-    DB2 --> CON2
-    DB1 --> CON3
-
-    style SOURCES fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style TRANSFORMS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
-    style STORAGE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
-    style CONSUMERS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-```
-
-### Summary
-
-The Dependencies & Integration analysis reveals a tightly-coupled monolithic data access pattern centered on the ApplicationDbContext as the single data gateway. All 5 identified data flow patterns are synchronous ORM-mediated operations with no asynchronous messaging or event-driven integration points. Cross-layer dependencies are compile-time bindings through dependency injection, providing type safety but limiting runtime flexibility.
-
-Integration health is adequate for a single-service identity provider but would require architectural evolution for multi-service scenarios. Recommendations include implementing a repository pattern abstraction over DbContext for testability, externalizing data contracts for the AppRegistration entity, and considering an event-driven pattern for audit logging of identity operations.
-
----
-
 ## Section 6: Architecture Decisions
 
 ### Overview
@@ -1121,6 +962,165 @@ flowchart TB
     style CONF_GROUP fill:#FFF4CE,stroke:#C19C00,stroke-width:2px,color:#323130
     style INT_GROUP fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
+
+---
+
+## Section 8: Dependencies & Integration
+
+### Overview
+
+The Dependencies & Integration analysis examines cross-component data relationships, producer-consumer patterns, and integration points within the IdentityProvider data architecture. The primary integration pattern is a tightly-coupled ORM-mediated data access model where all data operations flow through the ApplicationDbContext.
+
+The application follows a monolithic integration pattern where the ASP.NET Core application layer directly accesses the SQLite database through Entity Framework Core. There are no external data integration points, message queues, or event-driven data flows. Cross-component dependencies are managed through EF Core's navigation properties and foreign key constraints defined in migration files.
+
+### Data Flow Patterns
+
+| Flow Pattern       | Type            | Producer                 | Consumer             | Contract                | Source Evidence                                                      |
+| ------------------ | --------------- | ------------------------ | -------------------- | ----------------------- | -------------------------------------------------------------------- |
+| User Registration  | Synchronous     | Registration UI          | ApplicationDbContext | ApplicationUser entity  | src/IdentityProvider/Program.cs:31-34                                |
+| Authentication     | Synchronous     | SignInManager            | ApplicationDbContext | AspNetUsers table       | src/IdentityProvider/Program.cs:19-24                                |
+| User Lookup        | Synchronous     | IdentityUserAccessor     | UserManager          | ApplicationUser entity  | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:7-19 |
+| Schema Migration   | Batch (startup) | EF Core Migration Runner | SQLite Database      | InitialCreate migration | src/IdentityProvider/Program.cs:41-46                                |
+| Configuration Load | Startup         | appsettings.json         | DbContext Options    | Connection string       | src/IdentityProvider/appsettings.json:2-4                            |
+
+### Producer-Consumer Relationships
+
+```mermaid
+---
+title: IdentityProvider - Data Dependency Graph
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: IdentityProvider Data Dependency Graph
+    accDescr: Flowchart showing producer-consumer data relationships between application components and the SQLite database through the EF Core ORM layer
+
+    subgraph PRODUCERS["📤 Data Producers"]
+        REG["📝 Registration UI"]
+        ADMIN["🔧 Admin Portal"]
+        EXT["🔗 External Auth Providers"]
+    end
+
+    subgraph ORM["🗄️ EF Core ORM"]
+        CTX["📋 ApplicationDbContext"]
+        UM["👤 UserManager"]
+        SM["🔐 SignInManager"]
+    end
+
+    subgraph CONSUMERS["📥 Data Consumers"]
+        AUTH["🔒 Auth Middleware"]
+        AUTHZ["🛡️ Authorization"]
+        TOKEN["🎫 Token Validation"]
+    end
+
+    subgraph STORE["💾 SQLite"]
+        SQLDB["🗃️ identityProviderDB.db"]
+    end
+
+    REG --> UM
+    ADMIN --> UM
+    EXT --> SM
+    UM --> CTX
+    SM --> CTX
+    CTX --> SQLDB
+    SQLDB --> CTX
+    CTX --> AUTH
+    CTX --> AUTHZ
+    CTX --> TOKEN
+
+    style PRODUCERS fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style ORM fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style CONSUMERS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
+    style STORE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+```
+
+### Cross-Layer Dependencies
+
+| Dependency                   | From (Layer)  | To (Layer)   | Type         | Evidence                                                             |
+| ---------------------------- | ------------- | ------------ | ------------ | -------------------------------------------------------------------- |
+| DbContext Registration       | Application   | Data         | Compile-time | src/IdentityProvider/Program.cs:27-28 — AddDbContext registration    |
+| Identity Store Configuration | Application   | Data         | Compile-time | src/IdentityProvider/Program.cs:31-32 — AddEntityFrameworkStores     |
+| Connection String Binding    | Configuration | Data         | Runtime      | src/IdentityProvider/appsettings.json:2-4 — DefaultConnection        |
+| Migration Execution          | Data          | Data (Store) | Startup      | src/IdentityProvider/Program.cs:41-46 — Database.Migrate()           |
+| Container Deployment         | Technology    | Data         | Deploy-time  | infra/resources.bicep:78-126 — Container App hosting the application |
+
+### Data Lineage Diagram
+
+```mermaid
+---
+title: IdentityProvider - Data Lineage Graph
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: IdentityProvider Data Lineage Graph
+    accDescr: Data lineage diagram tracing the full path from source systems through transformations to persistent storage and downstream consumers for all identity data flows
+
+    subgraph SOURCES["📥 Data Sources"]
+        SRC1["📝 User Registration Form\nEmail, UserName, Password"]
+        SRC2["🔗 External OAuth Provider\nLoginProvider, ProviderKey"]
+        SRC3["🔧 Admin Configuration\nRoles, Claims, AppRegistrations"]
+        SRC4["⚙️ appsettings.json\nConnection strings"]
+    end
+
+    subgraph TRANSFORMS["🔄 Transformations"]
+        T1["🔒 Password Hasher\nPlaintext → Hash"]
+        T2["📧 Email Normalizer\nEmail → NormalizedEmail"]
+        T3["👤 UserName Normalizer\nUserName → NormalizedUserName"]
+        T4["📦 EF Core Migration\nModel → DDL"]
+    end
+
+    subgraph STORAGE["💾 Persistent Storage"]
+        DB1["🗃️ AspNetUsers\n+ AspNetUserClaims\n+ AspNetUserLogins\n+ AspNetUserTokens"]
+        DB2["🔑 AspNetRoles\n+ AspNetRoleClaims\n+ AspNetUserRoles"]
+    end
+
+    subgraph CONSUMERS["📤 Data Consumers"]
+        CON1["🔐 SignInManager\nAuthentication"]
+        CON2["🛡️ Authorization Middleware\nClaims/Role checks"]
+        CON3["🎫 Token Service\nJWT/Cookie issuance"]
+        CON4["👤 UserManager\nProfile operations"]
+    end
+
+    SRC1 --> T1
+    SRC1 --> T2
+    SRC1 --> T3
+    SRC2 --> DB1
+    SRC3 --> DB2
+    SRC4 --> T4
+    T1 --> DB1
+    T2 --> DB1
+    T3 --> DB1
+    T4 --> DB1
+    T4 --> DB2
+    DB1 --> CON1
+    DB1 --> CON4
+    DB2 --> CON2
+    DB1 --> CON3
+
+    style SOURCES fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style TRANSFORMS fill:#E8D4F0,stroke:#8764B8,stroke-width:2px,color:#323130
+    style STORAGE fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    style CONSUMERS fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
+
+### Summary
+
+The Dependencies & Integration analysis reveals a tightly-coupled monolithic data access pattern centered on the ApplicationDbContext as the single data gateway. All 5 identified data flow patterns are synchronous ORM-mediated operations with no asynchronous messaging or event-driven integration points. Cross-layer dependencies are compile-time bindings through dependency injection, providing type safety but limiting runtime flexibility.
+
+Integration health is adequate for a single-service identity provider but would require architectural evolution for multi-service scenarios. Recommendations include implementing a repository pattern abstraction over DbContext for testability, externalizing data contracts for the AppRegistration entity, and considering an event-driven pattern for audit logging of identity operations.
 
 ---
 
