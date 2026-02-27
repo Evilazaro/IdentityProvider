@@ -209,7 +209,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TB
+flowchart LR
     accTitle: Business Capability Map — Contoso IdentityProvider
     accDescr: Hierarchical view of 8 business capabilities organized by Authentication, Identity Management, and Integration domains
 
@@ -430,7 +430,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TB
+flowchart LR
     accTitle: Architecture Principle Hierarchy — Contoso IdentityProvider
     accDescr: Shows the 5 architecture principles organized by Foundation, Structural, and Evolution layers with dependency relationships
 
@@ -551,7 +551,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TB
+flowchart LR
     accTitle: Capability Assessment Heatmap — Contoso IdentityProvider
     accDescr: Visual heatmap showing capability status across key business capabilities with color-coded gap identification
 
@@ -1330,7 +1330,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TB
+flowchart LR
     accTitle: Cross-Domain Dependency Graph — Contoso IdentityProvider
     accDescr: Shows bidirectional dependencies between Authentication, Identity Management, Integration, Persistence, and Infrastructure domains
 
