@@ -701,16 +701,30 @@ The catalog covers 38 components across 11 Business Architecture component types
 
 ```mermaid
 ---
+title: Value Stream Map
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart LR
     accTitle: Value Stream Map — Contoso IdentityProvider
     accDescr: Shows the three value streams with their sequential stages from trigger to outcome
+
+    %% ═══════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% Semantic + Structural + Font + Accessibility Governance
+    %% ═══════════════════════════════════════════════════════════════
+    %% PHASE 1 — STRUCTURAL: Direction explicit, nesting ≤ 3
+    %% PHASE 2 — SEMANTIC: Max 5 classes, neutral-first
+    %% PHASE 3 — FONT: Dark text on light backgrounds ≥ 4.5:1
+    %% PHASE 4 — ACCESSIBILITY: accTitle + accDescr + icons on all nodes
+    %% PHASE 5 — STANDARD: Governance block + classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════
 
     subgraph main["IdentityProvider Value Streams"]
         subgraph vs1["User Onboarding (Primary)"]
@@ -726,22 +740,20 @@ flowchart LR
         end
     end
 
+    %% Semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+
+    class VS1A,VS1B,VS1C,VS1D core
+    class VS2A,VS2B,VS2C,VS2D success
+    class VS3A,VS3B,VS3C,VS3D data
+
+    %% Subgraph styling
     style main fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style vs1 fill:#E1DFDD,stroke:#0078D4,stroke-width:2px,color:#323130
-    style vs2 fill:#E1DFDD,stroke:#107C10,stroke-width:2px,color:#323130
-    style vs3 fill:#E1DFDD,stroke:#8661C5,stroke-width:2px,color:#323130
-    style VS1A fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style VS1B fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style VS1C fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style VS1D fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#0F6CBD
-    style VS2A fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style VS2B fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style VS2C fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style VS2D fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    style VS3A fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style VS3B fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style VS3C fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
-    style VS3D fill:#EDE3F6,stroke:#8661C5,stroke-width:2px,color:#6B4FA0
+    style vs1 fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style vs2 fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style vs3 fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
 ```
 
 ### 5.4 Business Processes
