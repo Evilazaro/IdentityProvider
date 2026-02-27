@@ -22,7 +22,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TB
+flowchart TD
     accTitle: Strategic Alignment Map — Contoso IdentityProvider
     accDescr: Maps strategic objectives to the three business domains showing alignment with Digital Identity Enablement vision
 
