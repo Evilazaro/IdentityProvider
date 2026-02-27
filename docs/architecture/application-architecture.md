@@ -1,10 +1,10 @@
 # Application Architecture - IdentityProvider
 
 **Generated**: 2026-02-27T00:00:00Z
+**Session ID**: 550e8400-e29b-41d4-a716-446655440001
 **Target Layer**: Application
 **Quality Level**: Comprehensive
 **Repository**: Evilazaro/IdentityProvider
-**Framework**: ASP.NET Core 9.0 Blazor Server with Identity
 **Components Found**: 23
 **Average Confidence**: 0.77
 
@@ -19,6 +19,17 @@ The IdentityProvider repository implements a Blazor Server web application built
 Analysis of the source files identified 23 application components across 8 of the 11 TOGAF Application component types, with an average confidence score of 0.77. Component distribution includes 4 Application Services, 3 Application Components, 1 Application Interface, 3 Application Functions, 1 Application Interaction pattern, 2 Application Data Objects, 2 Integration Patterns, and 7 Application Dependencies. Three component types — Application Collaborations, Application Events, and Service Contracts — were not detected in the scanned source files.
 
 The application demonstrates Level 2–3 maturity (Managed–Defined) with well-structured component separation via Blazor conventions, standardized Identity integration, and Entity Framework migrations. The primary architectural pattern is a monolithic Blazor Server application with cookie-based authentication, interactive server-side rendering, and SQLite for development data persistence. Key risks include the absence of a production-grade email sender (currently using a no-op implementation) and the lack of formal service contracts or API documentation.
+
+### Key Findings
+
+| Finding                                                                             | Impact                                                                | Evidence                                                                |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Monolithic Blazor Server architecture with 23 components across 8 of 11 TOGAF types | Deployment simplicity but limited independent scalability             | src/IdentityProvider/Program.cs:1-71                                    |
+| Full ASP.NET Core Identity integration with cookie-based authentication             | Strong security posture using battle-tested framework                 | src/IdentityProvider/Program.cs:20-36                                   |
+| No-op email sender stub replacing production email delivery                         | Email confirmation and password reset flows are non-functional        | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23 |
+| SQLite development database with no production database configuration               | Not suitable for production multi-instance deployment                 | src/IdentityProvider/appsettings.json:2-4                               |
+| Azure Container Apps deployment with Bicep infrastructure as code                   | Production-ready hosting with managed identity and auto-scaling       | azure.yaml:1-16, infra/resources.bicep:79-121                           |
+| No OpenAPI specs, health check endpoints, or formal service contracts               | Reduced maturity score; limits observability and consumer integration | Repository-wide scan                                                    |
 
 ---
 
@@ -38,7 +49,7 @@ The following subsections catalog all 11 Application component types discovered 
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ---------- | ---------------------- |
 | IdentityRevalidatingAuthenticationStateProvider | Server-side authentication state provider that revalidates security stamps every 30 minutes for connected interactive circuits | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:1-50 | 0.81       | Authentication Service |
 | IdentityRedirectManager                         | Scoped navigation service managing secure redirects with status message cookies and open-redirect prevention                   | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:1-59                         | 0.76       | Navigation Service     |
-| IdentityNoOpEmailSender                         | No-op email sender implementing IEmailSender&lt;ApplicationUser&gt; for confirmation links, password resets, and reset codes   | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23                         | 0.75       | Email Service          |
+| IdentityNoOpEmailSender                         | No-op email sender implementing IEmailSender for confirmation links, password resets, and reset codes                          | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23                         | 0.75       | Email Service          |
 | IdentityUserAccessor                            | Scoped service for retrieving the authenticated ApplicationUser from HttpContext with redirect-on-failure semantics            | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:1-21                            | 0.73       | User Access Service    |
 
 ### 2.2 Application Components
@@ -46,7 +57,7 @@ The following subsections catalog all 11 Application component types discovered 
 | Name                      | Description                                                                                                                               | Source                                                | Confidence | Service Type          |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------- | --------------------- |
 | IdentityProvider Web Host | ASP.NET Core 9.0 Blazor Server application entry point configuring service registration, middleware pipeline, authentication, and EF Core | src/IdentityProvider/Program.cs:1-71                  | 0.86       | Web Application Host  |
-| ApplicationDbContext      | Entity Framework Core database context inheriting IdentityDbContext&lt;ApplicationUser&gt; for Identity schema management                 | src/IdentityProvider/Data/ApplicationDbContext.cs:1-9 | 0.79       | Data Access Component |
+| ApplicationDbContext      | Entity Framework Core database context inheriting IdentityDbContext for Identity schema management                                        | src/IdentityProvider/Data/ApplicationDbContext.cs:1-9 | 0.79       | Data Access Component |
 | Routes                    | Blazor Router component configuring AuthorizeRouteView with MainLayout and RedirectToLogin for unauthorized access                        | src/IdentityProvider/Components/Routes.razor:1-12     | 0.71       | Routing Component     |
 
 ### 2.3 Application Interfaces
@@ -79,10 +90,60 @@ Not detected in source files. No domain events, webhooks, message queue integrat
 
 ### 2.8 Application Data Objects
 
-| Name            | Description                                                                                                                                                                                                            | Source                                                  | Confidence | Service Type |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------- | ------------ |
-| ApplicationUser | Identity user entity extending IdentityUser as the principal identity model for authentication and authorization                                                                                                       | src/IdentityProvider/Data/ApplicationUser.cs:1-10       | 0.74       | Entity       |
-| AppRegistration | OAuth/OIDC application registration data entity with data annotation validation, mapped to AppRegistrations table with ClientId, ClientSecret, TenantId, RedirectUri, Scopes, Authority, GrantTypes, and ResponseTypes | src/IdentityProvider/Components/AppRegistration.cs:1-44 | 0.72       | Entity       |
+| Name            | Description                                                                                                       | Source                                                  | Confidence | Service Type |
+| --------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------- | ------------ |
+| ApplicationUser | Identity user entity extending IdentityUser as the principal identity model for authentication and authorization  | src/IdentityProvider/Data/ApplicationUser.cs:1-10       | 0.74       | Entity       |
+| AppRegistration | OAuth/OIDC application registration data entity with data annotation validation, mapped to AppRegistrations table | src/IdentityProvider/Components/AppRegistration.cs:1-44 | 0.72       | Entity       |
+
+```mermaid
+---
+title: IdentityProvider C4 Container Diagram
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+---
+C4Container
+    accTitle: IdentityProvider Application C4 Container Diagram
+    accDescr: Shows the IdentityProvider Blazor Server application containers, their relationships, and external dependencies
+
+    %% C4 diagram with Azure-aligned theme variables
+
+    Person(user, "End User", "Authenticates via browser")
+
+    Container_Boundary(app, "IdentityProvider Application") {
+        Container(blazor, "Blazor Server", "ASP.NET Core 9.0", "Server-side rendered UI with Interactive Server rendering")
+        Container(identity, "Identity Services", "ASP.NET Core Identity", "Authentication, authorization, user management")
+        Container(endpoints, "Identity Endpoints", "Minimal API", "External login, logout, data download")
+        Container(dbctx, "ApplicationDbContext", "EF Core 9.0 / SQLite", "Identity schema persistence")
+    }
+
+    ContainerDb(sqlite, "SQLite Database", "identityProviderDB.db", "User accounts, roles, tokens")
+
+    System_Ext(email, "Email Provider", "Not connected (no-op stub)")
+    System_Ext(extauth, "External Auth Providers", "OAuth 2.0 / OIDC (none registered)")
+
+    Container_Boundary(azure, "Azure Infrastructure") {
+        Container(aca, "Container App", "Azure Container Apps", "Hosts application container")
+        Container(acr, "Container Registry", "Azure ACR", "Stores container images")
+        Container(appins, "Application Insights", "Azure Monitor", "Telemetry and logging")
+    }
+
+    Rel(user, blazor, "Authenticates", "HTTPS")
+    Rel(blazor, identity, "Uses", "DI")
+    Rel(blazor, endpoints, "Routes to", "HTTP POST")
+    Rel(identity, dbctx, "Persists", "EF Core")
+    Rel(endpoints, identity, "Uses", "DI")
+    Rel(dbctx, sqlite, "Reads/Writes", "SQLite")
+    Rel(identity, email, "Sends", "IEmailSender (no-op)")
+    Rel(endpoints, extauth, "Challenges", "OAuth 2.0")
+    Rel(aca, acr, "Pulls images", "Managed Identity")
+    Rel(aca, appins, "Reports telemetry", "OTLP")
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+```
 
 ### 2.9 Integration Patterns
 
@@ -125,12 +186,12 @@ The analysis identified 5 architecture principles with evidence spanning the app
 
 ### 3.1 Framework-Managed Authentication
 
-| Attribute      | Value                                                                                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Principle**  | Delegate authentication and authorization to the ASP.NET Core Identity framework rather than implementing custom security logic                                       |
-| **Evidence**   | src/IdentityProvider/Program.cs:20-36 — `AddAuthentication`, `AddIdentityCookies`, `AddIdentityCore<ApplicationUser>`, `AddSignInManager`, `AddDefaultTokenProviders` |
-| **Rationale**  | Leveraging a battle-tested framework reduces vulnerabilities from custom implementations and ensures standards compliance                                             |
-| **Compliance** | Full — All authentication flows use ASP.NET Core Identity with no custom cryptography or token handling                                                               |
+| Attribute      | Value                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Principle**  | Delegate authentication and authorization to the ASP.NET Core Identity framework rather than implementing custom security logic            |
+| **Evidence**   | src/IdentityProvider/Program.cs:20-36 — AddAuthentication, AddIdentityCookies, AddIdentityCore, AddSignInManager, AddDefaultTokenProviders |
+| **Rationale**  | Leveraging a battle-tested framework reduces vulnerabilities from custom implementations and ensures standards compliance                  |
+| **Compliance** | Full — All authentication flows use ASP.NET Core Identity with no custom cryptography or token handling                                    |
 
 ### 3.2 Convention-Based Component Organization
 
@@ -143,30 +204,30 @@ The analysis identified 5 architecture principles with evidence spanning the app
 
 ### 3.3 Data Annotation Validation
 
-| Attribute      | Value                                                                                                                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Principle**  | Use declarative data annotations for input validation on entity models and form components                                                                                                                               |
-| **Evidence**   | src/IdentityProvider/Components/AppRegistration.cs:1-44 — `[Required]`, `[MaxLength]`, `[Key]`, `[Table]` attributes; src/IdentityProvider/Components/Pages/AppRegistrationForm.razor:8 — `<DataAnnotationsValidator />` |
-| **Rationale**  | Declarative validation ensures consistency between client-side and server-side validation, centralizes rules on the model, and reduces validation logic duplication                                                      |
-| **Compliance** | Partial — Applied to AppRegistration entity and forms; Identity entities rely on framework-managed validation rather than explicit annotations                                                                           |
+| Attribute      | Value                                                                                                                                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Principle**  | Use declarative data annotations for input validation on entity models and form components                                                                                                                 |
+| **Evidence**   | src/IdentityProvider/Components/AppRegistration.cs:1-44 — [Required], [MaxLength], [Key], [Table] attributes; src/IdentityProvider/Components/Pages/AppRegistrationForm.razor:8 — DataAnnotationsValidator |
+| **Rationale**  | Declarative validation ensures consistency between client-side and server-side validation, centralizes rules on the model, and reduces validation logic duplication                                        |
+| **Compliance** | Partial — Applied to AppRegistration entity and forms; Identity entities rely on framework-managed validation rather than explicit annotations                                                             |
 
 ### 3.4 Scoped Service Lifecycle Management
 
-| Attribute      | Value                                                                                                                                                                                                                                                                               |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Principle**  | Register application services with appropriate DI lifetimes (Scoped for per-request services, Singleton for stateless services) to ensure correct resource management                                                                                                               |
-| **Evidence**   | src/IdentityProvider/Program.cs:15-17 — `AddScoped<IdentityUserAccessor>()`, `AddScoped<IdentityRedirectManager>()`, `AddScoped<AuthenticationStateProvider, ...>()`; src/IdentityProvider/Program.cs:37 — `AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>()` |
-| **Rationale**  | Correct DI lifetime management prevents memory leaks, ensures thread safety, and aligns with ASP.NET Core request-scoped processing                                                                                                                                                 |
-| **Compliance** | Full — All service registrations use appropriate lifetimes consistent with their statefulness                                                                                                                                                                                       |
+| Attribute      | Value                                                                                                                                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Principle**  | Register application services with appropriate DI lifetimes (Scoped for per-request services, Singleton for stateless services) to ensure correct resource management                                |
+| **Evidence**   | src/IdentityProvider/Program.cs:15-17 — AddScoped for IdentityUserAccessor, IdentityRedirectManager, AuthenticationStateProvider; src/IdentityProvider/Program.cs:37 — AddSingleton for IEmailSender |
+| **Rationale**  | Correct DI lifetime management prevents memory leaks, ensures thread safety, and aligns with ASP.NET Core request-scoped processing                                                                  |
+| **Compliance** | Full — All service registrations use appropriate lifetimes consistent with their statefulness                                                                                                        |
 
 ### 3.5 Secure Redirect Prevention
 
-| Attribute      | Value                                                                                                                                                                     |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Principle**  | Prevent open redirect attacks by validating all redirect URIs before navigation                                                                                           |
-| **Evidence**   | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:21-28 — `Uri.IsWellFormedUriString(uri, UriKind.Relative)` check with fallback to `ToBaseRelativePath` |
-| **Rationale**  | Open redirect vulnerabilities enable phishing attacks by redirecting users to malicious sites after authentication                                                        |
-| **Compliance** | Full — All redirects flow through IdentityRedirectManager which enforces relative URI validation                                                                          |
+| Attribute      | Value                                                                                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Principle**  | Prevent open redirect attacks by validating all redirect URIs before navigation                                                                                       |
+| **Evidence**   | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:21-28 — Uri.IsWellFormedUriString(uri, UriKind.Relative) check with fallback to ToBaseRelativePath |
+| **Rationale**  | Open redirect vulnerabilities enable phishing attacks by redirecting users to malicious sites after authentication                                                    |
+| **Compliance** | Full — All redirects flow through IdentityRedirectManager which enforces relative URI validation                                                                      |
 
 ---
 
@@ -226,11 +287,22 @@ The application is a single-service Blazor Server deployment targeting Azure Con
 | Antiforgery         | Operational | UseAntiforgery middleware configured                            |
 | External Login      | Configured  | Provider challenge flow implemented but no providers registered |
 
+### Gap Analysis
+
+| Gap                                        | Severity | Recommendation                                                          |
+| ------------------------------------------ | -------- | ----------------------------------------------------------------------- |
+| No production database provider configured | High     | Configure Azure SQL or PostgreSQL for production deployment             |
+| No-op email sender in use                  | High     | Implement production IEmailSender with SMTP or SendGrid                 |
+| No health check endpoints                  | Medium   | Add /health/live and /health/ready endpoints for Container Apps probes  |
+| No OpenAPI specification                   | Medium   | Generate OpenAPI spec for Identity Endpoints using Swashbuckle or NSwag |
+| No external auth providers registered      | Low      | Register OAuth 2.0 providers (Microsoft Entra ID, Google) if required   |
+| No formal data protection key ring         | Medium   | Configure Data Protection with Azure Key Vault or persistent storage    |
+
 ### Summary
 
 The IdentityProvider application operates as a single-service Blazor Server deployment with a mature Identity subsystem and Azure Container App hosting infrastructure. The deployment pipeline leverages Azure Developer CLI with Bicep-based infrastructure as code, managed identity authentication to Azure Container Registry, and Application Insights telemetry integration.
 
-The primary gap is the IdentityNoOpEmailSender stub implementation, which means email confirmation and password reset flows do not deliver messages. Additionally, the SQLite database provider is suitable only for development; a production database provider (e.g., Azure SQL, PostgreSQL) is not configured. No external authentication providers are registered despite the external login UI being present.
+The primary gap is the IdentityNoOpEmailSender stub implementation, which means email confirmation and password reset flows do not deliver messages. Additionally, the SQLite database provider is suitable only for development; a production database provider (e.g., Azure SQL, PostgreSQL) is not configured. No external authentication providers are registered despite the external login UI being present. No health check endpoints exist for Azure Container Apps liveness and readiness probes.
 
 ---
 
@@ -238,279 +310,509 @@ The primary gap is the IdentityNoOpEmailSender stub implementation, which means 
 
 ### Overview
 
-The Component Catalog provides detailed specifications for each application component identified in Section 2. Each component entry includes expanded attributes covering purpose, source traceability, dependencies, configuration, and integration characteristics.
+The Component Catalog provides detailed specifications for each application component identified in Section 2. Each component entry includes expanded attributes covering service type, API surface, dependencies, resilience patterns, scaling strategy, and health monitoring.
 
-Components are organized into the same 11 TOGAF-aligned subsections as Section 2, with additional technical depth including method signatures, DI registration patterns, and cross-component relationships. All specifications are derived from source file evidence with no fabricated information.
+Components are organized into the same 11 TOGAF-aligned subsections as Section 2, with additional technical depth including the 6 mandatory sub-attributes per component. All specifications are derived from source file evidence with no fabricated information.
 
 The catalog documents 23 components meeting the 0.70 confidence threshold across 8 active component types, with 3 types marked as not detected.
 
 ### 5.1 Application Services
 
-#### IdentityRevalidatingAuthenticationStateProvider
+#### 5.1.1 IdentityRevalidatingAuthenticationStateProvider
 
-| Attribute           | Value                                                                                                                                              |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**            | IdentityRevalidatingAuthenticationStateProvider                                                                                                    |
-| **Source**          | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:1-50                                                    |
-| **Confidence**      | 0.81                                                                                                                                               |
-| **Type**            | Authentication Service                                                                                                                             |
-| **Description**     | Server-side AuthenticationStateProvider that revalidates the connected user's security stamp every 30 minutes during an interactive Blazor circuit |
-| **DI Registration** | `AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>()` (Program.cs:17)                                        |
-| **Dependencies**    | ILoggerFactory, IServiceScopeFactory, IOptions&lt;IdentityOptions&gt;, UserManager&lt;ApplicationUser&gt;                                          |
-| **Key Behavior**    | Overrides `RevalidationInterval` (30 min) and `ValidateAuthenticationStateAsync` to compare ClaimsPrincipal security stamp against database        |
+| Attribute          | Value                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| **Component Name** | IdentityRevalidatingAuthenticationStateProvider                                                 |
+| **Service Type**   | Monolith                                                                                        |
+| **Source**         | src/IdentityProvider/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs:1-50 |
+| **Confidence**     | 0.81                                                                                            |
 
-#### IdentityRedirectManager
+**API Surface:**
 
-| Attribute           | Value                                                                                                                          |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| **Name**            | IdentityRedirectManager                                                                                                        |
-| **Source**          | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:1-59                                                        |
-| **Confidence**      | 0.76                                                                                                                           |
-| **Type**            | Navigation Service                                                                                                             |
-| **Description**     | Manages secure redirects with status message cookies (5-second MaxAge, Strict SameSite, HttpOnly) and open-redirect prevention |
-| **DI Registration** | `AddScoped<IdentityRedirectManager>()` (Program.cs:16)                                                                         |
-| **Dependencies**    | NavigationManager                                                                                                              |
-| **Key Behavior**    | `RedirectTo()` validates URI is well-formed relative; `RedirectToWithStatus()` appends status cookie before redirect           |
+No direct API surface — internal service within Blazor Server circuit. Provides `AuthenticationStateProvider` abstraction consumed by Blazor authorization infrastructure.
 
-#### IdentityNoOpEmailSender
+**Dependencies:**
 
-| Attribute           | Value                                                                                                                                        |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**            | IdentityNoOpEmailSender                                                                                                                      |
-| **Source**          | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23                                                                      |
-| **Confidence**      | 0.75                                                                                                                                         |
-| **Type**            | Email Service                                                                                                                                |
-| **Description**     | Stub IEmailSender<ApplicationUser> implementation that delegates to NoOpEmailSender — does not deliver emails                                |
-| **DI Registration** | `AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>()` (Program.cs:37)                                                     |
-| **Dependencies**    | IEmailSender (Microsoft.AspNetCore.Identity.UI.Services)                                                                                     |
-| **Key Behavior**    | Methods `SendConfirmationLinkAsync`, `SendPasswordResetLinkAsync`, `SendPasswordResetCodeAsync` format HTML messages but do not deliver them |
+| Dependency                  | Direction | Protocol    | Purpose                                                  |
+| --------------------------- | --------- | ----------- | -------------------------------------------------------- |
+| ILoggerFactory              | Upstream  | DI          | Logging                                                  |
+| IServiceScopeFactory        | Upstream  | DI          | Scoped service resolution for UserManager                |
+| UserManager                 | Upstream  | DI (scoped) | Security stamp validation via ValidateSecurityStampAsync |
+| IOptions\<IdentityOptions\> | Upstream  | DI          | Identity configuration access                            |
 
-#### IdentityUserAccessor
+**Resilience:** Not specified in source — requires operational documentation
 
-| Attribute           | Value                                                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| **Name**            | IdentityUserAccessor                                                                                                |
-| **Source**          | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:1-21                                                |
-| **Confidence**      | 0.73                                                                                                                |
-| **Type**            | User Access Service                                                                                                 |
-| **Description**     | Retrieves the authenticated ApplicationUser from HttpContext with automatic redirect to InvalidUser page on failure |
-| **DI Registration** | `AddScoped<IdentityUserAccessor>()` (Program.cs:15)                                                                 |
-| **Dependencies**    | UserManager&lt;ApplicationUser&gt;, IdentityRedirectManager                                                         |
-| **Key Behavior**    | `GetRequiredUserAsync()` resolves user or redirects with error status                                               |
+**Scaling:** Inherits from Blazor Server host; Azure Container Apps min 1, max 10 replicas (infra/resources.bicep:84-85)
+
+**Health:** No dedicated health endpoint — maturity level 1. Recommend adding security stamp revalidation health indicator.
+
+#### 5.1.2 IdentityRedirectManager
+
+| Attribute          | Value                                                                   |
+| ------------------ | ----------------------------------------------------------------------- |
+| **Component Name** | IdentityRedirectManager                                                 |
+| **Service Type**   | Monolith                                                                |
+| **Source**         | src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:1-59 |
+| **Confidence**     | 0.76                                                                    |
+
+**API Surface:**
+
+No direct API surface — internal navigation service. Exposes methods: `RedirectTo(string uri)`, `RedirectToWithStatus(string uri, string statusMessage, HttpContext context)`, `RedirectToCurrentPage()`, `RedirectToCurrentPageWithStatus(string statusMessage, HttpContext context)`.
+
+**Dependencies:**
+
+| Dependency        | Direction | Protocol | Purpose           |
+| ----------------- | --------- | -------- | ----------------- |
+| NavigationManager | Upstream  | DI       | Blazor navigation |
+
+**Resilience:** Open-redirect prevention via `Uri.IsWellFormedUriString(uri, UriKind.Relative)` validation (src/IdentityProvider/Components/Account/IdentityRedirectManager.cs:21-28)
+
+**Scaling:** Inherits from Blazor Server host; stateless scoped service supports horizontal scaling
+
+**Health:** No dedicated health endpoint — maturity level 1
+
+#### 5.1.3 IdentityNoOpEmailSender
+
+| Attribute          | Value                                                                   |
+| ------------------ | ----------------------------------------------------------------------- |
+| **Component Name** | IdentityNoOpEmailSender                                                 |
+| **Service Type**   | Monolith                                                                |
+| **Source**         | src/IdentityProvider/Components/Account/IdentityNoOpEmailSender.cs:1-23 |
+| **Confidence**     | 0.75                                                                    |
+
+**API Surface:**
+
+No direct API surface — implements `IEmailSender<ApplicationUser>`. Methods: `SendConfirmationLinkAsync`, `SendPasswordResetLinkAsync`, `SendPasswordResetCodeAsync`. All delegate to `NoOpEmailSender` (no actual delivery).
+
+**Dependencies:**
+
+| Dependency   | Direction | Protocol | Purpose                                |
+| ------------ | --------- | -------- | -------------------------------------- |
+| IEmailSender | Upstream  | DI       | Base email sending abstraction (no-op) |
+
+**Resilience:** Not applicable — no-op implementation performs no I/O
+
+**Scaling:** Singleton registration; stateless; supports any number of instances
+
+**Health:** DEGRADED — no-op implementation means email confirmation and password reset flows are non-functional. Requires replacement with production email provider.
+
+#### 5.1.4 IdentityUserAccessor
+
+| Attribute          | Value                                                                |
+| ------------------ | -------------------------------------------------------------------- |
+| **Component Name** | IdentityUserAccessor                                                 |
+| **Service Type**   | Monolith                                                             |
+| **Source**         | src/IdentityProvider/Components/Account/IdentityUserAccessor.cs:1-21 |
+| **Confidence**     | 0.73                                                                 |
+
+**API Surface:**
+
+No direct API surface — internal service. Exposes method: `GetRequiredUserAsync(HttpContext context)` returning `Task<ApplicationUser>`.
+
+**Dependencies:**
+
+| Dependency              | Direction  | Protocol | Purpose                                 |
+| ----------------------- | ---------- | -------- | --------------------------------------- |
+| UserManager             | Upstream   | DI       | User resolution via GetUserAsync        |
+| IdentityRedirectManager | Downstream | DI       | Redirect to InvalidUser page on failure |
+
+**Resilience:** Automatic redirect-on-failure semantics when user cannot be resolved from HttpContext
+
+**Scaling:** Inherits from Blazor Server host; scoped service supports horizontal scaling
+
+**Health:** No dedicated health endpoint — maturity level 1
 
 ### 5.2 Application Components
 
-#### IdentityProvider Web Host
+#### 5.2.1 IdentityProvider Web Host
 
-| Attribute               | Value                                                                                                                                                                                                                   |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**                | IdentityProvider Web Host                                                                                                                                                                                               |
-| **Source**              | src/IdentityProvider/Program.cs:1-71                                                                                                                                                                                    |
-| **Confidence**          | 0.86                                                                                                                                                                                                                    |
-| **Type**                | Web Application Host                                                                                                                                                                                                    |
-| **Description**         | ASP.NET Core 9.0 Blazor Server application entry point managing the full service registration and middleware pipeline                                                                                                   |
-| **Services Registered** | RazorComponents (Interactive Server), CascadingAuthenticationState, IdentityUserAccessor, IdentityRedirectManager, AuthenticationStateProvider, Authentication (Cookie), DbContext (SQLite), Identity Core, EmailSender |
-| **Middleware Pipeline** | HSTS → HTTPS Redirect → Static Files → Antiforgery → Razor Components → Identity Endpoints                                                                                                                              |
-| **Key Behavior**        | Auto-applies EF Core migrations in Development; maps Razor components with interactive server render mode                                                                                                               |
+| Attribute          | Value                                |
+| ------------------ | ------------------------------------ |
+| **Component Name** | IdentityProvider Web Host            |
+| **Service Type**   | Monolith                             |
+| **Source**         | src/IdentityProvider/Program.cs:1-71 |
+| **Confidence**     | 0.86                                 |
 
-#### ApplicationDbContext
+**API Surface:**
 
-| Attribute         | Value                                                                                                                                                               |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**          | ApplicationDbContext                                                                                                                                                |
-| **Source**        | src/IdentityProvider/Data/ApplicationDbContext.cs:1-9                                                                                                               |
-| **Confidence**    | 0.79                                                                                                                                                                |
-| **Type**          | Data Access Component                                                                                                                                               |
-| **Description**   | Entity Framework Core database context inheriting IdentityDbContext&lt;ApplicationUser&gt; providing ASP.NET Identity schema (Users, Roles, Claims, Logins, Tokens) |
-| **Dependencies**  | DbContextOptions&lt;ApplicationDbContext&gt;, Microsoft.EntityFrameworkCore, Microsoft.AspNetCore.Identity.EntityFrameworkCore                                      |
-| **Configuration** | Connection string "DefaultConnection" from appsettings.json; SQLite provider                                                                                        |
-| **Key Behavior**  | Primary constructor pattern; inherits full Identity schema management from IdentityDbContext                                                                        |
+| Endpoint Type | Count | Protocol          | Description                                                                         |
+| ------------- | ----- | ----------------- | ----------------------------------------------------------------------------------- |
+| POST          | 4     | HTTP/Cookie       | Identity endpoints (ExternalLogin, Logout, LinkExternalLogin, DownloadPersonalData) |
+| Blazor Hub    | 1     | WebSocket/SignalR | Interactive Server rendering circuit                                                |
+| Static Files  | 1     | HTTPS             | wwwroot static asset serving                                                        |
 
-#### Routes
+**Dependencies:**
 
-| Attribute         | Value                                                                                                                               |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**          | Routes                                                                                                                              |
-| **Source**        | src/IdentityProvider/Components/Routes.razor:1-12                                                                                   |
-| **Confidence**    | 0.71                                                                                                                                |
-| **Type**          | Routing Component                                                                                                                   |
-| **Description**   | Blazor Router component configuring application routing with authorization enforcement                                              |
-| **Dependencies**  | Program assembly, Layout.MainLayout, Account.Shared.RedirectToLogin                                                                 |
-| **Configuration** | AppAssembly set to `typeof(Program).Assembly`; DefaultLayout set to MainLayout                                                      |
-| **Key Behavior**  | AuthorizeRouteView renders page if authorized; NotAuthorized renders RedirectToLogin component; FocusOnNavigate targets h1 elements |
+| Dependency                  | Direction  | Protocol | Purpose                        |
+| --------------------------- | ---------- | -------- | ------------------------------ |
+| ApplicationDbContext        | Downstream | EF Core  | Data persistence registration  |
+| IdentityUserAccessor        | Downstream | DI       | Scoped service registration    |
+| IdentityRedirectManager     | Downstream | DI       | Scoped service registration    |
+| AuthenticationStateProvider | Downstream | DI       | Scoped service registration    |
+| IdentityNoOpEmailSender     | Downstream | DI       | Singleton service registration |
+| Identity Endpoints          | Downstream | HTTP     | Endpoint mapping               |
+
+**Resilience:** HSTS enforcement for production (src/IdentityProvider/Program.cs:54-57); Antiforgery middleware (src/IdentityProvider/Program.cs:63)
+
+**Scaling:** Azure Container Apps min 1, max 10 replicas (infra/resources.bicep:84-85). Blazor Server SignalR circuits are stateful, requiring sticky sessions for multi-instance deployment.
+
+**Health:** No health check endpoints configured. Auto-migration in Development environment (src/IdentityProvider/Program.cs:43-48). Recommend adding MapHealthChecks for Container Apps probes.
+
+#### 5.2.2 ApplicationDbContext
+
+| Attribute          | Value                                                 |
+| ------------------ | ----------------------------------------------------- |
+| **Component Name** | ApplicationDbContext                                  |
+| **Service Type**   | Monolith                                              |
+| **Source**         | src/IdentityProvider/Data/ApplicationDbContext.cs:1-9 |
+| **Confidence**     | 0.79                                                  |
+
+**API Surface:**
+
+EF Core DbSet operations inherited from IdentityDbContext: Users, Roles, UserClaims, UserLogins, UserTokens, RoleClaims, UserRoles. No custom DbSet properties defined.
+
+**Dependencies:**
+
+| Dependency        | Direction | Protocol    | Purpose                                                  |
+| ----------------- | --------- | ----------- | -------------------------------------------------------- |
+| DbContextOptions  | Upstream  | DI          | Configuration injection                                  |
+| SQLite Provider   | Upstream  | EF Core     | Database provider (Microsoft.EntityFrameworkCore.Sqlite) |
+| IdentityDbContext | Upstream  | Inheritance | Identity schema management base class                    |
+
+**Resilience:** Not specified in source — requires operational documentation. SQLite has limited concurrent write support.
+
+**Scaling:** Limited by SQLite single-writer constraint. Not suitable for multi-instance production deployment without migration to a production database.
+
+**Health:** No dedicated health endpoint. Database connectivity validated implicitly during auto-migration in Development (src/IdentityProvider/Program.cs:43-48).
+
+#### 5.2.3 Routes
+
+| Attribute          | Value                                             |
+| ------------------ | ------------------------------------------------- |
+| **Component Name** | Routes                                            |
+| **Service Type**   | Monolith                                          |
+| **Source**         | src/IdentityProvider/Components/Routes.razor:1-12 |
+| **Confidence**     | 0.71                                              |
+
+**API Surface:**
+
+No direct API surface — Blazor Router component. Routes incoming requests to page components via `Router` with `AppAssembly` set to `typeof(Program).Assembly`.
+
+**Dependencies:**
+
+| Dependency       | Direction  | Protocol   | Purpose                               |
+| ---------------- | ---------- | ---------- | ------------------------------------- |
+| MainLayout       | Downstream | Blazor     | Default layout for authorized routes  |
+| RedirectToLogin  | Downstream | Blazor     | NotAuthorized fallback component      |
+| Program Assembly | Upstream   | Reflection | Route discovery via assembly scanning |
+
+**Resilience:** AuthorizeRouteView enforces authorization on all routes; unauthorized users are redirected to login
+
+**Scaling:** Stateless component; inherits scaling from Blazor Server host
+
+**Health:** No dedicated health endpoint — maturity level 1
 
 ### 5.3 Application Interfaces
 
-#### Identity Endpoints
+#### 5.3.1 Identity Endpoints
 
-| Attribute         | Value                                                                                                                                                                                                                   |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**          | Identity Endpoints                                                                                                                                                                                                      |
-| **Source**        | src/IdentityProvider/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs:1-113                                                                                                                       |
-| **Confidence**    | 0.81                                                                                                                                                                                                                    |
-| **Type**          | REST Endpoint                                                                                                                                                                                                           |
-| **Description**   | Static extension method `MapAdditionalIdentityEndpoints` defining 4 HTTP POST endpoints required by Identity Razor components                                                                                           |
-| **Endpoints**     | POST /Account/PerformExternalLogin, POST /Account/Logout, POST /Account/Manage/LinkExternalLogin, POST /Account/Manage/DownloadPersonalData                                                                             |
-| **Authorization** | /Account/Manage/\* group requires authorization via `.RequireAuthorization()`                                                                                                                                           |
-| **Key Behavior**  | PerformExternalLogin configures external auth properties and returns Challenge; Logout signs out and returns LocalRedirect; DownloadPersonalData exports personal data as JSON download with Content-Disposition header |
+| Attribute          | Value                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------- |
+| **Component Name** | Identity Endpoints                                                                                |
+| **Service Type**   | Monolith                                                                                          |
+| **Source**         | src/IdentityProvider/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs:1-113 |
+| **Confidence**     | 0.81                                                                                              |
+
+**API Surface:**
+
+| Endpoint Type                             | Count | Protocol  | Description                                                      |
+| ----------------------------------------- | ----- | --------- | ---------------------------------------------------------------- |
+| POST /Account/PerformExternalLogin        | 1     | HTTP/Form | Configures external auth properties and returns Challenge result |
+| POST /Account/Logout                      | 1     | HTTP/Form | Signs out user and returns LocalRedirect                         |
+| POST /Account/Manage/LinkExternalLogin    | 1     | HTTP/Form | Links external login provider to existing account (authorized)   |
+| POST /Account/Manage/DownloadPersonalData | 1     | HTTP/JSON | Exports personal data as JSON file download (authorized)         |
+
+**Dependencies:**
+
+| Dependency                          | Direction | Protocol | Purpose                                                                             |
+| ----------------------------------- | --------- | -------- | ----------------------------------------------------------------------------------- |
+| SignInManager                       | Upstream  | DI       | Authentication operations (ConfigureExternalAuthenticationProperties, SignOutAsync) |
+| UserManager                         | Upstream  | DI       | User data operations (GetUserAsync, GetPersonalDataAsync)                           |
+| IUserStore                          | Upstream  | DI       | User store metadata access                                                          |
+| AuthenticationHttpContextExtensions | Upstream  | HTTP     | Challenge result for external login                                                 |
+
+**Resilience:** RequireAuthorization on /Account/Manage/\* group. Antiforgery validation via middleware.
+
+**Scaling:** Stateless HTTP endpoints; inherits scaling from Blazor Server host
+
+**Health:** No dedicated health endpoint. API contract format: undocumented (no OpenAPI spec). Maturity level 1 — recommend generating OpenAPI specification.
 
 ### 5.4 Application Collaborations
 
-See Section 2.4. No additional specifications detected in source files.
+Not detected in source files. No additional specifications beyond Section 2.4.
 
 ### 5.5 Application Functions
 
-#### User Authentication
+#### 5.5.1 User Authentication
 
-| Attribute        | Value                                                                                                                                                |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**         | User Authentication                                                                                                                                  |
-| **Source**       | src/IdentityProvider/Components/Account/Pages/Login.razor:1-129                                                                                      |
-| **Confidence**   | 0.75                                                                                                                                                 |
-| **Type**         | Authentication Function                                                                                                                              |
-| **Description**  | Login page with email/password form, remember-me option, external login picker, and links to forgot password, register, and resend confirmation      |
-| **Dependencies** | SignInManager&lt;ApplicationUser&gt;, ILogger&lt;Login&gt;, NavigationManager, IdentityRedirectManager                                               |
-| **Input Model**  | InputModel with Email (Required, EmailAddress), Password (Required, DataType.Password), RememberMe (bool)                                            |
-| **Key Behavior** | Clears external cookie on GET; calls `PasswordSignInAsync` on POST; redirects to 2FA page if `RequiresTwoFactor`; redirects to lockout if locked out |
+| Attribute          | Value                                                           |
+| ------------------ | --------------------------------------------------------------- |
+| **Component Name** | User Authentication                                             |
+| **Service Type**   | Monolith                                                        |
+| **Source**         | src/IdentityProvider/Components/Account/Pages/Login.razor:1-129 |
+| **Confidence**     | 0.75                                                            |
 
-#### User Registration
+**API Surface:**
 
-| Attribute        | Value                                                                                                                                                                                                                 |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**         | User Registration                                                                                                                                                                                                     |
-| **Source**       | src/IdentityProvider/Components/Account/Pages/Register.razor:1-146                                                                                                                                                    |
-| **Confidence**   | 0.75                                                                                                                                                                                                                  |
-| **Type**         | Registration Function                                                                                                                                                                                                 |
-| **Description**  | Registration page creating new ApplicationUser with email confirmation token generation and optional auto-sign-in                                                                                                     |
-| **Dependencies** | UserManager&lt;ApplicationUser&gt;, IUserStore&lt;ApplicationUser&gt;, SignInManager&lt;ApplicationUser&gt;, IEmailSender&lt;ApplicationUser&gt;, ILogger&lt;Register&gt;, NavigationManager, IdentityRedirectManager |
-| **Input Model**  | InputModel with Email (Required, EmailAddress), Password (Required, StringLength 100/6, DataType.Password), ConfirmPassword (Compare to Password)                                                                     |
-| **Key Behavior** | Creates user via UserManager.CreateAsync; generates email confirmation token; sends confirmation link via IEmailSender; redirects to RegisterConfirmation if RequireConfirmedAccount                                  |
+Blazor Server page at route `/Account/Login`. Renders email/password form with remember-me option, external login picker, and navigation links to forgot password, register, and resend confirmation.
 
-#### App Registration Management
+**Dependencies:**
 
-| Attribute        | Value                                                                                                                                            |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Name**         | App Registration Management                                                                                                                      |
-| **Source**       | src/IdentityProvider/Components/Pages/AppRegistrationForm.razor:1-105                                                                            |
-| **Confidence**   | 0.70                                                                                                                                             |
-| **Type**         | Management Function                                                                                                                              |
-| **Description**  | Form page for creating OAuth/OIDC application registrations with DataAnnotationsValidator and field-level validation                             |
-| **Dependencies** | NavigationManager, AppRegistration model                                                                                                         |
-| **Input Model**  | AppRegistration entity with ClientId, ClientSecret, TenantId, RedirectUri, Scopes, Authority, AppName, AppDescription, GrantTypes, ResponseTypes |
-| **Key Behavior** | EditForm with OnValidSubmit binding to HandleValidSubmit; navigates to root on success; persistence logic not yet implemented (noted in source)  |
+| Dependency              | Direction | Protocol | Purpose                            |
+| ----------------------- | --------- | -------- | ---------------------------------- |
+| SignInManager           | Upstream  | DI       | PasswordSignInAsync authentication |
+| ILogger\<Login\>        | Upstream  | DI       | Authentication event logging       |
+| NavigationManager       | Upstream  | DI       | URL and query string access        |
+| IdentityRedirectManager | Upstream  | DI       | Post-login redirect with status    |
+
+**Resilience:** Account lockout on repeated failed attempts (via ASP.NET Identity defaults). Clears external cookie on GET to prevent stale state.
+
+**Scaling:** Stateless page component; inherits from Blazor Server host
+
+**Health:** No dedicated health endpoint — maturity level 1
+
+#### 5.5.2 User Registration
+
+| Attribute          | Value                                                              |
+| ------------------ | ------------------------------------------------------------------ |
+| **Component Name** | User Registration                                                  |
+| **Service Type**   | Monolith                                                           |
+| **Source**         | src/IdentityProvider/Components/Account/Pages/Register.razor:1-146 |
+| **Confidence**     | 0.75                                                               |
+
+**API Surface:**
+
+Blazor Server page at route `/Account/Register`. Renders registration form with email, password, and confirm password fields. DataAnnotationsValidator enforces InputModel constraints.
+
+**Dependencies:**
+
+| Dependency              | Direction | Protocol | Purpose                                          |
+| ----------------------- | --------- | -------- | ------------------------------------------------ |
+| UserManager             | Upstream  | DI       | CreateAsync user creation                        |
+| IUserStore              | Upstream  | DI       | User store capability checks                     |
+| SignInManager           | Upstream  | DI       | Optional auto-sign-in after registration         |
+| IEmailSender            | Upstream  | DI       | SendConfirmationLinkAsync for email verification |
+| ILogger\<Register\>     | Upstream  | DI       | Registration event logging                       |
+| NavigationManager       | Upstream  | DI       | URL access                                       |
+| IdentityRedirectManager | Upstream  | DI       | Post-registration redirect                       |
+
+**Resilience:** Input validation via DataAnnotationsValidator (email format, password length 6-100, password confirmation match). Identity result error display on creation failure.
+
+**Scaling:** Stateless page component; inherits from Blazor Server host
+
+**Health:** No dedicated health endpoint — maturity level 1
+
+#### 5.5.3 App Registration Management
+
+| Attribute          | Value                                                                 |
+| ------------------ | --------------------------------------------------------------------- |
+| **Component Name** | App Registration Management                                           |
+| **Service Type**   | Monolith                                                              |
+| **Source**         | src/IdentityProvider/Components/Pages/AppRegistrationForm.razor:1-105 |
+| **Confidence**     | 0.70                                                                  |
+
+**API Surface:**
+
+Blazor Server page at route `/app-registration`. Renders OAuth/OIDC application registration form with fields for ClientId, ClientSecret, TenantId, RedirectUri, Scopes, Authority, AppName, AppDescription, GrantTypes, ResponseTypes.
+
+**Dependencies:**
+
+| Dependency        | Direction | Protocol | Purpose                                  |
+| ----------------- | --------- | -------- | ---------------------------------------- |
+| NavigationManager | Upstream  | DI       | Post-submit navigation to root           |
+| AppRegistration   | Upstream  | Model    | Form binding model with data annotations |
+
+**Resilience:** DataAnnotationsValidator enforces field-level validation (Required, MaxLength constraints). EditForm with OnValidSubmit binding.
+
+**Scaling:** Stateless page component; inherits from Blazor Server host
+
+**Health:** DEGRADED — persistence logic not yet implemented in HandleValidSubmit (noted in source). Form submits but does not save to database.
 
 ### 5.6 Application Interactions
 
-#### Cookie-Based Authentication
+#### 5.6.1 Cookie-Based Authentication
 
-| Attribute         | Value                                                                                                                                    |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**          | Cookie-Based Authentication                                                                                                              |
-| **Source**        | src/IdentityProvider/Program.cs:20-26                                                                                                    |
-| **Confidence**    | 0.73                                                                                                                                     |
-| **Type**          | Request/Response                                                                                                                         |
-| **Description**   | Authentication interaction pattern using two cookie schemes: ApplicationScheme (primary) and ExternalScheme (sign-in)                    |
-| **Protocol**      | HTTP Cookie-based with Strict SameSite, HttpOnly, Secure attributes                                                                      |
-| **Configuration** | DefaultScheme = IdentityConstants.ApplicationScheme; DefaultSignInScheme = IdentityConstants.ExternalScheme                              |
-| **Key Behavior**  | Cookie middleware issues authentication cookies on successful login; revalidation provider checks security stamps on 30-minute intervals |
+| Attribute          | Value                                 |
+| ------------------ | ------------------------------------- |
+| **Component Name** | Cookie-Based Authentication           |
+| **Service Type**   | Monolith                              |
+| **Source**         | src/IdentityProvider/Program.cs:20-26 |
+| **Confidence**     | 0.73                                  |
+
+**API Surface:**
+
+Authentication middleware configuration with two cookie schemes: IdentityConstants.ApplicationScheme (default) and IdentityConstants.ExternalScheme (sign-in). No direct API endpoints — operates as HTTP middleware.
+
+**Dependencies:**
+
+| Dependency                                      | Direction  | Protocol | Purpose                                      |
+| ----------------------------------------------- | ---------- | -------- | -------------------------------------------- |
+| AddAuthentication                               | Upstream   | DI       | Authentication service registration          |
+| AddIdentityCookies                              | Upstream   | DI       | Cookie authentication handler registration   |
+| IdentityRevalidatingAuthenticationStateProvider | Downstream | Blazor   | Security stamp revalidation every 30 minutes |
+
+**Resilience:** Cookie attributes: Strict SameSite, HttpOnly, Secure. Status message cookie with 5-second MaxAge to prevent stale messages.
+
+**Scaling:** Cookie-based authentication is stateless at the server level; supports horizontal scaling without session affinity for cookie validation (security stamp validated against database).
+
+**Health:** No dedicated health endpoint — maturity level 1
 
 ### 5.7 Application Events
 
-See Section 2.7. No additional specifications detected in source files.
+Not detected in source files. No additional specifications beyond Section 2.7.
 
 ### 5.8 Application Data Objects
 
-#### ApplicationUser
+#### 5.8.1 ApplicationUser
 
-| Attribute                | Value                                                                                                                                                                                                                       |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**                 | ApplicationUser                                                                                                                                                                                                             |
-| **Source**               | src/IdentityProvider/Data/ApplicationUser.cs:1-10                                                                                                                                                                           |
-| **Confidence**           | 0.74                                                                                                                                                                                                                        |
-| **Type**                 | Entity                                                                                                                                                                                                                      |
-| **Description**          | Identity user entity extending IdentityUser with no additional custom properties; serves as the principal identity model                                                                                                    |
-| **Namespace**            | IdentityProvider.Data                                                                                                                                                                                                       |
-| **Base Class**           | Microsoft.AspNetCore.Identity.IdentityUser                                                                                                                                                                                  |
-| **Inherited Properties** | Id, UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd, LockoutEnabled, AccessFailedCount |
-| **Database Table**       | AspNetUsers (via Identity conventions)                                                                                                                                                                                      |
+| Attribute          | Value                                             |
+| ------------------ | ------------------------------------------------- |
+| **Component Name** | ApplicationUser                                   |
+| **Service Type**   | Monolith                                          |
+| **Source**         | src/IdentityProvider/Data/ApplicationUser.cs:1-10 |
+| **Confidence**     | 0.74                                              |
 
-#### AppRegistration
+**API Surface:**
 
-| Attribute          | Value                                                                                                                                                                                                                                                                                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**           | AppRegistration                                                                                                                                                                                                                                                                                                                                         |
-| **Source**         | src/IdentityProvider/Components/AppRegistration.cs:1-44                                                                                                                                                                                                                                                                                                 |
-| **Confidence**     | 0.72                                                                                                                                                                                                                                                                                                                                                    |
-| **Type**           | Entity                                                                                                                                                                                                                                                                                                                                                  |
-| **Description**    | OAuth/OIDC application registration entity with data annotation validation attributes and explicit table mapping                                                                                                                                                                                                                                        |
-| **Namespace**      | IdentityProvider.Components                                                                                                                                                                                                                                                                                                                             |
-| **Database Table** | AppRegistrations (via `[Table("AppRegistrations")]`)                                                                                                                                                                                                                                                                                                    |
-| **Properties**     | ClientId [Key, Required, MaxLength(100)], ClientSecret [Required, MaxLength(200)], TenantId [Required, MaxLength(100)], RedirectUri [Required, MaxLength(200)], Scopes [Required], Authority [Required, MaxLength(200)], AppName [Required, MaxLength(100)], AppDescription [MaxLength(500), nullable], GrantTypes [Required], ResponseTypes [Required] |
+Entity class — no direct API. Extends `IdentityUser` with no custom properties. Inherited properties: Id, UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd, LockoutEnabled, AccessFailedCount. Database table: AspNetUsers (Identity conventions).
+
+**Dependencies:**
+
+| Dependency           | Direction  | Protocol    | Purpose                           |
+| -------------------- | ---------- | ----------- | --------------------------------- |
+| IdentityUser         | Upstream   | Inheritance | Base identity user class          |
+| ApplicationDbContext | Downstream | EF Core     | Persistence via IdentityDbContext |
+
+**Resilience:** ConcurrencyStamp property provides optimistic concurrency control via EF Core
+
+**Scaling:** Not applicable — entity class with no runtime behavior
+
+**Health:** Not applicable — entity class
+
+#### 5.8.2 AppRegistration
+
+| Attribute          | Value                                                   |
+| ------------------ | ------------------------------------------------------- |
+| **Component Name** | AppRegistration                                         |
+| **Service Type**   | Monolith                                                |
+| **Source**         | src/IdentityProvider/Components/AppRegistration.cs:1-44 |
+| **Confidence**     | 0.72                                                    |
+
+**API Surface:**
+
+Entity class — no direct API. Properties: ClientId [Key, Required, MaxLength(100)], ClientSecret [Required, MaxLength(200)], TenantId [Required, MaxLength(100)], RedirectUri [Required, MaxLength(200)], Scopes [Required], Authority [Required, MaxLength(200)], AppName [Required, MaxLength(100)], AppDescription [MaxLength(500), nullable], GrantTypes [Required], ResponseTypes [Required]. Database table: AppRegistrations (via `[Table("AppRegistrations")]`).
+
+**Dependencies:**
+
+| Dependency                            | Direction  | Protocol  | Purpose                |
+| ------------------------------------- | ---------- | --------- | ---------------------- |
+| System.ComponentModel.DataAnnotations | Upstream   | Attribute | Validation constraints |
+| AppRegistrationForm                   | Downstream | Blazor    | Form binding model     |
+
+**Resilience:** Data annotation validation enforces Required and MaxLength constraints at model level
+
+**Scaling:** Not applicable — entity class with no runtime behavior
+
+**Health:** Not applicable — entity class. Note: persistence logic in AppRegistrationForm.HandleValidSubmit is not yet implemented.
 
 ### 5.9 Integration Patterns
 
-#### ASP.NET Identity Integration
+#### 5.9.1 ASP.NET Identity Integration
 
-| Attribute                 | Value                                                                                                                                                                       |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**                  | ASP.NET Identity Integration                                                                                                                                                |
-| **Source**                | src/IdentityProvider/Program.cs:32-36                                                                                                                                       |
-| **Confidence**            | 0.79                                                                                                                                                                        |
-| **Type**                  | Framework Integration                                                                                                                                                       |
-| **Description**           | Full ASP.NET Core Identity stack integration chaining AddIdentityCore, AddEntityFrameworkStores, AddSignInManager, and AddDefaultTokenProviders                             |
-| **Configuration**         | `options.SignIn.RequireConfirmedAccount = true`                                                                                                                             |
-| **Components Integrated** | UserManager, SignInManager, RoleManager (implicit), TokenProviders                                                                                                          |
-| **Key Behavior**          | Configures Identity with confirmed account requirement; uses ApplicationDbContext as the backing store; provides token generation for email confirmation and password reset |
+| Attribute          | Value                                 |
+| ------------------ | ------------------------------------- |
+| **Component Name** | ASP.NET Identity Integration          |
+| **Service Type**   | Monolith                              |
+| **Source**         | src/IdentityProvider/Program.cs:32-36 |
+| **Confidence**     | 0.79                                  |
 
-#### EF Core SQLite Integration
+**API Surface:**
 
-| Attribute              | Value                                                                                                                             |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**               | EF Core SQLite Integration                                                                                                        |
-| **Source**             | src/IdentityProvider/Program.cs:28-30                                                                                             |
-| **Confidence**         | 0.78                                                                                                                              |
-| **Type**               | Database Integration                                                                                                              |
-| **Description**        | Entity Framework Core configured with SQLite provider and connection string from appsettings.json                                 |
-| **Connection String**  | `Data Source=identityProviderDB.db;` (from appsettings.json)                                                                      |
-| **Migration Strategy** | Automatic migration in Development (`dbContext.Database.Migrate()` at startup, Program.cs:43-48)                                  |
-| **Key Behavior**       | AddDbContext registers ApplicationDbContext with SQLite; AddDatabaseDeveloperPageExceptionFilter provides development diagnostics |
+Framework integration — no direct API. Configures Identity pipeline: `AddIdentityCore<ApplicationUser>` → `AddEntityFrameworkStores<ApplicationDbContext>` → `AddSignInManager` → `AddDefaultTokenProviders`. Configuration: `options.SignIn.RequireConfirmedAccount = true`.
+
+**Dependencies:**
+
+| Dependency           | Direction  | Protocol | Purpose                                      |
+| -------------------- | ---------- | -------- | -------------------------------------------- |
+| ApplicationDbContext | Upstream   | EF Core  | Entity Framework identity store              |
+| UserManager          | Downstream | DI       | User management operations                   |
+| SignInManager        | Downstream | DI       | Sign-in operations                           |
+| TokenProviders       | Downstream | DI       | Email confirmation and password reset tokens |
+
+**Resilience:** ASP.NET Core Identity defaults: account lockout after failed attempts, security stamp revalidation, PBKDF2 password hashing
+
+**Scaling:** Stateless service registrations; scaling limited by database backend (SQLite single-writer in development)
+
+**Health:** Not specified in source — relies on ASP.NET Core Identity framework health. Recommend monitoring failed authentication attempts and lockout rates.
+
+#### 5.9.2 EF Core SQLite Integration
+
+| Attribute          | Value                                 |
+| ------------------ | ------------------------------------- |
+| **Component Name** | EF Core SQLite Integration            |
+| **Service Type**   | Monolith                              |
+| **Source**         | src/IdentityProvider/Program.cs:28-30 |
+| **Confidence**     | 0.78                                  |
+
+**API Surface:**
+
+Framework integration — no direct API. Registers `ApplicationDbContext` with SQLite provider via `AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString))`. Adds `AddDatabaseDeveloperPageExceptionFilter` for development diagnostics.
+
+**Dependencies:**
+
+| Dependency                           | Direction  | Protocol | Purpose                                            |
+| ------------------------------------ | ---------- | -------- | -------------------------------------------------- |
+| IConfiguration                       | Upstream   | DI       | Connection string resolution from appsettings.json |
+| Microsoft.EntityFrameworkCore.Sqlite | Upstream   | NuGet    | SQLite database provider                           |
+| identityProviderDB.db                | Downstream | SQLite   | Physical database file                             |
+
+**Resilience:** Not specified in source — SQLite provides ACID transactions but limited concurrent write support. Auto-migration in Development catches schema drift (src/IdentityProvider/Program.cs:43-48).
+
+**Scaling:** SQLite is single-writer; not suitable for multi-instance production deployment. Recommend migrating to Azure SQL or PostgreSQL for production.
+
+**Health:** Database connectivity validated implicitly during auto-migration. No explicit health check endpoint.
 
 ### 5.10 Service Contracts
 
-See Section 2.10. No additional specifications detected in source files.
+Not detected in source files. No additional specifications beyond Section 2.10.
 
 ### 5.11 Application Dependencies
 
-#### NuGet Package Dependencies
+All packages target .NET 9.0 and use version 9.0.13 of the Microsoft.EntityFrameworkCore and Microsoft.AspNetCore.Identity ecosystem.
 
-All packages target .NET 9.0 and use version 9.0.13 of the Microsoft.EntityFrameworkCore and Microsoft.AspNetCore.Identity ecosystem. Source: src/IdentityProvider/IdentityProvider.csproj:10-22.
-
-| Package                                              | Version | Purpose                                                       | Scope      |
-| ---------------------------------------------------- | ------- | ------------------------------------------------------------- | ---------- |
-| Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore | 9.0.13  | Developer exception page for EF Core database errors          | Runtime    |
-| Microsoft.AspNetCore.Identity.EntityFrameworkCore    | 9.0.13  | Identity user/role store backed by Entity Framework Core      | Runtime    |
-| Microsoft.EntityFrameworkCore                        | 9.0.13  | Core ORM framework for object-relational mapping              | Runtime    |
-| Microsoft.EntityFrameworkCore.Design                 | 9.0.13  | Design-time services for migration scaffolding                | Build-time |
-| Microsoft.EntityFrameworkCore.Sqlite                 | 9.0.13  | SQLite database provider for EF Core                          | Runtime    |
-| Microsoft.EntityFrameworkCore.Sqlite.Core            | 9.0.13  | Core SQLite provider implementation                           | Runtime    |
-| Microsoft.EntityFrameworkCore.Tools                  | 9.0.13  | PowerShell/CLI tooling for migrations and database management | Build-time |
+| Component                                            | Description                                                   | Type          | Technology | Version | Dependencies      | API Endpoints  | SLA            | Owner     | Source File                                        |
+| ---------------------------------------------------- | ------------------------------------------------------------- | ------------- | ---------- | ------- | ----------------- | -------------- | -------------- | --------- | -------------------------------------------------- |
+| Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore | Developer exception page for EF Core database errors          | NuGet Package | .NET 9.0   | 9.0.13  | EF Core           | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:10    |
+| Microsoft.AspNetCore.Identity.EntityFrameworkCore    | Identity user/role store backed by Entity Framework Core      | NuGet Package | .NET 9.0   | 9.0.13  | EF Core, Identity | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:11    |
+| Microsoft.EntityFrameworkCore                        | Core ORM framework for object-relational mapping              | NuGet Package | .NET 9.0   | 9.0.13  | None              | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:12    |
+| Microsoft.EntityFrameworkCore.Design                 | Design-time services for migration scaffolding                | NuGet Package | .NET 9.0   | 9.0.13  | EF Core           | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:13-16 |
+| Microsoft.EntityFrameworkCore.Sqlite                 | SQLite database provider for EF Core                          | NuGet Package | .NET 9.0   | 9.0.13  | EF Core, SQLite   | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:17    |
+| Microsoft.EntityFrameworkCore.Sqlite.Core            | Core SQLite provider implementation                           | NuGet Package | .NET 9.0   | 9.0.13  | EF Core           | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:18    |
+| Microsoft.EntityFrameworkCore.Tools                  | PowerShell/CLI tooling for migrations and database management | NuGet Package | .NET 9.0   | 9.0.13  | EF Core           | Not applicable | Not applicable | Microsoft | src/IdentityProvider/IdentityProvider.csproj:19-22 |
 
 **Test Project Dependencies** (src/identityProviderTests/identityProviderTests.csproj):
 
-| Package                  | Version | Purpose                    |
-| ------------------------ | ------- | -------------------------- |
-| MSTest.Sdk               | 3.6.4   | Test framework SDK         |
-| xunit.extensibility.core | 2.9.3   | xUnit extensibility        |
-| Microsoft.NET.Test.Sdk   | 17.13.0 | .NET test platform         |
-| MSTest.Analyzers         | 3.8.3   | Test code analyzers        |
-| MSTest.TestAdapter       | 3.8.3   | Test adapter for VS Test   |
-| MSTest.TestFramework     | 3.8.3   | MSTest assertion framework |
+| Component              | Description                | Type          | Technology | Version | Dependencies | API Endpoints  | SLA            | Owner     | Source File                                               |
+| ---------------------- | -------------------------- | ------------- | ---------- | ------- | ------------ | -------------- | -------------- | --------- | --------------------------------------------------------- |
+| MSTest.Sdk             | Test framework SDK         | NuGet Package | .NET 9.0   | 3.6.4   | None         | Not applicable | Not applicable | Microsoft | src/identityProviderTests/identityProviderTests.csproj:\* |
+| Microsoft.NET.Test.Sdk | .NET test platform         | NuGet Package | .NET 9.0   | 17.13.0 | None         | Not applicable | Not applicable | Microsoft | src/identityProviderTests/identityProviderTests.csproj:\* |
+| MSTest.TestFramework   | MSTest assertion framework | NuGet Package | .NET 9.0   | 3.8.3   | None         | Not applicable | Not applicable | Microsoft | src/identityProviderTests/identityProviderTests.csproj:\* |
 
 ### Summary
 
-The Component Catalog documents 23 components across 8 active TOGAF Application component types. The strongest components by confidence are the IdentityProvider Web Host (0.86), IdentityRevalidatingAuthenticationStateProvider (0.81), Identity Endpoints (0.81), and ApplicationDbContext (0.79). The application demonstrates a cohesive Identity architecture with clear service boundaries but limited integration complexity due to its monolithic deployment model.
+The Component Catalog documents 23 components across 8 active TOGAF Application component types with the 6 mandatory sub-attributes (Service Type, API Surface, Dependencies, Resilience, Scaling, Health) specified for each. The strongest components by confidence are the IdentityProvider Web Host (0.86), IdentityRevalidatingAuthenticationStateProvider (0.81), Identity Endpoints (0.81), and ApplicationDbContext (0.79). The application demonstrates a cohesive monolithic architecture with clear service boundaries and consistent use of ASP.NET Core dependency injection.
 
-Key gaps in the catalog include: the IdentityNoOpEmailSender stub requiring replacement with a production email provider, the AppRegistrationForm's unimplemented persistence logic, and the absence of a production database provider configuration. The NuGet dependency stack is consistent at version 9.0.13 with no version conflicts detected.
+Key gaps in the catalog include: the IdentityNoOpEmailSender stub requiring replacement with a production email provider (Health: DEGRADED), the AppRegistrationForm's unimplemented persistence logic (Health: DEGRADED), the absence of health check endpoints across all components (maturity level 1), and the lack of OpenAPI specifications for the Identity Endpoints. The SQLite database backend limits horizontal scaling and must be replaced for production deployment.
 
 ---
 
@@ -545,9 +847,9 @@ The IdentityProvider application follows a layered integration model: the Progra
 
 ### Database Dependencies
 
-| Component            | Database              | Provider                                      | Connection                           | Source                                    |
-| -------------------- | --------------------- | --------------------------------------------- | ------------------------------------ | ----------------------------------------- |
-| ApplicationDbContext | identityProviderDB.db | SQLite (Microsoft.EntityFrameworkCore.Sqlite) | `Data Source=identityProviderDB.db;` | src/IdentityProvider/appsettings.json:2-4 |
+| Component            | Database              | Provider                                      | Connection                         | Source                                    |
+| -------------------- | --------------------- | --------------------------------------------- | ---------------------------------- | ----------------------------------------- |
+| ApplicationDbContext | identityProviderDB.db | SQLite (Microsoft.EntityFrameworkCore.Sqlite) | Data Source=identityProviderDB.db; | src/IdentityProvider/appsettings.json:2-4 |
 
 ### External Service Dependencies
 
@@ -567,7 +869,7 @@ The IdentityProvider application follows a layered integration model: the Progra
 
 ```mermaid
 ---
-title: IdentityProvider Application Architecture
+title: IdentityProvider Service Call Graph
 config:
   theme: base
   look: classic
@@ -578,8 +880,19 @@ config:
     htmlLabels: true
 ---
 flowchart TB
-    accTitle: IdentityProvider Application Component Diagram
-    accDescr: Component diagram showing the IdentityProvider Blazor Server application architecture with authentication services, data access, UI components, and Azure infrastructure dependencies
+    accTitle: IdentityProvider Service Call Graph
+    accDescr: Shows the service-to-service dependency graph for the IdentityProvider Blazor Server application including UI components, application services, Identity framework, data layer, and Azure infrastructure
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph UI["🖥️ Blazor UI Layer"]
         LOGIN["🔐 Login Page"]
@@ -642,6 +955,13 @@ flowchart TB
     ACA --> ACR
     ACA --> APPINS
 
+    classDef uiStyle fill:#E8F4FD,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef svcStyle fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef idStyle fill:#FCE4EC,stroke:#E81123,stroke-width:2px,color:#323130
+    classDef dataStyle fill:#E8F5E9,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef epStyle fill:#F3E5F5,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef azureStyle fill:#E3F2FD,stroke:#0078D4,stroke-width:2px,color:#323130
+
     style UI fill:#E8F4FD,stroke:#0078D4,stroke-width:2px,color:#323130
     style SERVICES fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     style IDENTITY fill:#FCE4EC,stroke:#E81123,stroke-width:2px,color:#323130
@@ -650,12 +970,18 @@ flowchart TB
     style AZURE fill:#E3F2FD,stroke:#0078D4,stroke-width:2px,color:#323130
 ```
 
+### Integration Pattern Analysis
+
+| Pattern Type          | Protocol    | Components Involved                                 | Data Contract                  | Error Handling                          |
+| --------------------- | ----------- | --------------------------------------------------- | ------------------------------ | --------------------------------------- |
+| Request/Response      | HTTP/Cookie | Login.razor → SignInManager → ApplicationDbContext  | ASP.NET Identity cookie scheme | Account lockout on repeated failure     |
+| Request/Response      | HTTP/Cookie | Register.razor → UserManager → ApplicationDbContext | ASP.NET Identity user creation | Identity result error display           |
+| Request/Response      | HTTP POST   | Identity Endpoints → SignInManager                  | Form-encoded POST body         | Challenge/redirect on auth failure      |
+| Framework Integration | DI/EF Core  | Program.cs → All services → ApplicationDbContext    | EF Core model configuration    | Developer exception page in Development |
+| Data Access           | SQLite      | ApplicationDbContext → identityProviderDB.db        | EF Core migrations             | Auto-migration in Development           |
+
 ### Summary
 
 The IdentityProvider application exhibits a cohesive dependency graph with the Program.cs host as the central service registration point. All component dependencies flow through ASP.NET Core's dependency injection container, with clear ownership boundaries between the UI layer (Razor components), service layer (Identity services), and data layer (EF Core + SQLite).
 
 The integration architecture is entirely synchronous and in-process, with no asynchronous messaging, event buses, or external API client integrations. The two primary integration seams are the ASP.NET Identity framework (providing authentication/authorization) and Entity Framework Core (providing data persistence). Infrastructure integration with Azure Container Apps, Container Registry, and Application Insights is defined declaratively in Bicep templates. The main integration gaps are the unconnected email provider and the absence of registered external authentication providers.
-
----
-
-> **Note**: Sections 6 (Architecture Decisions), 7 (Architecture Standards), and 9 (Governance & Management) are out of scope for this analysis as specified in the input parameters (`output_sections: [1, 2, 3, 4, 5, 8]`).
