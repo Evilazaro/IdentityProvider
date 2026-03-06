@@ -24,18 +24,23 @@ The application follows a layered architecture with Blazor Server for the UI, AS
 
 ```mermaid
 ---
-title: "Contoso Identity Provider Architecture"
+title: Contoso Identity Provider Architecture
 config:
   theme: base
   look: classic
   layout: dagre
-  themeVariables:
-    fontSize: '16px'
   flowchart:
     htmlLabels: true
+    curve: cardinal
+  themeVariables:
+    primaryColor: '#0078D4'
+    primaryBorderColor: '#106EBE'
+    primaryTextColor: '#FFFFFF'
+    lineColor: '#0078D4'
+    fontSize: '16px'
 ---
 flowchart TD
-    accTitle: Contoso Identity Provider Architecture Diagram
+    accTitle: Contoso Identity Provider Architecture
     accDescr: Shows the layered architecture of the Identity Provider including UI, authentication, data, and Azure infrastructure components
 
     %% ═══════════════════════════════════════════════════════════════════════════
@@ -66,10 +71,10 @@ flowchart TD
 
         subgraph auth["🔐 Identity & Authentication"]
             direction LR
-            identity["👤 ASP.NET Core Identity"]:::warning
-            signin["🔑 Sign-In Manager"]:::warning
-            external["🌍 External Login"]:::warning
-            tokens["🎫 Token Providers"]:::warning
+            identity["👤 ASP.NET Core Identity"]:::danger
+            signin["🔑 Sign-In Manager"]:::danger
+            external["🌍 External Login"]:::danger
+            tokens["🎫 Token Providers"]:::danger
         end
 
         subgraph dataLayer["💾 Data Layer"]
@@ -105,7 +110,7 @@ flowchart TD
     %% Centralized semantic classDefs
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
     %% Subgraph styling (6 subgraphs = 6 style directives)
