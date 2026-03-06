@@ -224,6 +224,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -254,8 +256,8 @@ flowchart TB
     end
 
     subgraph data["🗄️ Data Layer"]
-        EFCore["🔗 Entity Framework Core"]:::neutral
-        SQLite["💾 SQLite Database"]:::neutral
+        EFCore["🔗 Entity Framework Core"]:::data
+        SQLite["💾 SQLite Database"]:::data
     end
 
     subgraph azure["☁️ Azure Infrastructure"]
@@ -276,16 +278,17 @@ flowchart TB
     ContainerApp -->|"Telemetry"| Monitor
     ContainerApp -->|"Authenticate"| ManagedId
 
-    style client fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
-    style blazor fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    %% Subgraph styling (4 subgraphs = 4 style directives)
+    style client fill:#C8F0E7,stroke:#038387,stroke-width:2px,color:#323130
+    style blazor fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
+    style data fill:#E7E2FA,stroke:#5C2D91,stroke-width:2px,color:#323130
     style azure fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 
     %% Centralized semantic classDefs (Phase 5 compliant)
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+    classDef core fill:#0078D4,stroke:#106EBE,stroke-width:2px,color:#FFFFFF
+    classDef success fill:#107C10,stroke:#0B6A0B,stroke-width:2px,color:#FFFFFF
+    classDef data fill:#8764B8,stroke:#5C2D91,stroke-width:2px,color:#FFFFFF
+    classDef external fill:#038387,stroke:#005B70,stroke-width:2px,color:#FFFFFF
 ```
 
 ## 🤝 Contributing
