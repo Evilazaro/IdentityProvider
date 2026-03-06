@@ -29,14 +29,7 @@ config:
   theme: base
   look: classic
   layout: dagre
-  flowchart:
-    htmlLabels: true
-    curve: cardinal
   themeVariables:
-    primaryColor: '#0078D4'
-    primaryBorderColor: '#106EBE'
-    primaryTextColor: '#FFFFFF'
-    lineColor: '#0078D4'
     fontSize: '16px'
 ---
 flowchart TD
@@ -56,7 +49,7 @@ flowchart TD
 
     subgraph client["🌐 Client Layer"]
         direction LR
-        browser["🖥️ Web Browser"]:::neutral
+        browser["🖥️ Web Browser"]
     end
 
     subgraph app["⚙️ Application Layer"]
@@ -64,33 +57,33 @@ flowchart TD
 
         subgraph ui["🎨 Blazor Server UI"]
             direction LR
-            pages["📄 Razor Pages"]:::core
-            layout["📐 Layout Components"]:::core
-            nav["🧭 Navigation"]:::core
+            pages["📄 Razor Pages"]
+            layout["📐 Layout Components"]
+            nav["🧭 Navigation"]
         end
 
         subgraph auth["🔐 Identity & Authentication"]
             direction LR
-            identity["👤 ASP.NET Core Identity"]:::danger
-            signin["🔑 Sign-In Manager"]:::danger
-            external["🌍 External Login"]:::danger
-            tokens["🎫 Token Providers"]:::danger
+            identity["👤 ASP.NET Core Identity"]
+            signin["🔑 Sign-In Manager"]
+            external["🌍 External Login"]
+            tokens["🎫 Token Providers"]
         end
 
         subgraph dataLayer["💾 Data Layer"]
             direction LR
-            dbctx["📊 ApplicationDbContext"]:::data
-            efcore["🗄️ Entity Framework Core"]:::data
-            sqlite["🗃️ SQLite Database"]:::data
+            dbctx["📊 ApplicationDbContext"]
+            efcore["🗄️ Entity Framework Core"]
+            sqlite["🗃️ SQLite Database"]
         end
     end
 
     subgraph azure["☁️ Azure Infrastructure"]
         direction LR
-        aca["📦 Container Apps"]:::core
-        acr["🐳 Container Registry"]:::core
-        insights["📈 Application Insights"]:::core
-        mid["🆔 Managed Identity"]:::core
+        aca["📦 Container Apps"]
+        acr["🐳 Container Registry"]
+        insights["📈 Application Insights"]
+        mid["🆔 Managed Identity"]
     end
 
     browser -->|"sends requests"| pages
@@ -112,6 +105,12 @@ flowchart TD
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+
+    class browser neutral
+    class pages,layout,nav core
+    class identity,signin,external,tokens danger
+    class dbctx,efcore,sqlite data
+    class aca,acr,insights,mid core
 
     %% Subgraph styling (6 subgraphs = 6 style directives)
     style client fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
