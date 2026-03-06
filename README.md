@@ -6,15 +6,15 @@
 ![Azure Container Apps](https://img.shields.io/badge/Azure-Container_Apps-0078D4)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
-A digital identity management platform built with ASP.NET Core Blazor Server that provides user authentication, authorization, and OAuth/OIDC application registration capabilities, deployable to Azure Container Apps with one command.
+A **digital identity management platform** built with ASP.NET Core Blazor Server that provides **user authentication, authorization, and OAuth/OIDC application registration** capabilities, deployable to **Azure Container Apps** with one command.
 
 ## 📖 Overview
 
 **Overview**
 
-Contoso Identity Provider is a production-ready identity management solution for organizations that need centralized authentication and application registration services. Built on ASP.NET Core Identity with Blazor Server interactive SSR, it delivers a complete authentication experience including user registration, login, password recovery, email confirmation, two-factor authentication, and external login provider support.
+Contoso Identity Provider is a **production-ready identity management solution** for organizations that need **centralized authentication and application registration services**. Built on **ASP.NET Core Identity** with **Blazor Server interactive SSR**, it delivers a complete authentication experience including user registration, login, password recovery, email confirmation, two-factor authentication, and external login provider support.
 
-The platform uses a Code-First Entity Framework Core approach with SQLite for data persistence, Razor Components for the server-rendered UI, and Azure Container Apps for scalable cloud hosting. Infrastructure is fully defined as code using Azure Bicep with Azure Verified Modules (AVM), enabling repeatable deployments via the Azure Developer CLI (`azd`).
+The platform uses a **Code-First Entity Framework Core** approach with SQLite for data persistence, Razor Components for the server-rendered UI, and Azure Container Apps for scalable cloud hosting. Infrastructure is **fully defined as code** using **Azure Bicep** with **Azure Verified Modules (AVM)**, enabling repeatable deployments via the **Azure Developer CLI** (`azd`).
 
 ## 📑 Table of Contents
 
@@ -33,9 +33,9 @@ The platform uses a Code-First Entity Framework Core approach with SQLite for da
 
 **Overview**
 
-The system follows a layered Blazor Server SSR architecture with ASP.NET Core Identity managing authentication state, Entity Framework Core handling data access via SQLite, and Azure Container Apps providing cloud hosting. This separation ensures that presentation, business logic, and data access concerns remain independently maintainable.
+The system follows a **layered Blazor Server SSR architecture** with ASP.NET Core Identity managing authentication state, Entity Framework Core handling data access via SQLite, and Azure Container Apps providing cloud hosting. This separation ensures that presentation, business logic, and data access concerns remain **independently maintainable**.
 
-The architecture uses cascading authentication state with 30-minute security stamp revalidation on active SignalR circuits, cookie-based session management, and anti-forgery middleware. Infrastructure provisioning leverages Azure Verified Modules for Container Registry, Container Apps Environment, Application Insights monitoring, and User-Assigned Managed Identity for secure ACR image pulls.
+The architecture uses **cascading authentication state** with **30-minute security stamp revalidation** on active SignalR circuits, **cookie-based session management**, and **anti-forgery middleware**. Infrastructure provisioning leverages Azure Verified Modules for Container Registry, Container Apps Environment, Application Insights monitoring, and **User-Assigned Managed Identity** for secure ACR image pulls.
 
 ```mermaid
 ---
@@ -143,7 +143,7 @@ flowchart TB
 
 **Overview**
 
-Contoso Identity Provider delivers a comprehensive identity management experience out of the box. It combines ASP.NET Core Identity's battle-tested authentication framework with Blazor Server's interactive UI capabilities to provide secure user management without client-side JavaScript complexity.
+Contoso Identity Provider delivers a **comprehensive identity management experience** out of the box. It combines ASP.NET Core Identity's battle-tested authentication framework with Blazor Server's interactive UI capabilities to provide **secure user management** without client-side JavaScript complexity.
 
 The platform supports the full authentication lifecycle — from registration and email confirmation through login, password recovery, two-factor authentication, and external provider integration — alongside OAuth/OIDC application registration for building connected service ecosystems.
 
@@ -166,7 +166,7 @@ The platform supports the full authentication lifecycle — from registration an
 
 **Overview**
 
-Before running the Identity Provider locally or deploying to Azure, ensure the following tools and services are available on your development machine. The project targets .NET 9.0 and uses Azure Developer CLI for cloud provisioning.
+Before running the Identity Provider locally or deploying to Azure, **ensure the following tools and services are available** on your development machine. The project targets **.NET 9.0** and uses **Azure Developer CLI** for cloud provisioning.
 
 All Azure infrastructure is defined through Bicep templates, so no manual portal configuration is required beyond having an active subscription with sufficient permissions.
 
@@ -186,7 +186,7 @@ All Azure infrastructure is defined through Bicep templates, so no manual portal
 
 **Overview**
 
-Get the Identity Provider running locally in minutes. The application uses SQLite, so no external database setup is required for local development.
+Get the Identity Provider running locally in minutes. The application uses SQLite, so **no external database setup is required** for local development.
 
 > [!TIP]
 > The application automatically applies Entity Framework Core migrations on startup when running in the Development environment, so the database is created and seeded without manual intervention.
@@ -262,7 +262,7 @@ Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6
 
 **Overview**
 
-The Identity Provider deploys to Azure Container Apps using the Azure Developer CLI (`azd`). The entire infrastructure — Container Registry, Container Apps Environment, Application Insights, and Managed Identity — is provisioned automatically through Bicep templates.
+The Identity Provider deploys to **Azure Container Apps** using the **Azure Developer CLI** (`azd`). The entire infrastructure — Container Registry, Container Apps Environment, Application Insights, and Managed Identity — is **provisioned automatically** through Bicep templates.
 
 > [!WARNING]
 > Deploying to Azure will create billable resources in your subscription. The default configuration provisions a Container App with 0.5 CPU and 1.0 GiB RAM, scaling between 1 and 10 replicas. Review the Bicep parameters in `infra/main.parameters.json` before provisioning.
@@ -337,7 +337,7 @@ You can view the resources created under the resource group rg-<environmentName>
 
 **Overview**
 
-Once the application is running, users can register accounts, authenticate, and manage their identity through the Blazor Server UI. The application also exposes account management endpoints for programmatic interaction.
+Once the application is running, users can register accounts, authenticate, and manage their identity through the Blazor Server UI. The application also exposes **account management endpoints** for programmatic interaction.
 
 > [!NOTE]
 > Email confirmation is required for login (`RequireConfirmedAccount = true`). In development mode, the no-op email sender displays confirmation links in the application output rather than sending actual emails.
@@ -394,7 +394,7 @@ Redirect to Home page: "Welcome to Contoso Identity Provider V2.0"
 
 **Overview**
 
-The Identity Provider is configured through standard ASP.NET Core configuration files and Azure deployment parameters. Application settings control the database connection, logging levels, and host filtering, while Bicep parameters define the Azure infrastructure.
+The Identity Provider is configured through **standard ASP.NET Core configuration files** and **Azure deployment parameters**. Application settings control the database connection, logging levels, and host filtering, while Bicep parameters define the Azure infrastructure.
 
 Environment-specific overrides are supported through `appsettings.{Environment}.json` files and User Secrets for local development credentials.
 
@@ -442,7 +442,7 @@ Environment-specific overrides are supported through `appsettings.{Environment}.
 
 Contributions to the Contoso Identity Provider are welcome. Whether you are fixing a bug, adding a feature, or improving documentation, your contributions help make this project better for everyone.
 
-This project follows standard GitHub contribution workflows. Please ensure all code changes include appropriate tests and pass the existing test suite before submitting a pull request.
+This project follows standard GitHub contribution workflows. Please **ensure all code changes include appropriate tests** and pass the existing test suite before submitting a pull request.
 
 > [!TIP]
 > Run `dotnet test` from the repository root before submitting a pull request to ensure all existing tests pass.
