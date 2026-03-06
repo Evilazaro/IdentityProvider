@@ -29,6 +29,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -36,9 +38,20 @@ flowchart TD
     accTitle: Contoso Identity Provider Architecture Diagram
     accDescr: Shows the layered architecture of the Identity Provider including UI, authentication, data, and Azure infrastructure components
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
     subgraph client["🌐 Client Layer"]
         direction LR
-        browser["🖥️ Web Browser"]:::ui
+        browser["🖥️ Web Browser"]:::neutral
     end
 
     subgraph app["⚙️ Application Layer"]
@@ -46,20 +59,20 @@ flowchart TD
 
         subgraph ui["🎨 Blazor Server UI"]
             direction LR
-            pages["📄 Razor Pages"]:::ui
-            layout["📐 Layout Components"]:::ui
-            nav["🧭 Navigation"]:::ui
+            pages["📄 Razor Pages"]:::core
+            layout["📐 Layout Components"]:::core
+            nav["🧭 Navigation"]:::core
         end
 
         subgraph auth["🔐 Identity & Authentication"]
             direction LR
-            identity["👤 ASP.NET Core Identity"]:::auth
-            signin["🔑 Sign-In Manager"]:::auth
-            external["🌍 External Login"]:::auth
-            tokens["🎫 Token Providers"]:::auth
+            identity["👤 ASP.NET Core Identity"]:::warning
+            signin["🔑 Sign-In Manager"]:::warning
+            external["🌍 External Login"]:::warning
+            tokens["🎫 Token Providers"]:::warning
         end
 
-        subgraph data["💾 Data Layer"]
+        subgraph dataLayer["💾 Data Layer"]
             direction LR
             dbctx["📊 ApplicationDbContext"]:::data
             efcore["🗄️ Entity Framework Core"]:::data
@@ -69,10 +82,10 @@ flowchart TD
 
     subgraph azure["☁️ Azure Infrastructure"]
         direction LR
-        aca["📦 Container Apps"]:::infra
-        acr["🐳 Container Registry"]:::infra
-        insights["📈 Application Insights"]:::infra
-        mid["🆔 Managed Identity"]:::infra
+        aca["📦 Container Apps"]:::core
+        acr["🐳 Container Registry"]:::core
+        insights["📈 Application Insights"]:::core
+        mid["🆔 Managed Identity"]:::core
     end
 
     browser -->|"sends requests"| pages
@@ -89,17 +102,19 @@ flowchart TD
     aca -->|"reports to"| insights
     aca -->|"authenticates with"| mid
 
-    style client fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
-    style app fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1
-    style ui fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C
-    style auth fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#BF360C
-    style data fill:#E0F2F1,stroke:#00695C,stroke-width:2px,color:#004D40
-    style azure fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#003A6C
+    %% Centralized semantic classDefs
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
-    classDef ui fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C
-    classDef auth fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#BF360C
-    classDef data fill:#E0F2F1,stroke:#00695C,stroke-width:2px,color:#004D40
-    classDef infra fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#003A6C
+    %% Subgraph styling (6 subgraphs = 6 style directives)
+    style client fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style app fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style ui fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style auth fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style dataLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azure fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ## ✨ Features
