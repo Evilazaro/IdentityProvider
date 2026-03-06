@@ -8,63 +8,24 @@
 
 A Blazor Server identity management application built on ASP.NET Core Identity that provides secure authentication, authorization, and OAuth application registration capabilities, deployable to Azure Container Apps.
 
-## 📖 IdentityProvider
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Quick Start](#-quick-start)
+- [Requirements](#-requirements)
+- [Usage](#-usage)
+- [Deployment](#-deployment)
+- [Configuration](#%EF%B8%8F-configuration)
+- [Architecture](#%EF%B8%8F-architecture)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## Overview
 
 **Overview**
 
 IdentityProvider (Contoso Identity Provider V2.0) is a full-featured identity management web application built with ASP.NET Core Blazor Server and ASP.NET Core Identity. It provides a complete set of user authentication workflows — including registration, login, two-factor authentication, password recovery, and account management — along with an OAuth application registration interface. The project uses Entity Framework Core with SQLite for data persistence and is pre-configured for deployment to Azure Container Apps using the Azure Developer CLI (`azd`).
-
-## 🏗️ Architecture
-
-**Overview**
-
-The application follows a layered Blazor Server architecture with ASP.NET Core Identity for authentication, Entity Framework Core for data access, and Bicep-based Infrastructure as Code for Azure deployment. Interactive server-side rendering handles all UI interactions over a persistent SignalR connection.
-
-```mermaid
----
-title: IdentityProvider Architecture
-config:
-  theme: base
-  look: classic
----
-graph TB
-    accTitle: IdentityProvider Application Architecture
-    accDescr: Shows the layered architecture from client browser through Blazor Server to data and Azure infrastructure
-
-    subgraph Client["🌐 Client"]
-        Browser["Browser"]
-    end
-
-    subgraph BlazorServer["⚙️ Blazor Server Application"]
-        direction TB
-        Components["Razor Components<br/>(Pages, Layout, Shared)"]
-        Identity["ASP.NET Core Identity<br/>(Auth, 2FA, Account Mgmt)"]
-        AppReg["App Registration<br/>(OAuth Client Management)"]
-    end
-
-    subgraph DataLayer["🗄️ Data Layer"]
-        EFCore["Entity Framework Core"]
-        SQLite["SQLite Database"]
-    end
-
-    subgraph Azure["☁️ Azure Infrastructure"]
-        ContainerApp["Azure Container Apps"]
-        ACR["Azure Container Registry"]
-        Monitor["Azure Monitor<br/>(App Insights + Log Analytics)"]
-        ManagedId["User-Assigned<br/>Managed Identity"]
-    end
-
-    Browser -->|"SignalR<br/>WebSocket"| Components
-    Components --> Identity
-    Components --> AppReg
-    Identity --> EFCore
-    AppReg --> EFCore
-    EFCore --> SQLite
-    BlazorServer -->|"Deploy"| ContainerApp
-    ContainerApp --> ACR
-    ContainerApp --> Monitor
-    ContainerApp --> ManagedId
-```
 
 ## ✨ Features
 
@@ -83,25 +44,14 @@ IdentityProvider delivers a comprehensive identity management experience with en
 | Interactive Server Rendering    | Blazor Server with SignalR for real-time interactive UI                                                        | `Program.cs:12-13`                                                                           |
 | Azure Container Apps Deployment | Pre-configured IaC with Bicep for Azure Container Apps, Container Registry, and monitoring                     | `infra/resources.bicep`, `azure.yaml`                                                        |
 
-## 📋 Requirements
-
-**Overview**
-
-The following tools and runtimes are required to build, run, and deploy the application locally and to Azure.
-
-| Requirement                    | Version | Purpose                                    |
-| ------------------------------ | ------- | ------------------------------------------ |
-| 🟣 .NET SDK                    | 9.0+    | Build and run the application              |
-| 🗄️ SQLite                      | Bundled | Local data persistence (no install needed) |
-| 🔧 Azure Developer CLI (`azd`) | Latest  | Deploy to Azure Container Apps             |
-| ☁️ Azure Subscription          | —       | Required for cloud deployment              |
-| 🐳 Docker                      | Latest  | Container image build (for deployment)     |
-
 ## 🚀 Quick Start
 
 **Overview**
 
 Get the application running locally in a few steps.
+
+> [!TIP]
+> Run `dotnet restore` from the solution root to restore all projects (application and tests) at once.
 
 **1. Clone the repository**
 
@@ -148,11 +98,58 @@ dotnet test
 Passed!  - Failed:  0, Passed:  6, Skipped:  0, Total:  6
 ```
 
+## 📋 Requirements
+
+**Overview**
+
+The following tools and runtimes are required to build, run, and deploy the application. Only the .NET SDK is needed for local development; Azure-related tools are required only for cloud deployment.
+
+> [!TIP]
+> **Why This Matters**: The .NET 9.0 SDK includes the runtime, build tools, and the SQLite database provider is bundled via NuGet — no separate database installation is needed for local development.
+
+> [!IMPORTANT]
+> **How It Works**: The application compiles and runs entirely with `dotnet run`. EF Core auto-applies migrations in development mode, creating the SQLite database file (`identityProviderDB.db`) on first launch.
+
+| Requirement                    | Version | Purpose                                    |
+| ------------------------------ | ------- | ------------------------------------------ |
+| 🟣 .NET SDK                    | 9.0+    | Build and run the application              |
+| 🗄️ SQLite                      | Bundled | Local data persistence (no install needed) |
+| 🔧 Azure Developer CLI (`azd`) | Latest  | Deploy to Azure Container Apps             |
+| ☁️ Azure Subscription          | —       | Required for cloud deployment              |
+| 🐳 Docker                      | Latest  | Container image build (for deployment)     |
+
+## 💻 Usage
+
+**Overview**
+
+Once running, the application provides a web-based identity management interface with the following key workflows.
+
+**Register a new user account**
+
+1. Navigate to the application URL.
+2. Click **Register** to create a new account.
+3. Provide an email and password, then confirm your email.
+
+**Sign in**
+
+1. Navigate to `/Account/Login`.
+2. Enter your credentials.
+3. Optionally enable two-factor authentication from account settings.
+
+**Register an OAuth application**
+
+1. Navigate to `/AppRegistrationForm`.
+2. Fill in the required fields: Client ID, Client Secret, Tenant ID, Redirect URI, Scopes, Authority, App Name, Grant Types, and Response Types.
+3. Submit the form to create the registration.
+
 ## 📦 Deployment
 
 **Overview**
 
 The project includes Bicep-based Infrastructure as Code for deploying to Azure Container Apps using the Azure Developer CLI (`azd`). The infrastructure provisions a Container App, Container Registry, Application Insights monitoring, and a user-assigned managed identity.
+
+> [!WARNING]
+> You must authenticate with Azure CLI before running deployment commands. Run `azd auth login` before `azd up` to avoid authentication errors.
 
 **1. Authenticate with Azure**
 
@@ -180,7 +177,7 @@ azd up
 Deploying services (azd deploy)
 
   (✓) Done: Deploying service identity-provider
-  - Endpoint: https://<your-container-app>.azurecontainerapps.io
+  - Endpoint: https://identity-provider.<region>.azurecontainerapps.io
 
 SUCCESS: Your application was provisioned and deployed to Azure.
 ```
@@ -189,40 +186,16 @@ SUCCESS: Your application was provisioned and deployed to Azure.
 
 | Resource                                             | Purpose                                                    |
 | ---------------------------------------------------- | ---------------------------------------------------------- |
-| Azure Container Apps                                 | Hosts the application container (port 8080, 1-10 replicas) |
+| Azure Container Apps                                 | Hosts the application container (port 8080, 1–10 replicas) |
 | Azure Container Registry                             | Stores container images                                    |
 | Azure Monitor (Application Insights + Log Analytics) | Application monitoring and logging                         |
 | User-Assigned Managed Identity                       | Secure, passwordless authentication to Azure services      |
-
-## 💻 Usage
-
-**Overview**
-
-Once running, the application provides a web-based identity management interface with the following key workflows.
-
-**Register a new user account**
-
-1. Navigate to the application URL.
-2. Click **Register** to create a new account.
-3. Provide an email and password, then confirm your email.
-
-**Sign in**
-
-1. Navigate to `/Account/Login`.
-2. Enter your credentials.
-3. Optionally enable two-factor authentication from account settings.
-
-**Register an OAuth application**
-
-1. Navigate to `/AppRegistrationForm`.
-2. Fill in the required fields: Client ID, Client Secret, Tenant ID, Redirect URI, Scopes, Authority, App Name, Grant Types, and Response Types.
-3. Submit the form to create the registration.
 
 ## ⚙️ Configuration
 
 **Overview**
 
-The application is configured through standard ASP.NET Core configuration files. The primary settings control the database connection and logging behavior.
+The application is configured through standard ASP.NET Core configuration files. The primary settings control the database connection and logging behavior. Azure-specific environment variables are injected automatically during container deployment.
 
 | Parameter                               | Description                                                | Default                              | Required        |
 | --------------------------------------- | ---------------------------------------------------------- | ------------------------------------ | --------------- |
@@ -237,6 +210,83 @@ Configuration files:
 
 - [src/IdentityProvider/appsettings.json](src/IdentityProvider/appsettings.json) — Production settings
 - [src/IdentityProvider/appsettings.Development.json](src/IdentityProvider/appsettings.Development.json) — Development overrides
+
+## 🏗️ Architecture
+
+**Overview**
+
+The application follows a layered Blazor Server architecture with ASP.NET Core Identity for authentication, Entity Framework Core for data access, and Bicep-based Infrastructure as Code for Azure deployment. Interactive server-side rendering handles all UI interactions over a persistent SignalR connection.
+
+```mermaid
+---
+title: IdentityProvider Architecture
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: IdentityProvider Application Architecture
+    accDescr: Layered architecture showing client browser connecting via SignalR to Blazor Server with Identity and App Registration components backed by EF Core and SQLite and deployed to Azure Container Apps with monitoring
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph client["🌐 Client"]
+        Browser["🖥️ Browser"]:::external
+    end
+
+    subgraph blazor["⚙️ Blazor Server Application"]
+        direction TB
+        Components["📄 Razor Components"]:::core
+        Identity["🔐 ASP.NET Core Identity"]:::core
+        AppReg["📋 App Registration"]:::core
+    end
+
+    subgraph data["🗄️ Data Layer"]
+        EFCore["🔗 Entity Framework Core"]:::neutral
+        SQLite["💾 SQLite Database"]:::neutral
+    end
+
+    subgraph azure["☁️ Azure Infrastructure"]
+        ContainerApp["📦 Azure Container Apps"]:::success
+        ACR["🐳 Azure Container Registry"]:::success
+        Monitor["📊 Azure Monitor"]:::success
+        ManagedId["🔑 Managed Identity"]:::success
+    end
+
+    Browser -->|"SignalR WebSocket"| Components
+    Components -->|"Auth Flows"| Identity
+    Components -->|"OAuth Mgmt"| AppReg
+    Identity -->|"Query"| EFCore
+    AppReg -->|"Query"| EFCore
+    EFCore -->|"Read/Write"| SQLite
+    blazor -->|"Deploy"| ContainerApp
+    ContainerApp -->|"Pull Image"| ACR
+    ContainerApp -->|"Telemetry"| Monitor
+    ContainerApp -->|"Authenticate"| ManagedId
+
+    style client fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+    style blazor fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azure fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+
+    %% Centralized semantic classDefs (Phase 5 compliant)
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+```
 
 ## 🤝 Contributing
 
