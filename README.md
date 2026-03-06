@@ -191,6 +191,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -198,16 +200,16 @@ flowchart TB
     accTitle: IdentityProvider Application Architecture
     accDescr: Layered architecture showing Blazor Server frontend, ASP.NET Core Identity middleware, Entity Framework Core data layer, SQLite database, and Azure Container Apps deployment infrastructure
 
-    %% ═══════════════════════════════════════════════
+    %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
     %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════
+    %% ═══════════════════════════════════════════════════════════════════════════
     %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
     %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
     %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
     %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════
+    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph presentation["🖥️ Presentation Layer"]
         direction LR
@@ -218,10 +220,10 @@ flowchart TB
 
     subgraph identity["🔐 Identity & Authentication"]
         direction LR
-        auth["🔑 ASP.NET Core Identity"]:::security
-        cookies["🍪 Cookie Authentication"]:::security
-        twofa["📱 Two-Factor Auth (TOTP)"]:::security
-        appreg["📋 App Registration Management"]:::security
+        auth["🔑 ASP.NET Core Identity"]:::danger
+        cookies["🍪 Cookie Authentication"]:::danger
+        twofa["📱 Two-Factor Auth (TOTP)"]:::danger
+        appreg["📋 App Registration Management"]:::danger
     end
 
     subgraph data["💾 Data Layer"]
@@ -233,10 +235,10 @@ flowchart TB
 
     subgraph azure["☁️ Azure Infrastructure"]
         direction LR
-        containerapp["📦 Azure Container Apps"]:::cloud
-        acr["🐳 Azure Container Registry"]:::cloud
-        appinsights["📊 Application Insights"]:::cloud
-        managedid["🔐 Managed Identity"]:::cloud
+        containerapp["📦 Azure Container Apps"]:::external
+        acr["🐳 Azure Container Registry"]:::external
+        appinsights["📊 Application Insights"]:::external
+        managedid["🔐 Managed Identity"]:::external
     end
 
     blazor -->|"renders"| pages
@@ -254,14 +256,13 @@ flowchart TB
 
     style presentation fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     style identity fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
-    style data fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     style azure fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
 
-    %% Centralized semantic classDefs (Phase 5 compliant)
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef security fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
-    classDef data fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef cloud fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
 ```
 
 ### Project Structure
