@@ -231,18 +231,18 @@ config:
 ---
 flowchart TB
     accTitle: IdentityProvider Application Architecture
-    accDescr: Layered architecture showing client browser connecting via SignalR to Blazor Server with Identity and App Registration components backed by EF Core and SQLite and deployed to Azure Container Apps with monitoring
+    accDescr: Layered architecture with client browser connecting to Blazor Server identity components backed by EF Core and SQLite deployed to Azure Container Apps
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+%% ═══════════════════════════════════════════════════════════════════════════
+%% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+%% (Semantic + Structural + Font + Accessibility Governance)
+%% ═══════════════════════════════════════════════════════════════════════════
+%% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+%% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+%% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+%% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+%% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+%% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph client["🌐 Client"]
         Browser["🖥️ Browser"]:::external
@@ -279,10 +279,10 @@ flowchart TB
     ContainerApp -->|"Authenticate"| ManagedId
 
     %% Subgraph styling (4 subgraphs = 4 style directives)
-    style client fill:#C8F0E7,stroke:#038387,stroke-width:2px,color:#323130
-    style blazor fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#323130
-    style data fill:#E7E2FA,stroke:#5C2D91,stroke-width:2px,color:#323130
-    style azure fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style client fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style blazor fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azure fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% Centralized semantic classDefs (Phase 5 compliant)
     classDef core fill:#0078D4,stroke:#106EBE,stroke-width:2px,color:#FFFFFF
