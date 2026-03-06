@@ -191,52 +191,52 @@ config:
   theme: base
   look: classic
   layout: dagre
-  flowchart:
-    htmlLabels: true
+  themeVariables:
+    fontSize: '16px'
 ---
 flowchart TB
     accTitle: IdentityProvider Application Architecture
     accDescr: Layered architecture showing Blazor Server frontend, ASP.NET Core Identity middleware, Entity Framework Core data layer, SQLite database, and Azure Container Apps deployment infrastructure
 
-    %% ═══════════════════════════════════════════════
+    %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
     %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════
+    %% ═══════════════════════════════════════════════════════════════════════════
     %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
     %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
     %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
     %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════
+    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph presentation["🖥️ Presentation Layer"]
         direction LR
-        blazor["⚛️ Blazor Server Components"]:::core
-        layout["📐 Layout & Navigation"]:::core
-        pages["📄 Pages (Home, Auth, Counter, Weather)"]:::core
+        blazor["⚛️ Blazor Server Components"]
+        layout["📐 Layout & Navigation"]
+        pages["📄 Pages (Home, Auth, Counter, Weather)"]
     end
 
     subgraph identity["🔐 Identity & Authentication"]
         direction LR
-        auth["🔑 ASP.NET Core Identity"]:::security
-        cookies["🍪 Cookie Authentication"]:::security
-        twofa["📱 Two-Factor Auth (TOTP)"]:::security
-        appreg["📋 App Registration Management"]:::security
+        auth["🔑 ASP.NET Core Identity"]
+        cookies["🍪 Cookie Authentication"]
+        twofa["📱 Two-Factor Auth (TOTP)"]
+        appreg["📋 App Registration Management"]
     end
 
     subgraph data["💾 Data Layer"]
         direction LR
-        efcore["🗄️ Entity Framework Core"]:::data
-        dbcontext["📦 ApplicationDbContext"]:::data
-        sqlite[("🗃️ SQLite Database")]:::data
+        efcore["🗄️ Entity Framework Core"]
+        dbcontext["📦 ApplicationDbContext"]
+        sqlite[("🗃️ SQLite Database")]
     end
 
     subgraph azure["☁️ Azure Infrastructure"]
         direction LR
-        containerapp["📦 Azure Container Apps"]:::cloud
-        acr["🐳 Azure Container Registry"]:::cloud
-        appinsights["📊 Application Insights"]:::cloud
-        managedid["🔐 Managed Identity"]:::cloud
+        containerapp["📦 Azure Container Apps"]
+        acr["🐳 Azure Container Registry"]
+        appinsights["📊 Application Insights"]
+        managedid["🔐 Managed Identity"]
     end
 
     blazor -->|"renders"| pages
@@ -252,16 +252,21 @@ flowchart TB
     containerapp -->|"sends telemetry to"| appinsights
     containerapp -->|"authenticates with"| managedid
 
-    style presentation fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style identity fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
-    style data fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style azure fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
-
-    %% Centralized semantic classDefs (Phase 5 compliant)
+    %% Centralized semantic classDefs
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef security fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
-    classDef data fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef cloud fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+
+    class blazor,layout,pages core
+    class auth,cookies,twofa,appreg danger
+    class efcore,dbcontext,sqlite data
+    class containerapp,acr,appinsights,managedid external
+
+    style presentation fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style identity fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azure fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ### Project Structure
