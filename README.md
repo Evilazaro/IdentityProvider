@@ -111,14 +111,16 @@ flowchart LR
 
 **Component Roles:**
 
-- **Blazor Server**: Hosts all UI pages and handles interactive server-side rendering via SignalR.
-- **ASP.NET Core Identity**: Manages all authentication flows — local accounts, 2FA, recovery codes, external providers, and account management.
-- **Entity Framework Core**: Provides the ORM layer with automatic migration execution on startup.
-- **SQLite**: Lightweight, file-based relational database (`identityProviderDB.db`).
-- **Azure Container Apps**: Serverless container runtime that scales from 1 to 10 replicas.
-- **Azure Container Registry**: Stores and serves the container image for deployment.
-- **Azure Monitor / App Insights**: Captures runtime telemetry via the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable.
-- **Managed Identity**: A user-assigned managed identity provides credential-free ACR pulls.
+| Component                           | Role                                                                                                               |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 🖥️ **Blazor Server**                | Hosts all UI pages and handles interactive server-side rendering via SignalR                                       |
+| 🔐 **ASP.NET Core Identity**        | Manages all authentication flows — local accounts, 2FA, recovery codes, external providers, and account management |
+| ⚙️ **Entity Framework Core**        | Provides the ORM layer with automatic migration execution on startup                                               |
+| 🗄️ **SQLite**                       | Lightweight, file-based relational database (`identityProviderDB.db`)                                              |
+| ☁️ **Azure Container Apps**         | Serverless container runtime that scales from 1 to 10 replicas                                                     |
+| 📦 **Azure Container Registry**     | Stores and serves the container image for deployment                                                               |
+| 📊 **Azure Monitor / App Insights** | Captures runtime telemetry via the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable                    |
+| 🔑 **Managed Identity**             | A user-assigned managed identity provides credential-free ACR pulls                                                |
 
 ## Features
 
@@ -335,16 +337,18 @@ All account self-service pages are available under `/Account/Manage/`:
 
 Navigate to `/AppRegistrationForm` to register a new OAuth 2.0 client application. The form captures:
 
-- `ClientId` — Unique identifier for the application (max 100 chars)
-- `ClientSecret` — Shared secret (max 200 chars)
-- `TenantId` — Identity tenant (max 100 chars)
-- `RedirectUri` — Allowed redirect target (max 200 chars)
-- `Scopes` — Comma-separated OAuth scopes
-- `Authority` — Token authority URL (max 200 chars)
-- `AppName` — Human-readable application name (max 100 chars)
-- `AppDescription` — Optional description (max 500 chars)
-- `GrantTypes` — Comma-separated grant type values
-- `ResponseTypes` — Comma-separated response type values
+| Field               | Required    | Max Length | Description                                |
+| ------------------- | ----------- | ---------- | ------------------------------------------ |
+| 🆔 `ClientId`       | ✅ Required | 100 chars  | Unique identifier for the application      |
+| 🔐 `ClientSecret`   | ✅ Required | 200 chars  | Shared secret for client authentication    |
+| 🏢 `TenantId`       | ✅ Required | 100 chars  | Identity tenant identifier                 |
+| 🔗 `RedirectUri`    | ✅ Required | 200 chars  | Allowed OAuth redirect target URL          |
+| 🎯 `Scopes`         | ✅ Required | —          | Comma-separated OAuth scope values         |
+| 🔑 `Authority`      | ✅ Required | 200 chars  | Token authority URL                        |
+| 📛 `AppName`        | ✅ Required | 100 chars  | Human-readable application name            |
+| 📝 `AppDescription` | ⬜ Optional | 500 chars  | Optional application description           |
+| 🔄 `GrantTypes`     | ✅ Required | —          | Comma-separated OAuth grant type values    |
+| 📤 `ResponseTypes`  | ✅ Required | —          | Comma-separated OAuth response type values |
 
 The model is defined in `src/IdentityProvider/Components/AppRegistration.cs` and maps to the `AppRegistrations` table.
 
