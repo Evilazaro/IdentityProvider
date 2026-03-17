@@ -403,4 +403,7 @@ dotnet test src/identityProviderTests/identityProviderTests.csproj
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for full terms.
 
-Copyright (c) 2025 Evilázaro Alves
+## Created by
+
+**Evilazaro Alves | Principal Cloud Solution Architect | Cloud Platforms and AI
+Apps | Microsoft**
