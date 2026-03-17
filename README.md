@@ -400,9 +400,3 @@ dotnet test src/identityProviderTests/identityProviderTests.csproj
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for full terms.
 
 Copyright (c) 2025 Evilázaro Alves
-
----
-
-✅ **Mermaid Verification: 5/5 | Score: 100/100**
-
-✅ **README Compliance Score: 44/44 (100%) | P0: 17/17 | Conditional: CM1 ✅**
