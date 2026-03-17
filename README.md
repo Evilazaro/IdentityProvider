@@ -12,9 +12,9 @@ A production-ready **ASP.NET Core Identity Provider** built with Blazor Server a
 
 **Overview**
 
-Contoso Identity Provider is an enterprise-grade digital identity management platform designed for development teams that need a self-hosted, standards-compliant authentication service. It delivers user registration, email-confirmed login, two-factor authentication, and external provider support through a Blazor Server interactive UI, empowering teams to ship secured applications without building authentication from scratch.
+Contoso Identity Provider is an **enterprise-grade digital identity management platform** designed for development teams that need a self-hosted, **standards-compliant authentication service**. It delivers user registration, email-confirmed login, **two-factor authentication**, and external provider support through a Blazor Server interactive UI, empowering teams to ship secured applications without building authentication from scratch.
 
-The platform uses ASP.NET Core Identity on top of Entity Framework Core with a SQLite backend for rapid local development, and deploys seamlessly to Azure Container Apps via Bicep infrastructure-as-code and the Azure Developer CLI. Automatic migrations on startup, integrated Application Insights telemetry, and a managed identity RBAC model ensure the transition from development to production requires minimal operational overhead.
+The platform uses **ASP.NET Core Identity** on top of Entity Framework Core with a SQLite backend for rapid local development, and deploys seamlessly to Azure Container Apps via Bicep infrastructure-as-code and the Azure Developer CLI. **Automatic migrations on startup**, integrated Application Insights telemetry, and a **managed identity RBAC model** ensure the transition from development to production requires minimal operational overhead.
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ The platform uses ASP.NET Core Identity on top of Entity Framework Core with a S
 
 **Overview**
 
-The application follows a layered architecture separating the Blazor Server presentation tier, ASP.NET Core Identity service tier, and Entity Framework Core data tier. All layers are packaged as a single container image and deployed to Azure Container Apps with full observability via Azure Monitor.
+The application follows a **layered architecture** separating the Blazor Server presentation tier, ASP.NET Core Identity service tier, and Entity Framework Core data tier. All layers are packaged as a **single container image** and deployed to Azure Container Apps with full observability via Azure Monitor.
 
 ```mermaid
 ---
@@ -129,7 +129,7 @@ flowchart LR
 
 Contoso Identity Provider delivers a comprehensive authentication and identity lifecycle management solution that eliminates the need to build authentication logic from scratch. Development teams gain a working, production-deployable IdP with user registration, multi-factor authentication, account self-service, and OAuth 2.0 client registration — all backed by ASP.NET Core Identity's battle-tested security model.
 
-The platform differentiates itself by combining Blazor Server's real-time interactive UI with a fully scaffolded identity pipeline, Azure-native deployment using infrastructure-as-code Bicep, and extensible data models that teams can customize. Automatic EF Core migrations on development startup and managed identity RBAC in Azure reduce friction from first `git clone` to production deployment.
+The platform differentiates itself by combining Blazor Server's real-time interactive UI with a **fully scaffolded identity pipeline**, Azure-native deployment using **infrastructure-as-code Bicep**, and extensible data models that teams can customize. **Automatic EF Core migrations on development startup** and managed identity RBAC in Azure reduce friction from first `git clone` to production deployment.
 
 > [!NOTE]
 > The feature set is entirely evidence-based from source files in `src/IdentityProvider/`. No capabilities are implied or extrapolated beyond what the codebase implements.
@@ -151,9 +151,9 @@ The platform differentiates itself by combining Blazor Server's real-time intera
 
 **Overview**
 
-This project targets .NET 9 and requires the Azure Developer CLI for cloud deployment. All infrastructure resources — Container Apps environment, Container Registry, Application Insights, and managed identity — are provisioned automatically by the bundled Bicep templates.
+This project targets **.NET 9** and requires the **Azure Developer CLI** for cloud deployment. All infrastructure resources — Container Apps environment, Container Registry, Application Insights, and managed identity — are provisioned automatically by the bundled Bicep templates.
 
-Local development requires only the .NET 9 SDK and a supported IDE. The SQLite database file is created and migrated automatically on first run in the Development environment, so no manual database setup is needed.
+Local development requires only the .NET 9 SDK and a supported IDE. The SQLite database file is created and migrated automatically on first run in the Development environment, so **no manual database setup is needed**.
 
 > [!IMPORTANT]
 > The Azure Developer CLI (`azd`) and an active Azure subscription with sufficient quota for Container Apps and Container Registry are required only for cloud deployment. Local development has no Azure dependency.
@@ -199,7 +199,7 @@ info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 ```
 
-The SQLite database file `identityProviderDB.db` is created and all EF Core migrations are applied automatically on first startup in the Development environment (see `Program.cs`).
+The SQLite database file `identityProviderDB.db` is created and **all EF Core migrations are applied automatically on first startup** in the Development environment (see `Program.cs`).
 
 ### Run Unit Tests
 
@@ -236,7 +236,7 @@ This command:
 - Creates a resource group `rg-<environment-name>`
 - Provisions Azure Container Registry, Container Apps environment, Application Insights, and a user-assigned managed identity
 - Builds and pushes the container image to ACR
-- Deploys the Container App at port `8080` with auto-scale from 1 to 10 replicas
+- Deploys the Container App at port `8080` with **auto-scale from 1 to 10 replicas**
 
 3. Tear down all Azure resources:
 
@@ -248,9 +248,9 @@ azd down
 
 **Overview**
 
-Application configuration is managed via the standard ASP.NET Core appsettings hierarchy. The only required configuration for local development is the SQLite connection string in `appsettings.json`. Azure deployment injects environment-specific variables (`APPLICATIONINSIGHTS_CONNECTION_STRING`, `AZURE_CLIENT_ID`, `PORT`) at runtime through the Container App definition in `infra/resources.bicep`.
+Application configuration is managed via the standard ASP.NET Core appsettings hierarchy. The **only required configuration for local development** is the SQLite connection string in `appsettings.json`. Azure deployment injects environment-specific variables (`APPLICATIONINSIGHTS_CONNECTION_STRING`, `AZURE_CLIENT_ID`, `PORT`) at runtime through the Container App definition in `infra/resources.bicep`.
 
-For production deployments, secrets should be managed via Azure Key Vault or Container Apps secret references — never committed to source control. The `UserSecretsId` in `IdentityProvider.csproj` (project ID `aspnet-IdentityProvider-f99f5be1-3749-4889-aa7a-f8105c053e60`) supports the .NET User Secrets tool for local secret management.
+For production deployments, secrets should be managed via **Azure Key Vault or Container Apps secret references** — **never committed to source control**. The `UserSecretsId` in `IdentityProvider.csproj` (project ID `aspnet-IdentityProvider-f99f5be1-3749-4889-aa7a-f8105c053e60`) supports the .NET User Secrets tool for local secret management.
 
 ### Local Configuration (`appsettings.json`)
 
@@ -294,7 +294,7 @@ These variables are injected automatically when deploying via `azd up` (defined 
 
 ### Email Domain Allowlist
 
-The `eMail` utility in `src/IdentityProvider/Components/eMail.cs` validates user emails against a domain allowlist. The current defaults are `example.com` and `test.com`. Update `validDomains` in that file to match your organization's allowed domains before deploying.
+The `eMail` utility in `src/IdentityProvider/Components/eMail.cs` validates user emails against a domain allowlist. The current defaults are `example.com` and `test.com`. **Update** `validDomains` **in that file to match your organization's allowed domains before deploying.**
 
 ```csharp
 string[] validDomains = { "example.com", "test.com" };
@@ -302,7 +302,7 @@ string[] validDomains = { "example.com", "test.com" };
 
 ### Identity Options
 
-The `ApplicationUser` class in `src/IdentityProvider/Data/ApplicationUser.cs` extends `IdentityUser` for custom profile data. `RequireConfirmedAccount = true` is enforced in `Program.cs`, meaning all registrations trigger an email confirmation step handled by `IdentityNoOpEmailSender` (a no-op sender suitable for development; replace with a real `IEmailSender<ApplicationUser>` implementation for production).
+The `ApplicationUser` class in `src/IdentityProvider/Data/ApplicationUser.cs` extends `IdentityUser` for custom profile data. `RequireConfirmedAccount = true` is enforced in `Program.cs`, meaning all registrations trigger an email confirmation step handled by `IdentityNoOpEmailSender` (a no-op sender suitable for development; **replace with a real `IEmailSender<ApplicationUser>` implementation for production**).
 
 ## Usage
 
@@ -372,7 +372,7 @@ The `/auth` page (`src/IdentityProvider/Components/Pages/Auth.razor`) demonstrat
 
 Contributions to Contoso Identity Provider are welcome from developers who want to improve authentication flows, extend the identity model, add new OAuth providers, or harden the deployment infrastructure. The project follows standard GitHub flow — fork, branch, commit, pull request — with MSTest as the testing framework for all runtime logic changes.
 
-Before submitting a pull request, ensure all existing tests pass and add new `[TestClass]` tests in `src/identityProviderTests/` for any new utility or service logic. The `eMail` class test suite in `eMailTests.cs` demonstrates the data-driven `[DataTestMethod]` / `[DataRow]` pattern used throughout the project.
+Before submitting a pull request, **ensure all existing tests pass** and add new `[TestClass]` tests in `src/identityProviderTests/` for any new utility or service logic. The `eMail` class test suite in `eMailTests.cs` demonstrates the data-driven `[DataTestMethod]` / `[DataRow]` pattern used throughout the project.
 
 ### Steps to Contribute
 
@@ -397,7 +397,7 @@ dotnet test src/identityProviderTests/identityProviderTests.csproj
 - Target `net9.0` with `Nullable=enable` and `ImplicitUsings=enable` (see `IdentityProvider.csproj`).
 - Follow existing Razor component patterns in `src/IdentityProvider/Components/`.
 - Use `[Table]`, `[Key]`, `[Required]`, and `[MaxLength]` data annotations for new entity classes.
-- Do not commit `identityProviderDB.db` or any `.secrets` files.
+- **Do not commit** `identityProviderDB.db` or any `.secrets` files.
 
 ## License
 
