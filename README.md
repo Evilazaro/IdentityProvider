@@ -42,9 +42,10 @@ config:
   look: classic
   layout: dagre
   themeVariables:
-    fontSize: "16px"
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
+    curve: basis
 ---
 flowchart LR
     accTitle: Contoso Identity Provider System Architecture
@@ -66,22 +67,22 @@ flowchart LR
     end
 
     subgraph app["⚙️ Application Tier"]
-        blazor("🖥️ Blazor Server\n(Interactive SSR)"):::core
-        identity("🔐 ASP.NET Core Identity\n(Auth / 2FA / OAuth)"):::core
+        blazor("🖥️ Blazor Server<br>(Interactive SSR)"):::core
+        identity("🔐 ASP.NET Core Identity<br>(Auth / 2FA / OAuth)"):::core
         email("📧 Email Validator"):::neutral
-        appReg("📋 App Registration\nManager"):::neutral
+        appReg("📋 App Registration<br>Manager"):::neutral
     end
 
-    subgraph data["🗄️ Data Tier"]
+    subgraph dataTier["🗄️ Data Tier"]
         efcore("⚙️ Entity Framework Core"):::data
-        sqlite[("🗄️ SQLite Database\nidentityProviderDB.db")]:::data
+        sqlite[("🗄️ SQLite Database<br>identityProviderDB.db")]:::data
     end
 
     subgraph azure["☁️ Azure Infrastructure"]
         aca("☁️ Azure Container Apps"):::core
         acr("📦 Azure Container Registry"):::core
-        monitor("📊 Azure Monitor /\nApp Insights"):::success
-        identity_mi("🔑 Managed Identity\n(User Assigned)"):::warning
+        monitor("📊 Azure Monitor /<br>App Insights"):::success
+        identityMI("🔑 Managed Identity<br>(User Assigned)"):::warning
     end
 
     browser -->|"HTTPS SignalR"| blazor
@@ -94,11 +95,11 @@ flowchart LR
     blazor -->|"hosted on"| aca
     aca -->|"pulls image from"| acr
     aca -->|"telemetry to"| monitor
-    aca -->|"authenticates with"| identity_mi
+    aca -->|"authenticates with"| identityMI
 
     style client fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style app fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style dataTier fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style azure fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% Centralized semantic classDefs (Phase 5 compliant)
