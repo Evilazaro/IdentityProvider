@@ -45,16 +45,16 @@ Technology maturity is assessed at Level 3 (Defined) for the core platform, host
 
 ### Strategic Alignment
 
-| Strategic Pillar                  | Alignment Status | Maturity Level | Notes                                                                                     |
-| --------------------------------- | ---------------- | -------------- | ----------------------------------------------------------------------------------------- |
-| Cloud-Native Hosting              | ✅ Implemented   | 3 — Defined    | Azure Container Apps with AVM Bicep; azd deployment pipeline fully operational            |
-| Infrastructure as Code            | ✅ Implemented   | 3 — Defined    | All Azure resources in `infra/` Bicep; no manual portal provisioning evidence             |
-| Zero-Trust Security               | ⚠️ Partial       | 2 — Managed    | Managed Identity for AcrPull ✓; no Key Vault, no service mesh, no network segmentation    |
-| Observability & Monitoring        | ✅ Implemented   | 3 — Defined    | Application Insights + Log Analytics + Dashboard; SDK wiring via env var                  |
-| Platform Standardization          | ✅ Implemented   | 3 — Defined    | .NET 10.0 / ASP.NET Core 10.0 / EF Core 10.0.6 — homogeneous Microsoft stack              |
-| Secure-by-Default Configuration   | ✅ Implemented   | 3 — Defined    | HSTS, HTTPS redirect, antiforgery, SameSite Strict, HttpOnly, security stamp revalidation |
-| Production-Grade Data Persistence | ⛔ Gap           | 1 — Initial    | SQLite only; no Azure SQL, PostgreSQL, or Cosmos DB configured for production             |
-| Secrets Management                | ⚠️ Partial       | 2 — Managed    | Environment variables via Bicep; no Key Vault, no dynamic secret injection                |
+| Strategic Pillar | Alignment Status | 
+| --------------------------------- | ---------------- | 
+| Cloud-Native Hosting | ✅ Implemented | 
+| Infrastructure as Code | ✅ Implemented | 
+| Zero-Trust Security | ⚠️ Partial | 
+| Observability & Monitoring | ✅ Implemented | 
+| Platform Standardization | ✅ Implemented | 
+| Secure-by-Default Configuration | ✅ Implemented | 
+| Production-Grade Data Persistence | ⛔ Gap | 
+| Secrets Management | ⚠️ Partial | 
 
 ---
 
@@ -381,19 +381,19 @@ architecture-beta
 
 ### Technology Maturity Assessment
 
-| Component Type             | Maturity Level | Evidence                                                                                 | Gap / Risk                                                    |
-| -------------------------- | -------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Technology Platforms       | 3 — Defined    | .NET 10.0, ASP.NET Core 10.0, EF Core 10.0.6, Blazor Server; all current versions        | No .NET version pinning in global.json                        |
-| Infrastructure Services    | 3 — Defined    | AVM modules for all 4 Azure services; versioned and parameterized                        | No private endpoint or VNet integration                       |
-| Middleware & Runtime       | 3 — Defined    | Full pipeline: HTTPS redirect, HSTS, static files, antiforgery, EF diagnostics, SignalR  | HSTS max-age at ASP.NET Core default (30 days)                |
-| Security Services          | 3 — Defined    | Managed Identity, RBAC, HSTS, antiforgery, SameSite Strict, security stamp revalidation  | No Key Vault; no CSP headers; no rate limiting                |
-| Monitoring & Observability | 3 — Defined    | Application Insights + Log Analytics + Dashboard provisioned in all deployments          | App-level structured logging and custom metrics not wired     |
-| DevOps & Deployment        | 3 — Defined    | azd pipeline, Bicep AVM, Docker container build; full provision-build-deploy lifecycle   | No CI/CD YAML pipeline (GitHub Actions / Azure Pipelines)     |
-| Networking & Connectivity  | 2 — Managed    | HTTPS/HTTP ports defined; Container Apps ingress on port 8080                            | No VNet, no private endpoints, no CDN/WAF                     |
-| Storage & Persistence      | 1 — Initial    | SQLite only; single-file database unsuitable for multi-instance Container App deployment | No production database provisioned                            |
-| Compute & Hosting          | 3 — Defined    | Container Apps with autoscaling (1–10 replicas); 0.5 vCPU / 1.0 GiB defined in Bicep     | Autoscaling blocked by SQLite single-instance constraint      |
-| Configuration Management   | 2 — Managed    | appsettings.json, env vars, User Secrets present; structured parameter files in Bicep    | No Key Vault; no secret rotation; no configuration validation |
-| API & Communication        | 3 — Defined    | REST account endpoints, cookie auth protocol, SignalR protocol all implemented           | No API versioning; no rate limiting on account endpoints      |
+| Component Type | 
+| -------------------------- | 
+| Technology Platforms | 
+| Infrastructure Services | 
+| Middleware & Runtime | 
+| Security Services | 
+| Monitoring & Observability | 
+| DevOps & Deployment | 
+| Networking & Connectivity | 
+| Storage & Persistence | 
+| Compute & Hosting | 
+| Configuration Management | 
+| API & Communication | 
 
 ### Summary
 
