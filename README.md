@@ -68,6 +68,7 @@ flowchart TB
         end
 
         subgraph appLayer["⚙️ Application Layer — Azure Container Apps"]
+            direction TB
             blazor("🔷 Blazor Server App"):::core
             account("🔐 Account Pages"):::core
             appReg("📋 App Registration Form"):::core
@@ -75,6 +76,7 @@ flowchart TB
         end
 
         subgraph dataLayer["💾 Data Layer"]
+            direction TB
             efcore("📊 Entity Framework Core"):::neutral
             sqlite[("🗄️ SQLite Database")]:::neutral
         end
