@@ -80,6 +80,7 @@ flowchart TB
         end
 
         subgraph infraLayer["☁️ Azure Infrastructure"]
+            direction TB
             acr("📦 Container Registry"):::warning
             appInsights("📈 Application Insights"):::warning
             logAnalytics("🔍 Log Analytics"):::warning
