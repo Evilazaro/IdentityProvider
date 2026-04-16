@@ -45,10 +45,12 @@ config:
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: Contoso Identity Provider - System Architecture
-    accDescr: Layered architecture showing a browser client connecting via HTTPS to a Blazor Server app hosted in Azure Container Apps, which uses ASP.NET Core Identity for authentication, Entity Framework Core for data access, SQLite for storage, Azure Container Registry for image hosting, and Application Insights plus Log Analytics for monitoring. WCAG AA compliant.
+    accDescr: Layered architecture showing Browser/User Agent (core) connecting via HTTPS to Blazor Server App (core) hosted in Azure Container Apps, which renders Account Pages (core) and manages App Registration Form (core), authenticates via ASP.NET Core Identity (success), persists data via Entity Framework Core (neutral) and SQLite Database (data), and delivers telemetry to Application Insights (warning) and Log Analytics (warning) via Container Registry (warning). WCAG AA compliant.
 
     %%
     %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
@@ -62,13 +64,11 @@ flowchart TB
     %%
 
     subgraph identitySystem["🏗️ Contoso Identity Provider"]
-        direction TB
         subgraph clientLayer["🌐 Client Layer"]
             browser("🖥️ Browser / User Agent"):::core
         end
 
         subgraph appLayer["⚙️ Application Layer — Azure Container Apps"]
-            direction TB
             blazor("🔷 Blazor Server App"):::core
             account("🔐 Account Pages"):::core
             appReg("📋 App Registration Form"):::core
@@ -76,13 +76,11 @@ flowchart TB
         end
 
         subgraph dataLayer["💾 Data Layer"]
-            direction TB
             efcore("📊 Entity Framework Core"):::neutral
-            sqlite[("🗄️ SQLite Database")]:::neutral
+            sqlite[("🗄️ SQLite Database")]:::data
         end
 
         subgraph infraLayer["☁️ Azure Infrastructure"]
-            direction TB
             acr("📦 Container Registry"):::warning
             appInsights("📈 Application Insights"):::warning
             logAnalytics("🔍 Log Analytics"):::warning
@@ -103,7 +101,7 @@ flowchart TB
     style identitySystem fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style clientLayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     style appLayer fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style dataLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style dataLayer fill:#F0E6FF,stroke:#8764B8,stroke-width:2px,color:#323130
     style infraLayer fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
     %% Centralized semantic classDefs (Phase 5 compliant)
@@ -111,6 +109,7 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FF,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
 
 **Component Roles:**
