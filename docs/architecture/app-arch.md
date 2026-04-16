@@ -184,21 +184,16 @@ classDiagram
     IdentityRedirectManager --> NavigationManager : delegates
     IdentityEndpointExtensions --> ApplicationUser : operates on
 
-    classDef service fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef security fill:#FFF4CE,stroke:#8A8006,stroke-width:2px,color:#323130
-    classDef utility fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-
-    Program:::service
-    ApplicationDbContext:::data
-    ApplicationUser:::data
-    IdentityRevalidatingAuthStateProvider:::security
-    IdentityUserAccessor:::service
-    IdentityRedirectManager:::security
-    IdentityNoOpEmailSender:::utility
-    IdentityEndpointExtensions:::service
-    AppRegistration:::data
-    eMail:::utility
+    style Program fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style ApplicationDbContext fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style ApplicationUser fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style IdentityRevalidatingAuthStateProvider fill:#FFF4CE,stroke:#8A8006,stroke-width:2px,color:#323130
+    style IdentityUserAccessor fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style IdentityRedirectManager fill:#FFF4CE,stroke:#8A8006,stroke-width:2px,color:#323130
+    style IdentityNoOpEmailSender fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style IdentityEndpointExtensions fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style AppRegistration fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style eMail fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ### 2.3 Application Interfaces
@@ -591,16 +586,11 @@ classDiagram
     SignInManager~ApplicationUser~ --> ApplicationDbContext : uses via Identity stores
     UserManager~ApplicationUser~ --> ApplicationDbContext : persists via IdentityDbContext
 
-    classDef host fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef identity fill:#FFF4CE,stroke:#8A8006,stroke-width:2px,color:#323130
-    classDef data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef email fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-
-    Program:::host
-    SignInManager~ApplicationUser~:::identity
-    UserManager~ApplicationUser~:::identity
-    ApplicationDbContext:::data
-    IdentityNoOpEmailSender:::email
+    style Program fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style SignInManager fill:#FFF4CE,stroke:#8A8006,stroke-width:2px,color:#323130
+    style UserManager fill:#FFF4CE,stroke:#8A8006,stroke-width:2px,color:#323130
+    style ApplicationDbContext fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style IdentityNoOpEmailSender fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ### 5.2 Application Components
@@ -706,15 +696,12 @@ classDiagram
     EFCoreIdentityUserStore ..|> IUserStore~ApplicationUser~ : implements
     IdentityRevalidatingAuthStateProvider --|> AuthenticationStateProvider : extends
 
-    classDef contract fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef implementation fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-
-    IEmailSender~ApplicationUser~:::contract
-    IUserStore~ApplicationUser~:::contract
-    AuthenticationStateProvider:::contract
-    IdentityNoOpEmailSender:::implementation
-    EFCoreIdentityUserStore:::implementation
-    IdentityRevalidatingAuthStateProvider:::implementation
+    style IEmailSender fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style IUserStore fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style AuthenticationStateProvider fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style IdentityNoOpEmailSender fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style EFCoreIdentityUserStore fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style IdentityRevalidatingAuthStateProvider fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ### 5.4 Application Collaborations
