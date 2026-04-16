@@ -1,17 +1,3 @@
----
-title: "IdentityProvider — Business Architecture"
-layer: Business
-version: "1.0.0"
-date: "2026-04-16"
-status: "draft"
-framework: "TOGAF 10 ADM"
-quality_level: "comprehensive"
-output_sections: [1, 2, 3, 4, 5, 8]
-generated_by: "BDAT Master Coordinator v3.1.0"
-source_repository: "Evilazaro/IdentityProvider"
-branch: "main"
----
-
 # Business Architecture — IdentityProvider
 
 **Layer:** Business | **Framework:** TOGAF 10 Architecture Development Method (ADM) | **Generated:** 2026-04-16 | **Status:** Draft
@@ -45,16 +31,16 @@ Strategic alignment centres on enabling secure digital access for internal and e
 
 ### Strategic Alignment
 
-| Strategic Pillar | Alignment Status | 
-| ---------------------------- | ---------------- | 
-| Secure Identity Management | ✅ Implemented | 
-| Application Onboarding | ⚠️ Partial | 
-| Multi-Factor Authentication | ✅ Implemented | 
-| External Identity Federation | ⚠️ Scaffolded | 
-| Account Self-Service | ✅ Implemented | 
-| Email-Based Security | ⚠️ Stub | 
-| Observability | ✅ Implemented | 
-| Container-Native Deployment | ✅ Implemented | 
+| Strategic Pillar             | Alignment Status |
+| ---------------------------- | ---------------- |
+| Secure Identity Management   | ✅ Implemented   |
+| Application Onboarding       | ⚠️ Partial       |
+| Multi-Factor Authentication  | ✅ Implemented   |
+| External Identity Federation | ⚠️ Scaffolded    |
+| Account Self-Service         | ✅ Implemented   |
+| Email-Based Security         | ⚠️ Stub          |
+| Observability                | ✅ Implemented   |
+| Container-Native Deployment  | ✅ Implemented   |
 
 ---
 
@@ -551,47 +537,47 @@ Component types for which no instances were detected in the source files are exp
 
 The IdentityProvider's single business strategy is to provide a self-hosted, composable IAM platform that consolidates authentication, authorization, and application registration into a reusable service. This strategy is implemented through the technology and deployment decisions captured in `azure.yaml` and `infra/resources.bicep`.
 
-| Component | Description | Domain | Owner | Dependencies | Triggers | 
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------- | -------------------------------------------------- | -------------------------------------- | 
-| Identity & Access Management Platform | Self-hosted IAM service providing centralized user authentication, account management, and OAuth/OIDC app registration | Cross-cutting | Platform Engineering | Azure Container App, SQLite, ASP.NET Core Identity | Business need for centralized identity | 
+| Component                             | Description                                                                                                            | Domain        | Owner                | Dependencies                                       | Triggers                               |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------- | -------------------------------------------------- | -------------------------------------- |
+| Identity & Access Management Platform | Self-hosted IAM service providing centralized user authentication, account management, and OAuth/OIDC app registration | Cross-cutting | Platform Engineering | Azure Container App, SQLite, ASP.NET Core Identity | Business need for centralized identity |
 
 ### 5.2 Business Capabilities
 
 Business capabilities represent the platform's stable functional groupings. Each capability is described below with its full specification including domain ownership, maturity level, dependencies, and source traceability.
 
-| Component | Description | Domain | Owner | Dependencies | Triggers | 
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------- | ------------------------------------------------------------------ | ----------------------------------------------- | 
-| User Identity Management | Create, store, and lifecycle-manage user identities; includes registration, credential management, and account confirmation | Identity Domain | Identity Team | ApplicationUser, ApplicationDbContext, Identity Service | User registration request | 
-| Application Registration Management | Onboard OAuth/OIDC client applications by capturing and validating client credentials; persistence not yet implemented | Application Domain | Platform Engineering | AppRegistration entity, AppRegistrationForm | Developer submission | 
-| Multi-Factor Authentication | Enforce TOTP-based second authentication factor with authenticator app setup, code verification, and recovery code lifecycle | Identity Domain | Identity Team | TOTP, UserManager, Identity cookie | User 2FA enrolment | 
-| External Identity Federation | Accept authentication from external OAuth/OIDC providers; associate external claims with local ApplicationUser accounts | Identity Domain | Identity Team | SignInManager, ExternalLogin page, external provider configuration | External provider callback | 
-| Account Self-Service | Enable authenticated users to independently manage all profile attributes: email, password, phone, external logins, 2FA, personal data | Self-Service Domain | Identity Team | UserManager, SignInManager, all Manage/\* pages | User-initiated account action | 
-| Email Verification & Notification | Send transactional emails for account confirmation, password reset, email change, and 2FA notifications | Identity Domain | Platform Engineering | IEmailSender, IdentityNoOpEmailSender | User registration, password reset, email change | 
+| Component                           | Description                                                                                                                            | Domain              | Owner                | Dependencies                                                       | Triggers                                        |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------- | ------------------------------------------------------------------ | ----------------------------------------------- |
+| User Identity Management            | Create, store, and lifecycle-manage user identities; includes registration, credential management, and account confirmation            | Identity Domain     | Identity Team        | ApplicationUser, ApplicationDbContext, Identity Service            | User registration request                       |
+| Application Registration Management | Onboard OAuth/OIDC client applications by capturing and validating client credentials; persistence not yet implemented                 | Application Domain  | Platform Engineering | AppRegistration entity, AppRegistrationForm                        | Developer submission                            |
+| Multi-Factor Authentication         | Enforce TOTP-based second authentication factor with authenticator app setup, code verification, and recovery code lifecycle           | Identity Domain     | Identity Team        | TOTP, UserManager, Identity cookie                                 | User 2FA enrolment                              |
+| External Identity Federation        | Accept authentication from external OAuth/OIDC providers; associate external claims with local ApplicationUser accounts                | Identity Domain     | Identity Team        | SignInManager, ExternalLogin page, external provider configuration | External provider callback                      |
+| Account Self-Service                | Enable authenticated users to independently manage all profile attributes: email, password, phone, external logins, 2FA, personal data | Self-Service Domain | Identity Team        | UserManager, SignInManager, all Manage/\* pages                    | User-initiated account action                   |
+| Email Verification & Notification   | Send transactional emails for account confirmation, password reset, email change, and 2FA notifications                                | Identity Domain     | Platform Engineering | IEmailSender, IdentityNoOpEmailSender                              | User registration, password reset, email change |
 
 ### 5.3 Value Streams
 
 Value streams describe the end-to-end sequences of activities that deliver value to stakeholders. The IdentityProvider exhibits three distinct value streams, each with observable steps in the codebase.
 
-| Component | Description | Domain | Owner | Steps | 
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------ | -------------------- | ----------------------------------------------------------------- | 
-| User Onboarding Stream | New user progresses from registration form submission through email confirmation to first authenticated session | Identity Domain | Identity Team | Register → EmailConfirmationSent → EmailConfirmed → Login | 
-| Secure Authentication Stream | Returning user credential validation progressing through optional TOTP MFA check to session cookie issuance | Identity Domain | Identity Team | EnterCredentials → ValidatePassword → (MFA?) → SessionEstablished | 
-| Application Onboarding Stream | Developer submits app registration form; system validates fields; credentials are issued (persistence currently stubbed) | Application Domain | Platform Engineering | SubmitForm → ValidateFields → IssueCredentials | 
+| Component                     | Description                                                                                                              | Domain             | Owner                | Steps                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------ | -------------------- | ----------------------------------------------------------------- |
+| User Onboarding Stream        | New user progresses from registration form submission through email confirmation to first authenticated session          | Identity Domain    | Identity Team        | Register → EmailConfirmationSent → EmailConfirmed → Login         |
+| Secure Authentication Stream  | Returning user credential validation progressing through optional TOTP MFA check to session cookie issuance              | Identity Domain    | Identity Team        | EnterCredentials → ValidatePassword → (MFA?) → SessionEstablished |
+| Application Onboarding Stream | Developer submits app registration form; system validates fields; credentials are issued (persistence currently stubbed) | Application Domain | Platform Engineering | SubmitForm → ValidateFields → IssueCredentials                    |
 
 ### 5.4 Business Processes
 
 Business processes define the sequence of activities executed to achieve a business outcome. The IdentityProvider implements eight core processes; detailed specifications are provided below.
 
-| Component | Description | Domain | Owner | Input | Output | 
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------- | --------------------------------- | ---------------------------------------------- | 
-| User Registration Process | User submits email and password; system hashes password, stores ApplicationUser, sends confirmation email; user redirected to confirmation notice | Identity Domain | Identity Team | Email, Password, ConfirmPassword | Pending ApplicationUser, EmailConfirmationSent | 
-| Local Authentication Process | User submits email and password; SignInManager validates credentials; session cookie issued; user redirected to return URL | Identity Domain | Identity Team | Email, Password, RememberMe | Session cookie or AuthFailed | 
-| External Authentication Process | User selects external provider; browser redirects to provider; provider returns assertion; local account associated or created | Identity Domain | Identity Team | External provider selection | Associated ApplicationUser + session | 
-| Two-Factor Authentication Process | Enrolled user enters TOTP code after password validation; system verifies code; session elevated to 2FA-authenticated state | Identity Domain | Identity Team | TOTP code or Recovery code | 2FA-elevated session or AuthFailed | 
-| Password Reset Process | User requests reset; reset email dispatched; user follows link; new password submitted; hash stored; session invalidated | Identity Domain | Identity Team | Email address | Updated password hash | 
-| App Registration Creation Process | Developer fills app registration form; form validates data annotations; HandleValidSubmit called (currently stub) | Application Domain | Platform Engineering | AppRegistration form fields | (Stubbed) App credentials | 
-| Account Profile Management Process | Authenticated user navigates Manage portal; updates email, phone, password, or external logins; changes persisted via UserManager | Self-Service Domain | Identity Team | Updated profile attribute values | Updated ApplicationUser record | 
-| Personal Data Management Process | Authenticated user downloads personal data JSON or initiates account deletion with mandatory password confirmation | Self-Service Domain | Identity Team | User request (download or delete) | JSON file or account deletion | 
+| Component                          | Description                                                                                                                                       | Domain              | Owner                | Input                             | Output                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------- | --------------------------------- | ---------------------------------------------- |
+| User Registration Process          | User submits email and password; system hashes password, stores ApplicationUser, sends confirmation email; user redirected to confirmation notice | Identity Domain     | Identity Team        | Email, Password, ConfirmPassword  | Pending ApplicationUser, EmailConfirmationSent |
+| Local Authentication Process       | User submits email and password; SignInManager validates credentials; session cookie issued; user redirected to return URL                        | Identity Domain     | Identity Team        | Email, Password, RememberMe       | Session cookie or AuthFailed                   |
+| External Authentication Process    | User selects external provider; browser redirects to provider; provider returns assertion; local account associated or created                    | Identity Domain     | Identity Team        | External provider selection       | Associated ApplicationUser + session           |
+| Two-Factor Authentication Process  | Enrolled user enters TOTP code after password validation; system verifies code; session elevated to 2FA-authenticated state                       | Identity Domain     | Identity Team        | TOTP code or Recovery code        | 2FA-elevated session or AuthFailed             |
+| Password Reset Process             | User requests reset; reset email dispatched; user follows link; new password submitted; hash stored; session invalidated                          | Identity Domain     | Identity Team        | Email address                     | Updated password hash                          |
+| App Registration Creation Process  | Developer fills app registration form; form validates data annotations; HandleValidSubmit called (currently stub)                                 | Application Domain  | Platform Engineering | AppRegistration form fields       | (Stubbed) App credentials                      |
+| Account Profile Management Process | Authenticated user navigates Manage portal; updates email, phone, password, or external logins; changes persisted via UserManager                 | Self-Service Domain | Identity Team        | Updated profile attribute values  | Updated ApplicationUser record                 |
+| Personal Data Management Process   | Authenticated user downloads personal data JSON or initiates account deletion with mandatory password confirmation                                | Self-Service Domain | Identity Team        | User request (download or delete) | JSON file or account deletion                  |
 
 **Authentication Process Flow:**
 
@@ -671,27 +657,27 @@ flowchart TB
 
 Business services represent the discrete operational functions that implement business capabilities. Each service below is directly traceable to a service registration or interface implementation in the codebase.
 
-| Component | Description | Domain | Owner | Interface / Implementation | Dependencies | 
-| ------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------ | -------------------- | ----------------------------------------------------------- | ------------------------------------------------- | 
-| Identity Service | Core ASP.NET Core Identity providing user CRUD, claims management, and role management | Identity Domain | Identity Team | `IdentityCore<ApplicationUser>` | ApplicationDbContext, EF Core | 
-| Sign-In Manager Service | Manages authentication state: cookie sign-in/out, external challenge, lockout, 2FA elevation | Identity Domain | Identity Team | `SignInManager<ApplicationUser>` | Identity Service, HTTP context | 
-| User Manager Service | Provides CRUD on ApplicationUser: create, password hash, token generation, email confirmation, 2FA | Identity Domain | Identity Team | `UserManager<ApplicationUser>` | ApplicationDbContext, DataProtectionTokenProvider | 
-| Email Sender Service | Dispatches transactional emails for account confirmation, password reset, and change notifications | Identity Domain | Platform Engineering | `IEmailSender<ApplicationUser>` → `IdentityNoOpEmailSender` | (None — stub) | 
-| App Registration Service | Accepts and validates new OAuth/OIDC application registration submissions; persistence not implemented | Application Domain | Platform Engineering | `AppRegistrationForm` Blazor component | AppRegistration entity (unstored) | 
-| Email Validation Service | Validates email format and domain membership before accepting registration inputs | Identity Domain | Identity Team | `eMail.checkEmail()` | Hardcoded domain list | 
+| Component                | Description                                                                                            | Domain             | Owner                | Interface / Implementation                                  | Dependencies                                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------ | -------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
+| Identity Service         | Core ASP.NET Core Identity providing user CRUD, claims management, and role management                 | Identity Domain    | Identity Team        | `IdentityCore<ApplicationUser>`                             | ApplicationDbContext, EF Core                     |
+| Sign-In Manager Service  | Manages authentication state: cookie sign-in/out, external challenge, lockout, 2FA elevation           | Identity Domain    | Identity Team        | `SignInManager<ApplicationUser>`                            | Identity Service, HTTP context                    |
+| User Manager Service     | Provides CRUD on ApplicationUser: create, password hash, token generation, email confirmation, 2FA     | Identity Domain    | Identity Team        | `UserManager<ApplicationUser>`                              | ApplicationDbContext, DataProtectionTokenProvider |
+| Email Sender Service     | Dispatches transactional emails for account confirmation, password reset, and change notifications     | Identity Domain    | Platform Engineering | `IEmailSender<ApplicationUser>` → `IdentityNoOpEmailSender` | (None — stub)                                     |
+| App Registration Service | Accepts and validates new OAuth/OIDC application registration submissions; persistence not implemented | Application Domain | Platform Engineering | `AppRegistrationForm` Blazor component                      | AppRegistration entity (unstored)                 |
+| Email Validation Service | Validates email format and domain membership before accepting registration inputs                      | Identity Domain    | Identity Team        | `eMail.checkEmail()`                                        | Hardcoded domain list                             |
 
 ### 5.6 Business Functions
 
 Business functions represent the granular operations performed within services. The IdentityProvider surfaces six distinct business functions derived from code analysis.
 
-| Component | Description | Domain | Owner | Invoked By | Output | 
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------- | ---------------------------------------------------------------------------- | -------------------------------- | 
-| Account Authentication | Validate email/password credentials via SignInManager and issue identity cookie on success | Identity Domain | Identity Team | Login.razor, PerformExternalLogin endpoint | Session cookie or error | 
-| Session Management | Create, maintain, validate, and terminate identity session cookies; supports persistent (Remember Me) and session-scoped cookies | Identity Domain | Identity Team | IdentityRevalidatingAuthStateProvider, Logout endpoint | Cookie lifecycle managed | 
-| Application Credential Issuance | Record OAuth/OIDC client credentials in the AppRegistrations table (currently stubbed — form submitted but not saved) | Application Domain | Platform Engineering | AppRegistrationForm.HandleValidSubmit | AppRegistration record (pending) | 
-| User Profile Management | Enable authenticated users to update email address, phone number, password, and linked external logins via the Manage portal | Self-Service Domain | Identity Team | Manage/\*.razor pages | Updated ApplicationUser | 
-| Security Code Generation | Generate and validate TOTP verification codes, recovery codes, email confirmation tokens, and password reset tokens | Identity Domain | Identity Team | EnableAuthenticator.razor, GenerateRecoveryCodes.razor, ForgotPassword.razor | Time-limited tokens and codes | 
-| Personal Data Export | Compile all PersonalData-attributed properties of ApplicationUser into a downloadable JSON document | Self-Service Domain | Identity Team | DownloadPersonalData endpoint | JSON file download | 
+| Component                       | Description                                                                                                                      | Domain              | Owner                | Invoked By                                                                   | Output                           |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------- | ---------------------------------------------------------------------------- | -------------------------------- |
+| Account Authentication          | Validate email/password credentials via SignInManager and issue identity cookie on success                                       | Identity Domain     | Identity Team        | Login.razor, PerformExternalLogin endpoint                                   | Session cookie or error          |
+| Session Management              | Create, maintain, validate, and terminate identity session cookies; supports persistent (Remember Me) and session-scoped cookies | Identity Domain     | Identity Team        | IdentityRevalidatingAuthStateProvider, Logout endpoint                       | Cookie lifecycle managed         |
+| Application Credential Issuance | Record OAuth/OIDC client credentials in the AppRegistrations table (currently stubbed — form submitted but not saved)            | Application Domain  | Platform Engineering | AppRegistrationForm.HandleValidSubmit                                        | AppRegistration record (pending) |
+| User Profile Management         | Enable authenticated users to update email address, phone number, password, and linked external logins via the Manage portal     | Self-Service Domain | Identity Team        | Manage/\*.razor pages                                                        | Updated ApplicationUser          |
+| Security Code Generation        | Generate and validate TOTP verification codes, recovery codes, email confirmation tokens, and password reset tokens              | Identity Domain     | Identity Team        | EnableAuthenticator.razor, GenerateRecoveryCodes.razor, ForgotPassword.razor | Time-limited tokens and codes    |
+| Personal Data Export            | Compile all PersonalData-attributed properties of ApplicationUser into a downloadable JSON document                              | Self-Service Domain | Identity Team        | DownloadPersonalData endpoint                                                | JSON file download               |
 
 ### 5.7 Business Roles & Actors
 
@@ -906,21 +892,3 @@ flowchart TB
 The Dependencies & Integration analysis reveals a clean, minimal integration footprint appropriate for an early-stage identity platform. The core integration path—Blazor Server → ASP.NET Core Identity → EF Core → SQLite—is fully implemented and functional. Azure platform integrations (Container Registry, Application Insights, Log Analytics, Managed Identity) are provisioned and operational via Bicep IaC, providing a solid observability and deployment foundation.
 
 Two integration gaps require remediation before production deployment: the Email Sender no-op must be replaced with a production-capable email service, and the SQLite database must be migrated to a scalable relational database to support Azure Container App multi-replica scaling. The external OAuth/OIDC federation framework is structurally in place (challenge/callback pattern implemented) but requires provider-specific configuration. No asynchronous event integration, API gateway, or service mesh patterns are currently implemented; these can be introduced incrementally as the platform's usage patterns and performance requirements become clearer.
-
----
-
-> **Document Information**
->
-> | Field               | Value                                                                                                                                                             |
-> | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | Document ID         | BUS-ARCH-001                                                                                                                                                      |
-> | Layer               | Business                                                                                                                                                          |
-> | Framework           | TOGAF 10 ADM                                                                                                                                                      |
-> | Version             | 1.0.0                                                                                                                                                             |
-> | Status              | Draft                                                                                                                                                             |
-> | Generated           | 2026-04-16                                                                                                                                                        |
-> | Source Repository   | Evilazaro/IdentityProvider (branch: main)                                                                                                                         |
-> | Sections Included   | 1 (Executive Summary), 2 (Architecture Landscape), 3 (Architecture Principles), 4 (Current State Baseline), 5 (Component Catalog), 8 (Dependencies & Integration) |
-> | Coordinator Version | BDAT Master Coordinator v3.1.0                                                                                                                                    |
-> | Mermaid Target      | v11.x                                                                                                                                                             |
-> | Anti-Hallucination  | All components traced to source files                                                                                                                             |
