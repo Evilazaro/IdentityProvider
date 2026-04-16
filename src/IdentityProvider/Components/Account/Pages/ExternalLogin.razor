@@ -84,7 +84,7 @@
 
         if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
-            if (Action == LoginCallbackAction && User.Identity.IsAuthenticated)
+            if (Action == LoginCallbackAction && HttpContext.User.Identity?.IsAuthenticated == true)
             {
                 await OnLoginCallbackAsync();
                 return;
