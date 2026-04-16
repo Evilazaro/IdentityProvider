@@ -62,7 +62,7 @@ flowchart TB
     %%
 
     subgraph identitySystem["🏗️ Contoso Identity Provider"]
-
+        direction TB
         subgraph clientLayer["🌐 Client Layer"]
             browser("🖥️ Browser / User Agent"):::core
         end
