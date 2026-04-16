@@ -112,14 +112,7 @@ The following subsections catalogue all Application components discovered throug
 **Application Component Map:**
 
 ```mermaid
----
-title: "Contoso IdentityProvider — Application Component Structure"
-config:
-  theme: base
-  look: classic
-  themeVariables:
-    fontSize: '16px'
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}}}%%
 classDiagram
     accTitle: Application Component Structure
     accDescr: Shows the main application components of the Contoso IdentityProvider and their structural relationships
@@ -454,17 +447,7 @@ Gap analysis identifies three critical-severity gaps, two high-severity gaps, an
 **Current State Architecture Diagram:**
 
 ```mermaid
----
-title: "IdentityProvider — Current State Capability Baseline"
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '16px'
-  flowchart:
-    htmlLabels: true
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}, "flowchart": {"htmlLabels": true}}}%%
 flowchart TB
     accTitle: Current State Capability Baseline
     accDescr: Shows the current maturity state of each application capability area with identified gaps highlighted
@@ -544,14 +527,7 @@ Application services represent the top-level deployable units of the application
 **Application Service Architecture:**
 
 ```mermaid
----
-title: "IdentityProvider — Application Service Dependency Graph"
-config:
-  theme: base
-  look: classic
-  themeVariables:
-    fontSize: '16px'
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}}}%%
 classDiagram
     accTitle: Application Service Dependency Graph
     accDescr: Shows the IdentityProvider application service and all its registered service dependencies
@@ -675,14 +651,7 @@ Application interfaces are the contracts exposed by the application — both pro
 **Service Interface Diagram:**
 
 ```mermaid
----
-title: "IdentityProvider — Application Interface Contracts"
-config:
-  theme: base
-  look: classic
-  themeVariables:
-    fontSize: '16px'
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}}}%%
 classDiagram
     accTitle: Application Interface Contracts
     accDescr: Shows the C# interface contracts and HTTP endpoint interfaces exposed by the IdentityProvider application
@@ -798,14 +767,7 @@ Application interactions describe the runtime communication patterns between com
 **Login Sequence Interaction:**
 
 ```mermaid
----
-title: "User Login Flow — Application Interaction Sequence"
-config:
-  theme: base
-  look: classic
-  themeVariables:
-    fontSize: '16px'
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}}}%%
 sequenceDiagram
     accTitle: User Login Flow — Application Interaction Sequence
     accDescr: Shows the complete login flow from browser to Blazor server through ASP.NET Core Identity and the SQLite database
@@ -867,14 +829,7 @@ sequenceDiagram
 **Registration Sequence Interaction:**
 
 ```mermaid
----
-title: "User Registration Flow — Application Interaction Sequence"
-config:
-  theme: base
-  look: classic
-  themeVariables:
-    fontSize: '16px'
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}}}%%
 sequenceDiagram
     accTitle: User Registration Flow — Application Interaction Sequence
     accDescr: Shows the complete user registration flow including account creation, email confirmation token generation, and the no-op email sender gap
@@ -1047,17 +1002,7 @@ The integration risk profile is dominated by two dependencies: the SQLite data s
 **Integration Dependency Diagram:**
 
 ```mermaid
----
-title: "IdentityProvider — Application Integration Dependencies"
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '16px'
-  flowchart:
-    htmlLabels: true
----
+%%{init: {"theme": "base", "themeVariables": {"fontSize": "16px"}, "flowchart": {"htmlLabels": true}}}%%
 flowchart TB
     accTitle: Application Integration Dependencies
     accDescr: Shows all integration dependencies of the Contoso IdentityProvider application with health status indicators
